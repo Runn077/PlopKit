@@ -7,18 +7,10 @@ datasource db {
   provider = "postgresql"
 }
 
-model Site {
-  id       String    @id @default(cuid())
-  siteKey  String    @unique
-  domain   String
-  comments Comment[]
-}
-
 model Comment {
   id        String   @id @default(cuid())
   siteKey   String
   pageUrl   String
   body      String
   createdAt DateTime @default(now())
-  site      Site     @relation(fields: [siteKey], references: [siteKey])
 }
