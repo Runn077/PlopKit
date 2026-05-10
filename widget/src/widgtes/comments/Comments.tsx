@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import styles from './comments.css?inline'
 
 interface Reply {
   id: string
@@ -23,6 +24,7 @@ export default function Comments({ siteKey, pageUrl }: Props) {
   const [body, setBody] = useState('')
   const [replyingTo, setReplyingTo] = useState<string | null>(null)
   const [replyBody, setReplyBody] = useState('')
+  const [expanded, setExpanded] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     fetch(`http://localhost:3000/comments?site_key=${siteKey}&page_url=${encodeURIComponent(pageUrl)}`)
@@ -37,7 +39,6 @@ export default function Comments({ siteKey, pageUrl }: Props) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ site_key: siteKey, page_url: pageUrl, body }),
     }).then(res => res.json())
-
     setComments([{ ...comment, replies: [] }, ...comments])
     setBody('')
   }
@@ -49,7 +50,6 @@ export default function Comments({ siteKey, pageUrl }: Props) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ site_key: siteKey, page_url: pageUrl, body: replyBody, parent_id: parentId }),
     }).then(res => res.json())
-
     setComments(comments.map(c =>
       c.id === parentId ? { ...c, replies: [...c.replies, reply] } : c
     ))
@@ -57,61 +57,87 @@ export default function Comments({ siteKey, pageUrl }: Props) {
     setReplyBody('')
   }
 
+  const toggleExpanded = (id: string) => {
+    setExpanded(prev => {
+      const next = new Set(prev)
+      next.has(id) ? next.delete(id) : next.add(id)
+      return next
+    })
+  }
+
   return (
-    <div style={{ fontFamily: 'sans-serif', maxWidth: '600px', margin: '2rem auto' }}>
-      <h3 style={{ marginBottom: '1rem' }}>Comments</h3>
+    <>
+      <style>{styles}</style>
+      <div className="widget">
+        <h3>{comments.length} Comments</h3>
 
-      <textarea
-        value={body}
-        onChange={e => setBody(e.target.value)}
-        maxLength={280}
-        placeholder="Write a comment..."
-        style={{ width: '100%', height: '80px', padding: '8px', boxSizing: 'border-box' }}
-      />
-      <div style={{ fontSize: '12px', color: '#999', textAlign: 'right' }}>{body.length}/280</div>
-      <button onClick={postComment} style={{ marginTop: '8px', padding: '8px 16px' }}>Post</button>
-
-      <div style={{ marginTop: '1.5rem' }}>
-        {comments.length === 0 && <p style={{ color: '#999' }}>No comments yet. Be the first!</p>}
-        {comments.map(c => (
-          <div key={c.id} style={{ borderTop: '1px solid #eee', padding: '12px 0' }}>
-            <p style={{ margin: 0 }}>{c.body}</p>
-            <span style={{ fontSize: '12px', color: '#999' }}>{new Date(c.createdAt).toLocaleString()}</span>
-
-            <button
-              onClick={() => setReplyingTo(replyingTo === c.id ? null : c.id)}
-              style={{ marginLeft: '12px', fontSize: '12px', background: 'none', border: 'none', cursor: 'pointer', color: '#666' }}
-            >
-              Reply
+        <div className="input-area">
+          <textarea
+            value={body}
+            onChange={e => setBody(e.target.value)}
+            maxLength={280}
+            placeholder="Add a comment..."
+          />
+          <div className="input-actions">
+            <span className="char-count">{body.length}/280</span>
+            <button className="btn-post" onClick={postComment} disabled={!body.trim()}>
+              Post
             </button>
-
-            {replyingTo === c.id && (
-              <div style={{ marginTop: '8px' }}>
-                <textarea
-                  value={replyBody}
-                  onChange={e => setReplyBody(e.target.value)}
-                  maxLength={280}
-                  placeholder="Write a reply..."
-                  style={{ width: '100%', height: '60px', padding: '8px', boxSizing: 'border-box' }}
-                />
-                <div style={{ fontSize: '12px', color: '#999', textAlign: 'right' }}>{replyBody.length}/280</div>
-                <button onClick={() => postReply(c.id)} style={{ marginTop: '4px', padding: '6px 12px' }}>Post Reply</button>
-              </div>
-            )}
-
-            {c.replies.length > 0 && (
-              <div style={{ marginLeft: '24px', marginTop: '8px' }}>
-                {c.replies.map(r => (
-                  <div key={r.id} style={{ borderTop: '1px solid #f5f5f5', padding: '8px 0' }}>
-                    <p style={{ margin: 0, fontSize: '14px' }}>{r.body}</p>
-                    <span style={{ fontSize: '12px', color: '#999' }}>{new Date(r.createdAt).toLocaleString()}</span>
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
-        ))}
+        </div>
+
+        <div className="comments-list">
+          {comments.length === 0 && <p className="empty">No comments yet. Be the first!</p>}
+          {comments.map(c => (
+            <div key={c.id} className="comment">
+              <p className={`comment-body ${expanded.has(c.id) ? 'expanded' : ''}`}>
+                {c.body}
+              </p>
+              {c.body.length > 20 && (
+                <button className="btn-show-more" onClick={() => toggleExpanded(c.id)}>
+                  {expanded.has(c.id) ? 'Show less' : 'Show more'}
+                </button>
+              )}
+              <div className="comment-meta">
+                <span className="comment-time">{new Date(c.createdAt).toLocaleString()}</span>
+                <button className="btn-reply" onClick={() => setReplyingTo(replyingTo === c.id ? null : c.id)}>
+                  {replyingTo === c.id ? 'Cancel' : 'Reply'}
+                </button>
+              </div>
+
+              {replyingTo === c.id && (
+                <div className="reply-input-area">
+                  <textarea
+                    value={replyBody}
+                    onChange={e => setReplyBody(e.target.value)}
+                    maxLength={280}
+                    placeholder="Add a reply..."
+                    autoFocus
+                  />
+                  <div className="reply-actions">
+                    <span className="char-count">{replyBody.length}/280</span>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <button className="btn-cancel" onClick={() => { setReplyingTo(null); setReplyBody('') }}>Cancel</button>
+                      <button className="btn-post-reply" onClick={() => postReply(c.id)} disabled={!replyBody.trim()}>Reply</button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {c.replies.length > 0 && (
+                <div className="replies">
+                  {c.replies.map(r => (
+                    <div key={r.id} className="reply">
+                      <p className="reply-body">{r.body}</p>
+                      <span className="reply-time">{new Date(r.createdAt).toLocaleString()}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
