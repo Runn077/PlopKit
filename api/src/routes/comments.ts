@@ -8,17 +8,27 @@ router.get('/', async (req, res) => {
 
   const comments = await prisma.comment.findMany({
     where: { siteKey: site_key, pageUrl: page_url },
-    orderBy: { createdAt: 'desc' }
+    orderBy: { createdAt: 'desc' },
+    include: {
+      replies: {
+        orderBy: { createdAt: 'asc' }
+      }
+    }
   })
 
   res.json(comments)
 })
 
 router.post('/', async (req, res) => {
-  const { site_key, page_url, body } = req.body
+  const { site_key, page_url, body, parent_id } = req.body
 
   const comment = await prisma.comment.create({
-    data: { siteKey: site_key, pageUrl: page_url, body }
+    data: { 
+      siteKey: site_key, 
+      pageUrl: page_url, 
+      body,
+      parentId: parent_id ?? null 
+    }
   })
 
   res.json(comment)
