@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import App from './widgtes/Comments'
+import App from './widgtes/comments/Comments'
 
 const script = document.currentScript as HTMLScriptElement
 const siteKey = script?.getAttribute('data-site-key') ?? ''
