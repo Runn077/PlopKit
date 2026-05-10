@@ -8,9 +8,12 @@ datasource db {
 }
 
 model Comment {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   siteKey   String
   pageUrl   String
   body      String
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
+  parentId  String?
+  parent    Comment?  @relation("Replies", fields: [parentId], references: [id])
+  replies   Comment[] @relation("Replies")
 }
