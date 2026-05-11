@@ -22,13 +22,28 @@ interface Props {
 
 export default function Comments({ siteKey, pageUrl }: Props) {
   const [comments, setComments] = useState<Comment[]>([])
+  const [hasMore, setHasMore] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [body, setBody] = useState('')
+  const [total, setTotal] = useState(0)
 
+  const fetchComments = async (cursor?: string) => {
+    setLoading(true)
+    const url = `http://localhost:3000/comments?site_key=${siteKey}&page_url=${encodeURIComponent(pageUrl)}${cursor ? `&cursor=${cursor}` : ''}`
+    const data = await fetch(url).then(res => res.json())
+    setComments(prev => cursor ? [...prev, ...data.comments] : data.comments)
+    setHasMore(data.hasMore)
+    setTotal(data.total ?? (cursor ? total : data.comments.length))
+    setLoading(false)
+  }
   useEffect(() => {
-    fetch(`http://localhost:3000/comments?site_key=${siteKey}&page_url=${encodeURIComponent(pageUrl)}`)
-      .then(res => res.json())
-      .then(setComments)
+    fetchComments()
   }, [])
+
+  const loadMore = () => {
+    const lastComment = comments[comments.length - 1]
+    if (lastComment) fetchComments(lastComment.id)
+  }
 
   const postComment = async () => {
     if (!body.trim()) return
@@ -37,12 +52,12 @@ export default function Comments({ siteKey, pageUrl }: Props) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ site_key: siteKey, page_url: pageUrl, body }),
     }).then(res => res.json())
-    setComments([{ ...comment, replies: [] }, ...comments])
+    setComments(prev => [{ ...comment, replies: [] }, ...prev])
     setBody('')
   }
 
   const handleReplyPosted = (commentId: string, reply: Reply) => {
-    setComments(comments.map(c =>
+    setComments(prev => prev.map(c =>
       c.id === commentId ? { ...c, replies: [...c.replies, reply] } : c
     ))
   }
@@ -51,7 +66,7 @@ export default function Comments({ siteKey, pageUrl }: Props) {
     <>
       <style>{styles}</style>
       <div className="widget">
-        <h3>{comments.length} Comments</h3>
+        <h3>{total} Comments</h3>
 
         <div className="input-area">
           <textarea
@@ -69,7 +84,7 @@ export default function Comments({ siteKey, pageUrl }: Props) {
         </div>
 
         <div className="comments-list">
-          {comments.length === 0 && <p className="empty">No comments yet. Be the first!</p>}
+          {comments.length === 0 && !loading && <p className="empty">No comments yet. Be the first!</p>}
           {comments.map(c => (
             <CommentItem
               key={c.id}
@@ -79,6 +94,11 @@ export default function Comments({ siteKey, pageUrl }: Props) {
               onReplyPosted={handleReplyPosted}
             />
           ))}
+          {hasMore && (
+            <button className="btn-load-more" onClick={loadMore} disabled={loading}>
+              {loading ? 'Loading...' : 'Load more'}
+            </button>
+          )}
         </div>
       </div>
     </>
