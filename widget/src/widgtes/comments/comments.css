@@ -26,9 +26,9 @@
 
   .input-area textarea {
     width: 100%;
-    padding: 8px 0;
-    border: none;
-    border-bottom: 1px solid #ccc;
+    padding: 10px 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
     outline: none;
     resize: none;
     font-size: 14px;
@@ -40,7 +40,7 @@
 
   .input-area textarea:focus,
   .input-area textarea:not(:placeholder-shown) {
-    border-bottom: 2px solid #0f0f0f;
+    border: 2px solid #0f0f0f;
   }
 
   .input-actions {
@@ -153,9 +153,9 @@
 
   .reply-input-area textarea {
     width: 100%;
-    padding: 8px 0;
-    border: none;
-    border-bottom: 1px solid #ccc;
+    padding: 10px 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
     outline: none;
     resize: none;
     font-size: 13px;
@@ -166,7 +166,7 @@
   }
 
   .reply-input-area textarea:focus {
-    border-bottom: 2px solid #0f0f0f;
+    border: 2px solid #0f0f0f;
   }
 
   .reply-actions {
