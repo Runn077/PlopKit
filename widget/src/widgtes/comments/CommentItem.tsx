@@ -97,14 +97,19 @@ export default function CommentItem({ comment, siteKey, pageUrl, onReplyPosted }
       )}
 
       {comment.replies.length > 0 && (
-        <div className="replies">
+        <>
           <button className="btn-show-replies" onClick={() => setShowReplies(!showReplies)}>
             {showReplies ? 'Hide replies' : `Show ${comment.replies.length} ${comment.replies.length === 1 ? 'reply' : 'replies'}`}
           </button>
-          {showReplies && comment.replies.map(r => (
-            <ReplyItem key={r.id} reply={r} />
-          ))}
-        </div>
+
+          {showReplies && (
+            <div className="replies">
+              {comment.replies.map(r => (
+                <ReplyItem key={r.id} reply={r} />
+              ))}
+            </div>
+          )}
+        </>
       )}
     </div>
   )
