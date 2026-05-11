@@ -24,24 +24,24 @@
     margin-bottom: 24px;
   }
 
-.input-area textarea {
-  width: 100%;
-  padding: 8px 0;
-  border: none;
-  border-bottom: 1px solid #ccc;
-  outline: none;
-  resize: none;
-  font-size: 14px;
-  font-family: inherit;
-  color: #0f0f0f;
-  background: transparent;
-  height: 80px;
-}
+  .input-area textarea {
+    width: 100%;
+    padding: 8px 0;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    outline: none;
+    resize: none;
+    font-size: 14px;
+    font-family: inherit;
+    color: #0f0f0f;
+    background: transparent;
+    height: 80px;
+  }
 
-.input-area textarea:focus,
-.input-area textarea:not(:placeholder-shown) {
-  border-bottom: 2px solid #0f0f0f;
-}
+  .input-area textarea:focus,
+  .input-area textarea:not(:placeholder-shown) {
+    border-bottom: 2px solid #0f0f0f;
+  }
 
   .input-actions {
     display: flex;
@@ -89,16 +89,12 @@
     line-height: 1.5;
     margin-bottom: 6px;
     white-space: pre-wrap;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
   }
 
   .comment-body.expanded {
     display: block;
     overflow: visible;
-    -webkit-line-clamp: unset;
+    white-space: pre-wrap;
   }
 
   .btn-show-more {
@@ -179,6 +175,21 @@
     align-items: center;
   }
 
+  .comment-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-vote {
+    background: none;
+    border: none;
+    cursor: default;
+    font-size: 14px;
+    padding: 0;
+    opacity: 0.5;
+  }
+
   .btn-post-reply {
     background: #0f0f0f;
     color: #fff;
@@ -188,6 +199,20 @@
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
+  }
+
+  .btn-show-replies {
+    background: none;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    color: #0f0f0f;
+    cursor: pointer;
+    padding: 4px 0;
+  }
+
+  .btn-show-replies:hover {
+    color: #555;
   }
 
   .btn-post-reply:hover {
