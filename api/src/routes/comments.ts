@@ -38,6 +38,12 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   const { site_key, page_url, body, parent_id } = req.body
 
+  const site = await prisma.site.findUnique({ where: { siteKey: site_key } })
+  if (!site) {
+    res.status(404).json({ error: 'Invalid site key' })
+    return
+  }
+
   const comment = await prisma.comment.create({
     data: {
       siteKey: site_key,
@@ -46,7 +52,6 @@ router.post('/', async (req, res) => {
       parentId: parent_id ?? null
     }
   })
-
   res.json(comment)
 })
 
