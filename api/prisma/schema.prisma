@@ -68,6 +68,7 @@ model Site {
   siteKey   String    @unique
   userId    String
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comments  Comment[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
@@ -77,6 +78,7 @@ model Site {
 model Comment {
   id        String    @id @default(cuid())
   siteKey   String
+  site      Site      @relation(fields: [siteKey], references: [siteKey])
   pageUrl   String
   body      String
   createdAt DateTime  @default(now())
