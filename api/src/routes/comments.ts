@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import prisma from '../lib/prisma.js'
+import { requireAuth } from '../middleware/requireAuth.js'
 
 const router = Router()
 
@@ -53,6 +54,31 @@ router.post('/', async (req, res) => {
     }
   })
   res.json(comment)
+})
+
+router.delete('/:id', requireAuth, async (req, res) => {
+  const id = req.params.id as string
+  const { user } = res.locals.session
+
+  // Find the comment
+  const comment = await prisma.comment.findUnique({ where: { id } })
+  if (!comment) {
+    res.status(404).json({ error: 'Comment not found' })
+    return
+  }
+
+  // Check that the site belongs to the logged in user
+  const site = await prisma.site.findUnique({ where: { siteKey: comment.siteKey } })
+  if (!site || site.userId !== user.id) {
+    res.status(403).json({ error: 'Forbidden' })
+    return
+  }
+
+  // Delete replies first, then the comment
+  await prisma.comment.deleteMany({ where: { parentId: id } })
+  await prisma.comment.delete({ where: { id } })
+
+  res.json({ success: true })
 })
 
 export default router
