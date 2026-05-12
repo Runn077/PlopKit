@@ -11,7 +11,6 @@ app.use(cors({
   credentials: true,
 }))
 
-// Must be before express.json()
 app.all('/api/auth/*splat', toNodeHandler(auth))
 
 app.use(express.json())
