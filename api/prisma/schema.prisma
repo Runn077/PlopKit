@@ -17,6 +17,7 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  sites     Site[]
 }
 
 model Session {
@@ -59,6 +60,17 @@ model Verification {
   updatedAt  DateTime  @updatedAt
 }
 
+
+
+model Site {
+  id        String    @id @default(cuid())
+  name      String
+  siteKey   String    @unique
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
 
 
 
