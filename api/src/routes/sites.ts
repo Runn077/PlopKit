@@ -38,4 +38,18 @@ router.get('/', requireAuth, async (req, res) => {
   res.json(sites)
 })
 
+router.get('/:id', requireAuth, async (req, res) => {
+  const { user } = res.locals.session
+  const site = await prisma.site.findUnique({
+    where: { id: req.params.id as string },
+  })
+
+  if (!site || site.userId !== user.id) {
+    res.status(404).json({ error: 'Site not found' })
+    return
+  }
+
+  res.json(site)
+})
+
 export default router

@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import ProtectedRoute from './components/ProtectedRoute'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
+import Dashboard from './pages/Dashboard'
+import SiteWidgets from './pages/SiteWidgets'
 
 function App() {
   return (
@@ -10,10 +12,10 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/dashboard' element={
-          <ProtectedRoute><div>Sites list</div></ProtectedRoute>
+          <ProtectedRoute><Dashboard /></ProtectedRoute>
         } />
         <Route path='/dashboard/sites/:siteId' element={
-          <ProtectedRoute><div>Widgets</div></ProtectedRoute>
+          <ProtectedRoute><SiteWidgets /></ProtectedRoute>
         } />
         <Route path='/dashboard/sites/:siteId/comments' element={
           <ProtectedRoute><div>Comments</div></ProtectedRoute>
