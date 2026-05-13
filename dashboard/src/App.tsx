@@ -4,6 +4,7 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Dashboard from './pages/Dashboard'
 import SiteWidgets from './pages/SiteWidgets'
+import SiteComments from './pages/SiteComments'
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
           <ProtectedRoute><SiteWidgets /></ProtectedRoute>
         } />
         <Route path='/dashboard/sites/:siteId/comments' element={
-          <ProtectedRoute><div>Comments</div></ProtectedRoute>
+          <ProtectedRoute><SiteComments /></ProtectedRoute>
         } />
         <Route path='*' element={<Navigate to='/login' />} />
       </Routes>

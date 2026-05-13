@@ -8,7 +8,11 @@ import sitesRouter from './routes/sites.js'
 const app = express()
 
 app.use(cors({
-  origin: process.env.WIDGET_ORIGIN ?? 'http://localhost:5173',
+  origin: [
+    process.env.WIDGET_ORIGIN ?? 'http://localhost:5173',
+    'http://localhost:5174',
+    'null',
+  ],
   credentials: true,
 }))
 

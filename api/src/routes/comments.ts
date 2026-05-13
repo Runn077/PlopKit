@@ -7,9 +7,10 @@ const router = Router()
 const TAKE = 20
 
 router.get('/', async (req, res) => {
-  const { site_key, page_url, cursor } = req.query as { site_key: string, page_url: string, cursor?: string }
+  const { site_key, page_url, cursor } = req.query as { site_key: string, page_url?: string, cursor?: string }
 
-  const baseWhere: any = { siteKey: site_key, pageUrl: page_url, parentId: null }
+  const baseWhere: any = { siteKey: site_key, parentId: null }
+  if (page_url) baseWhere.pageUrl = page_url
 
   if (cursor) {
     const cursorComment = await prisma.comment.findUnique({ where: { id: cursor } })
@@ -18,8 +19,10 @@ router.get('/', async (req, res) => {
     }
   }
 
-  const total = await prisma.comment.count({ where: { siteKey: site_key, pageUrl: page_url, parentId: null } })
+  const countWhere: any = { siteKey: site_key, parentId: null }
+  if (page_url) countWhere.pageUrl = page_url
 
+  const total = await prisma.comment.count({ where: countWhere })
   const comments = await prisma.comment.findMany({
     where: baseWhere,
     orderBy: { createdAt: 'desc' },
@@ -32,7 +35,6 @@ router.get('/', async (req, res) => {
   })
 
   const hasMore = comments.length === TAKE
-
   res.json({ comments, hasMore, total })
 })
 
