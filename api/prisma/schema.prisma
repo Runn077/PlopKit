@@ -65,6 +65,7 @@ model Verification {
 model Site {
   id        String    @id @default(cuid())
   name      String
+  domain    String
   siteKey   String    @unique
   userId    String
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)

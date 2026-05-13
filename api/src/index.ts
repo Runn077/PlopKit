@@ -8,11 +8,17 @@ import sitesRouter from './routes/sites.js'
 const app = express()
 
 app.use(cors({
-  origin: [
-    process.env.WIDGET_ORIGIN ?? 'http://localhost:5173',
-    'http://localhost:5174',
-    'null',
-  ],
+  origin: (origin, callback) => {
+    const allowed = [
+      'http://localhost:5173',
+      'http://localhost:5174',
+    ]
+    if (!origin || allowed.includes(origin) || origin.startsWith('http://localhost')) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
   credentials: true,
 }))
 

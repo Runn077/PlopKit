@@ -7,7 +7,7 @@ const router = Router()
 
 // Create a site
 router.post('/', requireAuth, async (req, res) => {
-  const { name } = req.body
+  const { name, domain } = req.body
   const { user } = res.locals.session
 
   if (!name) {
@@ -15,9 +15,15 @@ router.post('/', requireAuth, async (req, res) => {
     return
   }
 
+  if (!domain) {
+    res.status(400).json({ error: 'Domain is required' })
+    return
+  }
+
   const site = await prisma.site.create({
     data: {
       name,
+      domain,
       siteKey: randomBytes(16).toString('hex'),
       userId: user.id,
     },

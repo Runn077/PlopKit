@@ -47,6 +47,13 @@ router.post('/', async (req, res) => {
     return
   }
 
+  const origin = req.headers.origin ?? req.headers.referer ?? ''
+  const allowed = origin.includes(site.domain)
+  if (!allowed) {
+    res.status(403).json({ error: 'Domain not allowed' })
+    return
+  }
+
   const comment = await prisma.comment.create({
     data: {
       siteKey: site_key,

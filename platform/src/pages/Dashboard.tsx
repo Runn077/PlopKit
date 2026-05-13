@@ -14,6 +14,7 @@ function Dashboard() {
   const [sites, setSites] = useState<Site[]>([])
   const [loading, setLoading] = useState(true)
   const [newSiteName, setNewSiteName] = useState('')
+  const [newSiteDomain, setNewSiteDomain] = useState('')
   const [adding, setAdding] = useState(false)
   const [showForm, setShowForm] = useState(false)
 
@@ -31,19 +32,20 @@ function Dashboard() {
   }
 
   async function handleAddSite() {
-    if (!newSiteName.trim()) return
+    if (!newSiteName.trim() || !newSiteDomain.trim()) return
     setAdding(true)
 
     const res = await fetch('http://localhost:3000/sites', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify({ name: newSiteName }),
+      body: JSON.stringify({ name: newSiteName, domain: newSiteDomain }),
     })
 
     const site = await res.json()
     setSites(prev => [site, ...prev])
     setNewSiteName('')
+    setNewSiteDomain('')
     setShowForm(false)
     setAdding(false)
   }
@@ -78,6 +80,12 @@ function Dashboard() {
             placeholder='Site name'
             value={newSiteName}
             onChange={e => setNewSiteName(e.target.value)}
+          />
+          <input
+            type='text'
+            placeholder='Domain (e.g. myblog.com)'
+            value={newSiteDomain}
+            onChange={e => setNewSiteDomain(e.target.value)}
           />
           <button onClick={handleAddSite} disabled={adding}>
             {adding ? 'Adding...' : 'Add site'}
