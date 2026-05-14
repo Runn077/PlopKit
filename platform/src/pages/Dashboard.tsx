@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { signOut } from '../lib/auth-client'
+import Navbar from '../components/Navbar'
 
 interface Site {
   id: string
@@ -59,10 +60,7 @@ function Dashboard() {
 
   return (
     <div>
-      <nav>
-        <h1>PlopKit</h1>
-        <button onClick={handleSignOut}>Sign out</button>
-      </nav>
+      <Navbar />
 
       <h2>Your Sites</h2>
 

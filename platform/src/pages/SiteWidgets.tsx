@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { signOut } from '../lib/auth-client'
 import { useState, useEffect } from 'react'
+import Navbar from '../components/Navbar'
 
 interface Site {
   id: string
@@ -37,11 +38,7 @@ function SiteWidgets() {
 
   return (
     <div>
-      <nav>
-        <button onClick={() => navigate('/dashboard')}>← Back</button>
-        <h1>PlopKit</h1>
-        <button onClick={handleSignOut}>Sign out</button>
-      </nav>
+      < Navbar />
 
       <h2>{site.name}</h2>
       <p>Choose a widget to manage:</p>

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { signUp } from '../lib/auth-client'
 import { useNavigate, Link } from 'react-router-dom'
+import Navbar from '../components/Navbar'
 
 function Signup() {
   const navigate = useNavigate()
@@ -32,6 +33,7 @@ function Signup() {
 
   return (
     <div>
+      < Navbar />
       <h1>Create your PlopKit account</h1>
       <form onSubmit={handleSubmit}>
         <div>

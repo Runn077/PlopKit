@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { signOut } from '../lib/auth-client'
+import Navbar from '../components/Navbar'
 
 interface Reply {
   id: string
@@ -92,11 +93,7 @@ function SiteComments() {
 
   return (
     <div>
-      <nav>
-        <button onClick={() => navigate(`/dashboard/sites/${siteId}`)}>← Back</button>
-        <h1>PlopKit</h1>
-        <button onClick={handleSignOut}>Sign out</button>
-      </nav>
+      < Navbar />
 
       <h2>{site.name} — Comments</h2>
 
