@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { signOut } from '../lib/auth-client'
 import Navbar from '../components/Navbar'
 
 interface Site {
@@ -49,11 +48,6 @@ function Dashboard() {
     setNewSiteDomain('')
     setShowForm(false)
     setAdding(false)
-  }
-
-  async function handleSignOut() {
-    await signOut()
-    navigate('/login')
   }
 
   if (loading) return <div>Loading...</div>

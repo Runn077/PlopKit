@@ -1,5 +1,4 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import { signOut } from '../lib/auth-client'
 import { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar'
 
@@ -26,11 +25,6 @@ function SiteWidgets() {
     const data = await res.json()
     setSite(data)
     setLoading(false)
-  }
-
-  async function handleSignOut() {
-    await signOut()
-    navigate('/login')
   }
 
   if (loading) return <div>Loading...</div>

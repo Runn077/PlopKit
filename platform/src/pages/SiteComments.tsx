@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { signOut } from '../lib/auth-client'
+import { useParams } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 
 interface Reply {
@@ -25,7 +24,6 @@ interface Site {
 
 function SiteComments() {
   const { siteId } = useParams()
-  const navigate = useNavigate()
   const [site, setSite] = useState<Site | null>(null)
   const [comments, setComments] = useState<Comment[]>([])
   const [hasMore, setHasMore] = useState(false)
@@ -73,11 +71,6 @@ function SiteComments() {
     if (res.ok) {
       setComments(prev => prev.filter(c => c.id !== commentId))
     }
-  }
-
-  async function handleSignOut() {
-    await signOut()
-    navigate('/login')
   }
 
   function handleLoadMore() {
