@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import prisma from '../lib/prisma.js'
 import { requireAuth } from '../middleware/requireAuth.js'
+import { commentLimiter } from '../middleware/commentLimiter.js'
 
 const router = Router()
 
@@ -38,7 +39,7 @@ router.get('/', async (req, res) => {
   res.json({ comments, hasMore, total })
 })
 
-router.post('/', async (req, res) => {
+router.post('/', commentLimiter, async (req, res) => {
   const { site_key, page_url, body, parent_id } = req.body
 
   const site = await prisma.site.findUnique({ where: { siteKey: site_key } })
