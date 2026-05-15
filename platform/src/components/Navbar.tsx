@@ -27,7 +27,7 @@ function Navbar() {
         fontFamily: 'sans-serif',
         fontSize: '18px',
         fontWeight: 600,
-        color: '#9370DB',
+        color: '#000000',
         letterSpacing: '-0.02em',
         marginRight: 'auto',
         cursor: 'pointer',

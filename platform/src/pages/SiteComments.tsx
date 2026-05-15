@@ -62,14 +62,21 @@ function SiteComments() {
     setLoadingMore(false)
   }
 
-  async function handleDelete(commentId: string) {
+  async function handleDelete(commentId: string, parentId?: string) {
     const res = await fetch(`http://localhost:3000/comments/${commentId}`, {
       method: 'DELETE',
       credentials: 'include',
     })
-
     if (res.ok) {
-      setComments(prev => prev.filter(c => c.id !== commentId))
+      if (parentId) {
+        setComments(prev => prev.map(c =>
+          c.id === parentId
+            ? { ...c, replies: c.replies.filter(r => r.id !== commentId) }
+            : c
+        ))
+      } else {
+        setComments(prev => prev.filter(c => c.id !== commentId))
+      }
     }
   }
 
@@ -106,17 +113,20 @@ function SiteComments() {
         {comments.map(comment => (
           <li key={comment.id}>
             <p>{comment.body}</p>
-            <small>{comment.pageUrl} — {new Date(comment.createdAt).toLocaleDateString()}</small>
+            <small style={{ display: 'block' }}>
+              {comment.pageUrl} — {new Date(comment.createdAt).toLocaleDateString()}
+            </small>
+            <button onClick={() => handleDelete(comment.id)}>Delete</button>
             {comment.replies.length > 0 && (
               <ul>
                 {comment.replies.map(reply => (
                   <li key={reply.id}>
                     <p>{reply.body}</p>
+                    <button onClick={() => handleDelete(reply.id, comment.id)}>Delete</button>
                   </li>
                 ))}
               </ul>
             )}
-            <button onClick={() => handleDelete(comment.id)}>Delete</button>
           </li>
         ))}
       </ul>
