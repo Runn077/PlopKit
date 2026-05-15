@@ -14,11 +14,20 @@ router.post('/', requireAuth, async (req, res) => {
     res.status(400).json({ error: 'Name is required' })
     return
   }
-
   if (!domain) {
     res.status(400).json({ error: 'Domain is required' })
     return
   }
+
+  // Check if domain is already registered
+  const existing = await prisma.site.findUnique({ where: { domain } })
+  if (existing) {
+    res.status(409).json({ error: 'This domain is already registered' })
+    return
+  }
+
+  const expiresAt = new Date()
+  expiresAt.setDate(expiresAt.getDate() + 7)
 
   const site = await prisma.site.create({
     data: {
@@ -26,6 +35,8 @@ router.post('/', requireAuth, async (req, res) => {
       domain,
       siteKey: randomBytes(16).toString('hex'),
       userId: user.id,
+      verified: false,
+      expiresAt,
     },
   })
 

@@ -65,8 +65,10 @@ model Verification {
 model Site {
   id        String    @id @default(cuid())
   name      String
-  domain    String
+  domain    String    @unique
   siteKey   String    @unique
+  verified  Boolean   @default(false)
+  expiresAt DateTime?
   userId    String
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   comments  Comment[]
@@ -84,6 +86,6 @@ model Comment {
   body      String
   createdAt DateTime  @default(now())
   parentId  String?
-  parent    Comment?  @relation("Replies", fields: [parentId], references: [id])
+  parent    Comment?  @relation("Replies", fields: [parentId], references: [id], onDelete: Cascade)
   replies   Comment[] @relation("Replies")
 }

@@ -47,11 +47,28 @@ router.post('/', async (req, res) => {
     return
   }
 
+  // Reject if unverified and expired
+  if (!site.verified && site.expiresAt && site.expiresAt < new Date()) {
+    res.status(403).json({ error: 'Site verification expired. Please re-register your domain.' })
+    return
+  }
+
+  // Check origin matches domain
   const origin = req.headers.origin ?? req.headers.referer ?? ''
-  const allowed = origin.includes(site.domain)
-  if (!allowed) {
+  const originHostname = new URL(origin).hostname
+  const siteHostname = new URL(`https://${site.domain}`).hostname
+
+  if (originHostname !== siteHostname) {
     res.status(403).json({ error: 'Domain not allowed' })
     return
+  }
+
+  // Passively verify on first successful request
+  if (!site.verified) {
+    await prisma.site.update({
+      where: { siteKey: site_key },
+      data: { verified: true, expiresAt: null },
+    })
   }
 
   const comment = await prisma.comment.create({
@@ -59,9 +76,10 @@ router.post('/', async (req, res) => {
       siteKey: site_key,
       pageUrl: page_url,
       body,
-      parentId: parent_id ?? null
-    }
+      parentId: parent_id ?? null,
+    },
   })
+
   res.json(comment)
 })
 
