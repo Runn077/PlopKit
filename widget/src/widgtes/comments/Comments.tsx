@@ -72,11 +72,11 @@ export default function Comments({ siteKey, pageUrl }: Props) {
           <textarea
             value={body}
             onChange={e => setBody(e.target.value)}
-            maxLength={280}
+            maxLength={1000}
             placeholder="Add a comment..."
           />
           <div className="input-actions">
-            <span className="char-count">{body.length}/280</span>
+            <span className="char-count">{body.length}/1000</span>
             <button className="btn-post" onClick={postComment} disabled={!body.trim()}>
               Post
             </button>

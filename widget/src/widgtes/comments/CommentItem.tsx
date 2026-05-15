@@ -27,7 +27,7 @@ export default function CommentItem({ comment, siteKey, pageUrl, onReplyPosted }
   const [replyOpen, setReplyOpen] = useState(false)
   const [replyBody, setReplyBody] = useState('')
 
-  const LIMIT = 200
+  const LIMIT = 1000
   const MAX_LINES = 3
   const lines = comment.body.split('\n')
   const isLong = comment.body.length > LIMIT || lines.length > MAX_LINES
@@ -82,12 +82,12 @@ export default function CommentItem({ comment, siteKey, pageUrl, onReplyPosted }
           <textarea
             value={replyBody}
             onChange={e => setReplyBody(e.target.value)}
-            maxLength={280}
+            maxLength={1000}
             placeholder="Add a reply..."
             autoFocus
           />
           <div className="reply-actions">
-            <span className="char-count">{replyBody.length}/280</span>
+            <span className="char-count">{replyBody.length}/1000</span>
             <div style={{ display: 'flex', gap: '8px' }}>
               <button className="btn-cancel" onClick={() => { setReplyOpen(false); setReplyBody('') }}>Cancel</button>
               <button className="btn-post-reply" onClick={postReply} disabled={!replyBody.trim()}>Reply</button>

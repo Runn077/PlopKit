@@ -42,6 +42,16 @@ router.get('/', async (req, res) => {
 router.post('/', commentLimiter, async (req, res) => {
   const { site_key, page_url, body, parent_id } = req.body
 
+  if (!body || body.trim().length === 0) {
+    res.status(400).json({ error: 'Comment body is required' })
+    return
+  }
+
+  if (body.length > 1000) {
+    res.status(400).json({ error: 'Comment must be under 1000 characters' })
+    return
+  }
+
   const site = await prisma.site.findUnique({ where: { siteKey: site_key } })
   if (!site) {
     res.status(404).json({ error: 'Invalid site key' })
