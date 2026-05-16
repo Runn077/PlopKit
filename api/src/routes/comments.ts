@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import prisma from '../lib/prisma.js'
+import sanitizeHtml from 'sanitize-html'
 import { requireAuth } from '../middleware/requireAuth.js'
 import { commentLimiter } from '../middleware/commentLimiter.js'
 
@@ -42,12 +43,14 @@ router.get('/', async (req, res) => {
 router.post('/', commentLimiter, async (req, res) => {
   const { site_key, page_url, body, parent_id } = req.body
 
-  if (!body || body.trim().length === 0) {
+  const cleanBody = sanitizeHtml(body, { allowedTags: [], allowedAttributes: {} })
+
+  if (!cleanBody || body.trim().length === 0) {
     res.status(400).json({ error: 'Comment body is required' })
     return
   }
 
-  if (body.length > 1000) {
+  if (cleanBody.length > 1000) {
     res.status(400).json({ error: 'Comment must be under 1000 characters' })
     return
   }
@@ -86,7 +89,7 @@ router.post('/', commentLimiter, async (req, res) => {
     data: {
       siteKey: site_key,
       pageUrl: page_url,
-      body,
+      body: cleanBody,
       parentId: parent_id ?? null,
     },
   })
