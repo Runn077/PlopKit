@@ -69,6 +69,7 @@ model Site {
   siteKey   String    @unique
   verified  Boolean   @default(false)
   expiresAt DateTime?
+  widgets   Widget[]
   userId    String
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   comments  Comment[]
@@ -76,6 +77,15 @@ model Site {
   updatedAt DateTime  @updatedAt
 }
 
+
+model Widget {
+  id        String   @id @default(cuid())
+  type      String
+  name      String
+  siteId    String
+  site      Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
 
 
 model Comment {
