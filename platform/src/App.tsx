@@ -3,7 +3,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Dashboard from './pages/Dashboard/index'
-import SiteWidgets from './pages/SiteWidgets'
+import SiteWidgets from './pages/SiteWidgets/index'
 import SiteComments from './pages/SiteComments'
 
 function App() {
