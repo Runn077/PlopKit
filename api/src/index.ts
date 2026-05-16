@@ -2,9 +2,11 @@ import express from 'express'
 import cors from 'cors'
 import { toNodeHandler } from 'better-auth/node'
 import { auth } from './lib/auth.js'
+import { startCronJobs } from './lib/cron.js'
 import commentsRouter from './routes/comments.js'
 import sitesRouter from './routes/sites.js'
-import { startCronJobs } from './lib/cron.js'
+import widgetsRouter from './routes/widgets.js'
+
 
 const app = express()
 
@@ -28,6 +30,7 @@ app.all('/api/auth/*splat', toNodeHandler(auth))
 app.use(express.json())
 app.use('/comments', commentsRouter)
 app.use('/sites', sitesRouter)
+app.use('/widgets', widgetsRouter)
 
 startCronJobs()
 
