@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import ProtectedRoute from './components/ProtectedRoute'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
-import Dashboard from './pages/Dashboard'
+import Dashboard from './pages/Dashboard/index'
 import SiteWidgets from './pages/SiteWidgets'
 import SiteComments from './pages/SiteComments'
 

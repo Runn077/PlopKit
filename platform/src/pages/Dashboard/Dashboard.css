@@ -1,0 +1,145 @@
+.dashboard-container {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  font-family: sans-serif;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.dashboard-title {
+  font-size: 18px;
+  color: #000;
+}
+
+/* Site list */
+.site-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.site-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid #000;
+}
+
+.site-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #000;
+}
+
+.site-domain {
+  font-size: 12px;
+  color: #555;
+  margin-top: 2px;
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 60px 0;
+  font-size: 14px;
+  color: #000;
+}
+
+.empty-state p {
+  margin-bottom: 16px;
+}
+
+/* Buttons */
+.btn {
+  font-size: 13px;
+  font-weight: 500;
+  font-family: sans-serif;
+  padding: 7px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid #000;
+  background: #fff;
+  color: #000;
+}
+
+.btn:hover {
+  background: #f5f5f5;
+}
+
+.btn-primary {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+.btn-primary:hover {
+  background: #333;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  width: 100%;
+  max-width: 380px;
+}
+
+.modal-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 20px;
+  font-family: sans-serif;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-family: sans-serif;
+  border: 1px solid #000;
+  border-radius: 6px;
+  outline: none;
+  color: #000;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.modal-input::placeholder {
+  color: #999;
+}
+
+.modal-error {
+  font-size: 12px;
+  color: #000;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
