@@ -2,7 +2,7 @@ import { Router } from 'express'
 import prisma from '../lib/prisma.js'
 import sanitizeHtml from 'sanitize-html'
 import { requireAuth } from '../middleware/requireAuth.js'
-import { commentLimiter } from '../middleware/commentLimiter.js'
+import { commentBurstLimiter, commentHourlyLimiter } from '../middleware/commentLimiter.js'
 
 const router = Router()
 const TAKE = 20
@@ -35,7 +35,7 @@ router.get('/', async (req, res) => {
   }
 })
 
-router.post('/', commentLimiter, async (req, res) => {
+router.post('/', commentBurstLimiter, commentHourlyLimiter, async (req, res) => {
   try {
     const { site_key, page_url, body, parent_id } = req.body
     const cleanBody = sanitizeHtml(body, { allowedTags: [], allowedAttributes: {} })
