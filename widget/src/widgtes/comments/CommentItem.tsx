@@ -69,8 +69,6 @@ export default function CommentItem({ comment, siteKey, pageUrl, onReplyPosted }
       <div className="comment-meta">
         <span className="comment-time">{new Date(comment.createdAt).toLocaleString()}</span>
         <div className="comment-actions">
-          <button className="btn-vote">👍</button>
-          <button className="btn-vote">👎</button>
           <button className="btn-reply" onClick={() => setReplyOpen(!replyOpen)}>
             {replyOpen ? 'Cancel' : 'Reply'}
           </button>
