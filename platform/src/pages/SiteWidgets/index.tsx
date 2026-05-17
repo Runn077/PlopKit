@@ -74,7 +74,7 @@ function SiteWidgets() {
         </div>
         <WidgetList
           widgets={widgets}
-          onOpen={(widget) => navigate(`/dashboard/sites/${siteId}/comments`)}
+          onOpen={(widget) => navigate(`/dashboard/sites/${siteId}/widgets/${widget.id}/comments`)}
         />
         {showModal && (
           <AddWidgetModal

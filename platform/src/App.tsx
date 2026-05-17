@@ -18,7 +18,7 @@ function App() {
         <Route path='/dashboard/sites/:siteId' element={
           <ProtectedRoute><SiteWidgets /></ProtectedRoute>
         } />
-        <Route path='/dashboard/sites/:siteId/comments' element={
+        <Route path='/dashboard/sites/:siteId/widgets/:widgetId/comments' element={
           <ProtectedRoute><SiteComments /></ProtectedRoute>
         } />
         <Route path='*' element={<Navigate to='/login' />} />
