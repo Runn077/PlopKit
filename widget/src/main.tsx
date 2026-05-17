@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import Comments from './widgtes/comments/Comments'
 
 const script = document.currentScript as HTMLScriptElement
-const siteKey = script?.getAttribute('data-site-key') ?? ''
+const widgetKey = script?.getAttribute('data-widget-key') ?? ''
 const widget = script?.getAttribute('data-widget') ?? 'comments'
 
 const host = document.createElement('div')
@@ -19,11 +19,10 @@ const widgetMap: Record<string, React.ComponentType<any>> = {
 }
 
 const Widget = widgetMap[widget]
-
-if (Widget) { 
+if (Widget) {
   createRoot(mountPoint).render(
     <StrictMode>
-      <Widget siteKey={siteKey} pageUrl={window.location.href} />
+      <Widget widgetKey={widgetKey} pageUrl={window.location.href} />
     </StrictMode>
   )
 }

@@ -16,12 +16,12 @@ interface Comment {
 
 interface Props {
   comment: Comment
-  siteKey: string
+  widgetKey: string
   pageUrl: string
   onReplyPosted: (commentId: string, reply: Reply) => void
 }
 
-export default function CommentItem({ comment, siteKey, pageUrl, onReplyPosted }: Props) {
+export default function CommentItem({ comment, widgetKey, pageUrl, onReplyPosted }: Props) {
   const [expanded, setExpanded] = useState(false)
   const [showReplies, setShowReplies] = useState(false)
   const [replyOpen, setReplyOpen] = useState(false)
@@ -43,13 +43,12 @@ export default function CommentItem({ comment, siteKey, pageUrl, onReplyPosted }
     }
   }
 
-
   const postReply = async () => {
     if (!replyBody.trim()) return
     const reply = await fetch('http://localhost:3000/comments', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ site_key: siteKey, page_url: pageUrl, body: replyBody, parent_id: comment.id }),
+      body: JSON.stringify({ widget_key: widgetKey, page_url: pageUrl, body: replyBody, parent_id: comment.id }),
     }).then(res => res.json())
     onReplyPosted(comment.id, reply)
     setReplyOpen(false)
@@ -59,13 +58,11 @@ export default function CommentItem({ comment, siteKey, pageUrl, onReplyPosted }
   return (
     <div className="comment">
       <p className={`comment-body ${expanded ? 'expanded' : ''}`}>{displayBody}</p>
-
       {isLong && (
         <button className="btn-show-more" onClick={() => setExpanded(!expanded)}>
           {expanded ? 'Show less' : 'Show more'}
         </button>
       )}
-
       <div className="comment-meta">
         <span className="comment-time">{new Date(comment.createdAt).toLocaleString()}</span>
         <div className="comment-actions">
@@ -74,7 +71,6 @@ export default function CommentItem({ comment, siteKey, pageUrl, onReplyPosted }
           </button>
         </div>
       </div>
-
       {replyOpen && (
         <div className="reply-input-area">
           <textarea
@@ -93,13 +89,11 @@ export default function CommentItem({ comment, siteKey, pageUrl, onReplyPosted }
           </div>
         </div>
       )}
-
       {comment.replies.length > 0 && (
         <>
           <button className="btn-show-replies" onClick={() => setShowReplies(!showReplies)}>
             {showReplies ? 'Hide replies' : `Show ${comment.replies.length} ${comment.replies.length === 1 ? 'reply' : 'replies'}`}
           </button>
-
           {showReplies && (
             <div className="replies">
               {comment.replies.map(r => (

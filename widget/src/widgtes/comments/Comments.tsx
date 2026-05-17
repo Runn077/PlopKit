@@ -16,11 +16,11 @@ interface Comment {
 }
 
 interface Props {
-  siteKey: string
+  widgetKey: string
   pageUrl: string
 }
 
-export default function Comments({ siteKey, pageUrl }: Props) {
+export default function Comments({ widgetKey, pageUrl }: Props) {
   const [comments, setComments] = useState<Comment[]>([])
   const [hasMore, setHasMore] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -29,13 +29,14 @@ export default function Comments({ siteKey, pageUrl }: Props) {
 
   const fetchComments = async (cursor?: string) => {
     setLoading(true)
-    const url = `http://localhost:3000/comments?site_key=${siteKey}&page_url=${encodeURIComponent(pageUrl)}${cursor ? `&cursor=${cursor}` : ''}`
+    const url = `http://localhost:3000/comments?widget_key=${widgetKey}&page_url=${encodeURIComponent(pageUrl)}${cursor ? `&cursor=${cursor}` : ''}`
     const data = await fetch(url).then(res => res.json())
     setComments(prev => cursor ? [...prev, ...data.comments] : data.comments)
     setHasMore(data.hasMore)
     setTotal(data.total ?? (cursor ? total : data.comments.length))
     setLoading(false)
   }
+
   useEffect(() => {
     fetchComments()
   }, [])
@@ -50,7 +51,7 @@ export default function Comments({ siteKey, pageUrl }: Props) {
     const comment = await fetch('http://localhost:3000/comments', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ site_key: siteKey, page_url: pageUrl, body }),
+      body: JSON.stringify({ widget_key: widgetKey, page_url: pageUrl, body }),
     }).then(res => res.json())
     setComments(prev => [{ ...comment, replies: [] }, ...prev])
     setBody('')
@@ -67,7 +68,6 @@ export default function Comments({ siteKey, pageUrl }: Props) {
       <style>{styles}</style>
       <div className="widget">
         <h3>{total} Comments</h3>
-
         <div className="input-area">
           <textarea
             value={body}
@@ -82,14 +82,13 @@ export default function Comments({ siteKey, pageUrl }: Props) {
             </button>
           </div>
         </div>
-
         <div className="comments-list">
           {comments.length === 0 && !loading && <p className="empty">No comments yet. Be the first!</p>}
           {comments.map(c => (
             <CommentItem
               key={c.id}
               comment={c}
-              siteKey={siteKey}
+              widgetKey={widgetKey}
               pageUrl={pageUrl}
               onReplyPosted={handleReplyPosted}
             />
