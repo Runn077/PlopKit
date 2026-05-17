@@ -72,7 +72,6 @@ model Site {
   widgets   Widget[]
   userId    String
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  comments  Comment[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
@@ -82,20 +81,22 @@ model Widget {
   id        String   @id @default(cuid())
   type      String
   name      String
+  widgetKey String   @unique
   siteId    String
   site      Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  comments  Comment[]
   createdAt DateTime @default(now())
 }
 
 
 model Comment {
-  id        String    @id @default(cuid())
-  siteKey   String
-  site      Site      @relation(fields: [siteKey], references: [siteKey])
+  id        String   @id @default(cuid())
+  widgetKey String
+  widget    Widget   @relation(fields: [widgetKey], references: [widgetKey])
   pageUrl   String
   body      String
-  createdAt DateTime  @default(now())
+  createdAt DateTime @default(now())
   parentId  String?
-  parent    Comment?  @relation("Replies", fields: [parentId], references: [id], onDelete: Cascade)
+  parent    Comment? @relation("Replies", fields: [parentId], references: [id], onDelete: Cascade)
   replies   Comment[] @relation("Replies")
 }

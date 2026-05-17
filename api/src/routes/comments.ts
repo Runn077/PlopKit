@@ -9,8 +9,8 @@ const TAKE = 20
 
 router.get('/', async (req, res) => {
   try {
-    const { site_key, page_url, cursor } = req.query as { site_key: string, page_url?: string, cursor?: string }
-    const baseWhere: any = { siteKey: site_key, parentId: null }
+    const { widget_key, page_url, cursor } = req.query as { widget_key: string, page_url?: string, cursor?: string }
+    const baseWhere: any = { widgetKey: widget_key, parentId: null }
     if (page_url) baseWhere.pageUrl = page_url
     if (cursor) {
       const cursorComment = await prisma.comment.findUnique({ where: { id: cursor } })
@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
         baseWhere.createdAt = { lt: cursorComment.createdAt }
       }
     }
-    const countWhere: any = { siteKey: site_key, parentId: null }
+    const countWhere: any = { widgetKey: widget_key, parentId: null }
     if (page_url) countWhere.pageUrl = page_url
     const total = await prisma.comment.count({ where: countWhere })
     const comments = await prisma.comment.findMany({
@@ -37,7 +37,7 @@ router.get('/', async (req, res) => {
 
 router.post('/', commentBurstLimiter, commentHourlyLimiter, async (req, res) => {
   try {
-    const { site_key, page_url, body, parent_id } = req.body
+    const { widget_key, page_url, body, parent_id } = req.body
     const cleanBody = sanitizeHtml(body, { allowedTags: [], allowedAttributes: {} })
     if (!cleanBody || cleanBody.trim().length === 0) {
       res.status(400).json({ error: 'Comment body is required' })
@@ -47,31 +47,34 @@ router.post('/', commentBurstLimiter, commentHourlyLimiter, async (req, res) => 
       res.status(400).json({ error: 'Comment must be under 1000 characters' })
       return
     }
-    const site = await prisma.site.findUnique({ where: { siteKey: site_key } })
-    if (!site) {
-      res.status(404).json({ error: 'Invalid site key' })
+    const widget = await prisma.widget.findUnique({
+      where: { widgetKey: widget_key },
+      include: { site: true }
+    })
+    if (!widget) {
+      res.status(404).json({ error: 'Invalid widget key' })
       return
     }
-    if (!site.verified && site.expiresAt && site.expiresAt < new Date()) {
+    if (!widget.site.verified && widget.site.expiresAt && widget.site.expiresAt < new Date()) {
       res.status(403).json({ error: 'Site verification expired. Please re-register your domain.' })
       return
     }
     const origin = req.headers.origin ?? req.headers.referer ?? ''
     const originHostname = new URL(origin).hostname
-    const siteHostname = new URL(`https://${site.domain}`).hostname
+    const siteHostname = new URL(`https://${widget.site.domain}`).hostname
     if (originHostname !== siteHostname) {
       res.status(403).json({ error: 'Domain not allowed' })
       return
     }
-    if (!site.verified) {
+    if (!widget.site.verified) {
       await prisma.site.update({
-        where: { siteKey: site_key },
+        where: { id: widget.site.id },
         data: { verified: true, expiresAt: null },
       })
     }
     const comment = await prisma.comment.create({
       data: {
-        siteKey: site_key,
+        widgetKey: widget_key,
         pageUrl: page_url,
         body: cleanBody,
         parentId: parent_id ?? null,
@@ -93,8 +96,11 @@ router.delete('/:id', requireAuth, async (req, res) => {
       res.status(404).json({ error: 'Comment not found' })
       return
     }
-    const site = await prisma.site.findUnique({ where: { siteKey: comment.siteKey } })
-    if (!site || site.userId !== user.id) {
+    const widget = await prisma.widget.findUnique({
+      where: { widgetKey: comment.widgetKey },
+      include: { site: true }
+    })
+    if (!widget || widget.site.userId !== user.id) {
       res.status(403).json({ error: 'Forbidden' })
       return
     }

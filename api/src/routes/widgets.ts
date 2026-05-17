@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import prisma from '../lib/prisma.js'
 import { requireAuth } from '../middleware/requireAuth.js'
+import { randomBytes } from 'crypto'
 
 const router = Router()
 
@@ -24,17 +25,23 @@ router.get('/:siteId', requireAuth, async (req, res) => {
   }
 })
 
+
 router.post('/', requireAuth, async (req, res) => {
   try {
     const { user } = res.locals.session
     const { siteId, type, name } = req.body
-    const site = await prisma.site.findUnique({ where: { id: siteId } })
+    const site = await prisma.site.findUnique({ where: { id: siteId as string } })
     if (!site || site.userId !== user.id) {
       res.status(404).json({ error: 'Site not found' })
       return
     }
     const widget = await prisma.widget.create({
-      data: { siteId, type, name },
+      data: {
+        siteId,
+        type,
+        name,
+        widgetKey: randomBytes(16).toString('hex'),
+      },
     })
     res.status(201).json(widget)
   } catch (err) {
