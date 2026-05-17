@@ -70,4 +70,23 @@ router.delete('/:id', requireAuth, async (req, res) => {
   }
 })
 
+router.get('/single/:widgetId', requireAuth, async (req, res) => {
+  try {
+    const { user } = res.locals.session
+    const widgetId = req.params.widgetId as string
+    const widget = await prisma.widget.findUnique({
+      where: { id: widgetId },
+      include: { site: true },
+    })
+    if (!widget || widget.site.userId !== user.id) {
+      res.status(404).json({ error: 'Widget not found' })
+      return
+    }
+    res.json(widget)
+  } catch (err) {
+    console.error('GET /widgets/single/:widgetId error:', err)
+    res.status(500).json({ error: 'Failed to fetch widget' })
+  }
+})
+
 export default router

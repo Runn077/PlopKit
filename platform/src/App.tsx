@@ -4,7 +4,7 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Dashboard from './pages/Dashboard/index'
 import SiteWidgets from './pages/SiteWidgets/index'
-import SiteComments from './pages/SiteComments'
+import SiteComments from './pages/SiteComments/index'
 
 function App() {
   return (
