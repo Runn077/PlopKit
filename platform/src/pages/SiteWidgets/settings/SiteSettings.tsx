@@ -26,9 +26,10 @@ interface Props {
   onDelete: () => Promise<void>
   onDeleteWidget: (widgetId: string) => Promise<void>
   onOpenWidget: (widget: Widget) => void
+  onRenameWidget: (widgetId: string, name: string) => Promise<void>
 }
 
-function SiteSettings({ site, widgets, onSave, onDelete, onDeleteWidget, onOpenWidget }: Props) {
+function SiteSettings({ site, widgets, onSave, onDelete, onDeleteWidget, onOpenWidget, onRenameWidget }: Props) {
   const [activeSection, setActiveSection] = useState<SettingsSection>('general')
 
   return (
@@ -43,6 +44,7 @@ function SiteSettings({ site, widgets, onSave, onDelete, onDeleteWidget, onOpenW
             widgets={widgets}
             onOpen={onOpenWidget}
             onDelete={onDeleteWidget}
+            onRename={onRenameWidget}
           />
         )}
       </div>

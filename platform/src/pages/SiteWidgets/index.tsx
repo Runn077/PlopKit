@@ -99,6 +99,21 @@ function SiteWidgets() {
     setWidgets(prev => prev.filter(w => w.id !== widgetId))
   }
 
+  async function handleRenameWidget(widgetId: string, name: string) {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/widgets/${widgetId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ name }),
+    })
+    if (!res.ok) {
+      const data = await res.json()
+      throw new Error(data.error ?? 'Something went wrong')
+    }
+    const updated = await res.json()
+    setWidgets(prev => prev.map(w => w.id === widgetId ? { ...w, name: updated.name } : w))
+  }
+
   if (loading) return <div>Loading...</div>
   if (!site) return <div>Site not found</div>
 
@@ -142,6 +157,7 @@ function SiteWidgets() {
             onDelete={handleDeleteSite}
             onDeleteWidget={handleDeleteWidget}
             onOpenWidget={(widget) => navigate(`/dashboard/sites/${siteId}/widgets/${widget.id}/comments`)}
+            onRenameWidget={handleRenameWidget}
           />
         </div>
       )}

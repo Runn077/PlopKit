@@ -11,6 +11,7 @@ interface Props {
   widgets: Widget[]
   onOpen: (widget: Widget) => void
   onDelete: (widgetId: string) => Promise<void>
+  onRename: (widgetId: string, name: string) => Promise<void>
 }
 
 function DeleteWidgetModal({ onClose, onConfirm }: { onClose: () => void, onConfirm: () => Promise<void> }) {
@@ -56,9 +57,98 @@ function DeleteWidgetModal({ onClose, onConfirm }: { onClose: () => void, onConf
   )
 }
 
-function ManageWidgets({ widgets, onOpen, onDelete }: Props) {
-  const [deletingWidget, setDeletingWidget] = useState<Widget | null>(null)
+function WidgetRow({ widget, onOpen, onDelete, onRename }: {
+  widget: Widget
+  onOpen: (widget: Widget) => void
+  onDelete: (widgetId: string) => Promise<void>
+  onRename: (widgetId: string, name: string) => Promise<void>
+}) {
+  const [editing, setEditing] = useState(false)
+  const [name, setName] = useState(widget.name)
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState('')
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
 
+  async function handleRename() {
+    if (!name.trim() || name === widget.name) {
+      setEditing(false)
+      setName(widget.name)
+      return
+    }
+    setSaving(true)
+    setError('')
+    try {
+      await onRename(widget.id, name)
+      setEditing(false)
+    } catch (err: any) {
+      setError(err.message)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  function handleCancel() {
+    setEditing(false)
+    setName(widget.name)
+    setError('')
+  }
+
+  return (
+    <div className="sw-manage-widget-row">
+      <div style={{ flex: 1, minWidth: 0 }}>
+        {editing ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <input
+              className="sw-input"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              autoFocus
+              onKeyDown={e => {
+                if (e.key === 'Enter') handleRename()
+                if (e.key === 'Escape') handleCancel()
+              }}
+            />
+            {error && <p className="sw-modal-error">{error}</p>}
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button className="sw-btn sw-btn-primary" onClick={handleRename} disabled={saving}>
+                {saving ? 'Saving...' : 'Confirm'}
+              </button>
+              <button className="sw-btn" onClick={handleCancel}>Cancel</button>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <p
+              className="sw-manage-widget-name"
+              style={{ cursor: 'pointer' }}
+              onClick={() => setEditing(true)}
+              title="Click to edit"
+            >
+              {widget.name}
+            </p>
+            <p className="sw-manage-widget-type">{widget.type}</p>
+          </div>
+        )}
+      </div>
+
+      {!editing && (
+        <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+          <button className="sw-btn" onClick={() => onOpen(widget)}>Open</button>
+          <button className="sw-btn sw-btn-danger-outline" onClick={() => setShowDeleteModal(true)}>Delete</button>
+        </div>
+      )}
+
+      {showDeleteModal && (
+        <DeleteWidgetModal
+          onClose={() => setShowDeleteModal(false)}
+          onConfirm={() => onDelete(widget.id)}
+        />
+      )}
+    </div>
+  )
+}
+
+function ManageWidgets({ widgets, onOpen, onDelete, onRename }: Props) {
   if (widgets.length === 0) {
     return (
       <div>
@@ -73,25 +163,15 @@ function ManageWidgets({ widgets, onOpen, onDelete }: Props) {
       <p className="sw-settings-section-title">Manage widgets</p>
       <div className="sw-manage-widget-list">
         {widgets.map(widget => (
-          <div key={widget.id} className="sw-manage-widget-row">
-            <div>
-              <p className="sw-manage-widget-name">{widget.name}</p>
-              <p className="sw-manage-widget-type">{widget.type}</p>
-            </div>
-            <div style={{ display: 'flex', gap: 8 }}>
-              <button className="sw-btn" onClick={() => onOpen(widget)}>Open</button>
-              <button className="sw-btn sw-btn-danger-outline" onClick={() => setDeletingWidget(widget)}>Delete</button>
-            </div>
-          </div>
+          <WidgetRow
+            key={widget.id}
+            widget={widget}
+            onOpen={onOpen}
+            onDelete={onDelete}
+            onRename={onRename}
+          />
         ))}
       </div>
-
-      {deletingWidget && (
-        <DeleteWidgetModal
-          onClose={() => setDeletingWidget(null)}
-          onConfirm={() => onDelete(deletingWidget.id)}
-        />
-      )}
     </div>
   )
 }
