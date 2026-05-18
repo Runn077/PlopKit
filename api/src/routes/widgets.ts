@@ -89,4 +89,53 @@ router.get('/single/:widgetId', requireAuth, async (req, res) => {
   }
 })
 
+router.patch('/:id', requireAuth, async (req, res) => {
+  try {
+    const { user } = res.locals.session
+    const id = req.params.id as string
+    const { name } = req.body
+
+    const widget = await prisma.widget.findUnique({
+      where: { id },
+      include: { site: true },
+    })
+    if (!widget || widget.site.userId !== user.id) {
+      res.status(404).json({ error: 'Widget not found' })
+      return
+    }
+
+    const updated = await prisma.widget.update({
+      where: { id },
+      data: { ...(name && { name }) },
+    })
+
+    res.json(updated)
+  } catch (err) {
+    console.error('PATCH /widgets/:id error:', err)
+    res.status(500).json({ error: 'Failed to update widget' })
+  }
+})
+
+router.delete('/:id', requireAuth, async (req, res) => {
+  try {
+    const { user } = res.locals.session
+    const id = req.params.id as string
+
+    const widget = await prisma.widget.findUnique({
+      where: { id },
+      include: { site: true },
+    })
+    if (!widget || widget.site.userId !== user.id) {
+      res.status(404).json({ error: 'Widget not found' })
+      return
+    }
+
+    await prisma.widget.delete({ where: { id } })
+    res.json({ success: true })
+  } catch (err) {
+    console.error('DELETE /widgets/:id error:', err)
+    res.status(500).json({ error: 'Failed to delete widget' })
+  }
+})
+
 export default router

@@ -72,4 +72,58 @@ router.get('/:id', requireAuth, async (req, res) => {
   }
 })
 
+router.patch('/:id', requireAuth, async (req, res) => {
+  try {
+    const { user } = res.locals.session
+    const id = req.params.id as string
+    const { name, domain } = req.body
+
+    const site = await prisma.site.findUnique({ where: { id } })
+    if (!site || site.userId !== user.id) {
+      res.status(404).json({ error: 'Site not found' })
+      return
+    }
+
+    if (domain && domain !== site.domain) {
+      const existing = await prisma.site.findUnique({ where: { domain } })
+      if (existing) {
+        res.status(409).json({ error: 'This domain is already registered' })
+        return
+      }
+    }
+
+    const updated = await prisma.site.update({
+      where: { id },
+      data: {
+        ...(name && { name }),
+        ...(domain && { domain }),
+      },
+    })
+
+    res.json(updated)
+  } catch (err) {
+    console.error('PATCH /sites/:id error:', err)
+    res.status(500).json({ error: 'Failed to update site' })
+  }
+})
+
+router.delete('/:id', requireAuth, async (req, res) => {
+  try {
+    const { user } = res.locals.session
+    const id = req.params.id as string
+
+    const site = await prisma.site.findUnique({ where: { id } })
+    if (!site || site.userId !== user.id) {
+      res.status(404).json({ error: 'Site not found' })
+      return
+    }
+
+    await prisma.site.delete({ where: { id } })
+    res.json({ success: true })
+  } catch (err) {
+    console.error('DELETE /sites/:id error:', err)
+    res.status(500).json({ error: 'Failed to delete site' })
+  }
+})
+
 export default router
