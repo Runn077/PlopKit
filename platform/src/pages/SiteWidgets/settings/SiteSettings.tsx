@@ -1,0 +1,53 @@
+import { useState } from 'react'
+import '../SiteWidgets.css'
+import SettingsSideNav from './SettingsSideNav'
+import GeneralSettings from './GeneralSettings'
+import ManageWidgets from './ManageWidgets'
+
+type SettingsSection = 'general' | 'manage-widgets'
+
+interface Site {
+  id: string
+  name: string
+  domain: string
+  siteKey: string
+}
+
+interface Widget {
+  id: string
+  type: string
+  name: string
+}
+
+interface Props {
+  site: Site
+  widgets: Widget[]
+  onSave: (name: string, domain: string) => Promise<void>
+  onDelete: () => Promise<void>
+  onDeleteWidget: (widgetId: string) => Promise<void>
+  onOpenWidget: (widget: Widget) => void
+}
+
+function SiteSettings({ site, widgets, onSave, onDelete, onDeleteWidget, onOpenWidget }: Props) {
+  const [activeSection, setActiveSection] = useState<SettingsSection>('general')
+
+  return (
+    <div className="settings-layout">
+      <SettingsSideNav active={activeSection} onChange={setActiveSection} />
+      <div className="settings-content">
+        {activeSection === 'general' && (
+          <GeneralSettings site={site} onSave={onSave} onDelete={onDelete} />
+        )}
+        {activeSection === 'manage-widgets' && (
+          <ManageWidgets
+            widgets={widgets}
+            onOpen={onOpenWidget}
+            onDelete={onDeleteWidget}
+          />
+        )}
+      </div>
+    </div>
+  )
+}
+
+export default SiteSettings
