@@ -106,35 +106,35 @@ function SiteWidgets() {
     <div>
       <Navbar />
       <SubNav activeTab={activeTab} onTabChange={setActiveTab} />
-      <div className="sw-container">
-        <div className="sw-breadcrumb">
-          <span className="sw-breadcrumb-link" onClick={() => navigate('/dashboard')}>Sites</span>
-          <span className="sw-breadcrumb-sep">/</span>
-          <span className="sw-breadcrumb-current">{site.name}</span>
-        </div>
 
-        {activeTab === 'widgets' && (
-          <>
-            <div className="sw-header">
-              <h2 className="sw-title">Widgets</h2>
-              <button className="sw-btn sw-btn-primary" onClick={() => setShowModal(true)}>
-                + Add widget
-              </button>
-            </div>
-            <WidgetList
-              widgets={widgets}
-              onOpen={(widget) => navigate(`/dashboard/sites/${siteId}/widgets/${widget.id}/comments`)}
+      {activeTab === 'widgets' && (
+        <div className="sw-container">
+          <div className="sw-breadcrumb">
+            <span className="sw-breadcrumb-link" onClick={() => navigate('/dashboard')}>Sites</span>
+            <span className="sw-breadcrumb-sep">/</span>
+            <span className="sw-breadcrumb-current">{site.name}</span>
+          </div>
+          <div className="sw-header">
+            <h2 className="sw-title">Widgets</h2>
+            <button className="sw-btn sw-btn-primary" onClick={() => setShowModal(true)}>
+              + Add widget
+            </button>
+          </div>
+          <WidgetList
+            widgets={widgets}
+            onOpen={(widget) => navigate(`/dashboard/sites/${siteId}/widgets/${widget.id}/comments`)}
+          />
+          {showModal && (
+            <AddWidgetModal
+              onClose={() => setShowModal(false)}
+              onSubmit={handleAddWidget}
             />
-            {showModal && (
-              <AddWidgetModal
-                onClose={() => setShowModal(false)}
-                onSubmit={handleAddWidget}
-              />
-            )}
-          </>
-        )}
+          )}
+        </div>
+      )}
 
-        {activeTab === 'settings' && (
+      {activeTab === 'settings' && (
+        <div style={{ paddingTop: 32 }}>
           <SiteSettings
             site={site}
             widgets={widgets}
@@ -143,8 +143,8 @@ function SiteWidgets() {
             onDeleteWidget={handleDeleteWidget}
             onOpenWidget={(widget) => navigate(`/dashboard/sites/${siteId}/widgets/${widget.id}/comments`)}
           />
-        )}
-      </div>
+        </div>
+      )}
     </div>
   )
 }
