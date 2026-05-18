@@ -29,7 +29,7 @@ export default function Comments({ widgetKey, pageUrl }: Props) {
 
   const fetchComments = async (cursor?: string) => {
     setLoading(true)
-    const url = `http://localhost:3000/comments?widget_key=${widgetKey}&page_url=${encodeURIComponent(pageUrl)}${cursor ? `&cursor=${cursor}` : ''}`
+    const url = `${import.meta.env.VITE_API_URL}/comments?widget_key=${widgetKey}&page_url=${encodeURIComponent(pageUrl)}${cursor ? `&cursor=${cursor}` : ''}`
     const data = await fetch(url).then(res => res.json())
     setComments(prev => cursor ? [...prev, ...data.comments] : data.comments)
     setHasMore(data.hasMore)
@@ -48,7 +48,7 @@ export default function Comments({ widgetKey, pageUrl }: Props) {
 
   const postComment = async () => {
     if (!body.trim()) return
-    const comment = await fetch('http://localhost:3000/comments', {
+    const comment = await fetch(`${import.meta.env.VITE_API_URL}/comments`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ widget_key: widgetKey, page_url: pageUrl, body }),

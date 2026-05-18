@@ -45,7 +45,7 @@ export default function CommentItem({ comment, widgetKey, pageUrl, onReplyPosted
 
   const postReply = async () => {
     if (!replyBody.trim()) return
-    const reply = await fetch('http://localhost:3000/comments', {
+    const reply = await fetch(`${import.meta.env.VITE_API_URL}/comments`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ widget_key: widgetKey, page_url: pageUrl, body: replyBody, parent_id: comment.id }),

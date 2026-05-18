@@ -22,14 +22,14 @@ function Dashboard() {
   useEffect(() => { fetchSites() }, [])
 
   async function fetchSites() {
-    const res = await fetch('http://localhost:3000/sites', { credentials: 'include' })
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/sites`, { credentials: 'include' })
     const data = await res.json()
     setSites(data)
     setLoading(false)
   }
 
   async function handleAddSite(name: string, domain: string) {
-    const res = await fetch('http://localhost:3000/sites', {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/sites`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',

@@ -31,8 +31,8 @@ function SiteWidgets() {
 
   async function fetchData() {
     const [siteRes, widgetsRes] = await Promise.all([
-      fetch(`http://localhost:3000/sites/${siteId}`, { credentials: 'include' }),
-      fetch(`http://localhost:3000/widgets/${siteId}`, { credentials: 'include' }),
+      fetch(`${import.meta.env.VITE_API_URL}/sites/${siteId}`, { credentials: 'include' }),
+      fetch(`${import.meta.env.VITE_API_URL}/widgets/${siteId}`, { credentials: 'include' }),
     ])
     const siteData = await siteRes.json()
     const widgetsData = await widgetsRes.json()
@@ -42,7 +42,7 @@ function SiteWidgets() {
   }
 
   async function handleAddWidget(type: string, name: string) {
-    const res = await fetch('http://localhost:3000/widgets', {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/widgets`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',

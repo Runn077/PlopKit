@@ -39,7 +39,7 @@ function SiteComments() {
   useEffect(() => { fetchData() }, [widgetId])
 
   async function fetchData() {
-    const res = await fetch(`http://localhost:3000/widgets/single/${widgetId}`, {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/widgets/single/${widgetId}`, {
       credentials: 'include',
     })
     const data = await res.json()
@@ -50,7 +50,7 @@ function SiteComments() {
   async function fetchComments(widgetKey: string, cursor?: string) {
     const params = new URLSearchParams({ widget_key: widgetKey })
     if (cursor) params.set('cursor', cursor)
-    const res = await fetch(`http://localhost:3000/comments?${params}`, {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/comments?${params}`, {
       credentials: 'include',
     })
     const data = await res.json()
@@ -64,7 +64,7 @@ function SiteComments() {
   }
 
   async function handleDelete(commentId: string, parentId?: string) {
-    const res = await fetch(`http://localhost:3000/comments/${commentId}`, {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/comments/${commentId}`, {
       method: 'DELETE',
       credentials: 'include',
     })
@@ -96,7 +96,7 @@ function SiteComments() {
   if (loading) return <div>Loading...</div>
   if (!widget) return <div>Widget not found</div>
 
-  const scriptTag = `<script src="http://localhost:5174/widget.js" data-widget-key="${widget.widgetKey}" data-widget="comments"></script>`
+  const scriptTag = `<script src="${import.meta.env.VITE_WIDGET_URL}/widget.js" data-widget-key="${widget.widgetKey}" data-widget="comments"></script>`
 
   return (
     <div>
