@@ -7,10 +7,68 @@ import { commentBurstLimiter, commentHourlyLimiter } from '../middleware/comment
 const router = Router()
 const TAKE = 20
 
+router.get('/pending', requireAuth, async (req, res) => {
+  try {
+    const { widget_key } = req.query as { widget_key: string }
+    const { user } = res.locals.session
+
+    const widget = await prisma.widget.findUnique({
+      where: { widgetKey: widget_key },
+      include: { site: true },
+    })
+    if (!widget || widget.site.userId !== user.id) {
+      res.status(404).json({ error: 'Widget not found' })
+      return
+    }
+
+    const comments = await prisma.comment.findMany({
+      where: { widgetKey: widget_key, status: 'pending', deletedAt: null, parentId: null },
+      orderBy: { createdAt: 'desc' },
+      include: { replies: { orderBy: { createdAt: 'asc' } } },
+    })
+    res.json(comments)
+  } catch (err) {
+    console.error('GET /comments/pending error:', err)
+    res.status(500).json({ error: 'Failed to fetch pending comments' })
+  }
+})
+
+router.get('/deleted', requireAuth, async (req, res) => {
+  try {
+    const { widget_key } = req.query as { widget_key: string }
+    const { user } = res.locals.session
+
+    const widget = await prisma.widget.findUnique({
+      where: { widgetKey: widget_key },
+      include: { site: true },
+    })
+    if (!widget || widget.site.userId !== user.id) {
+      res.status(404).json({ error: 'Widget not found' })
+      return
+    }
+
+    const comments = await prisma.comment.findMany({
+      where: { widgetKey: widget_key, deletedAt: { not: null }, parentId: null },
+      orderBy: { deletedAt: 'desc' },
+      include: { replies: { orderBy: { createdAt: 'asc' } } },
+    })
+    res.json(comments)
+  } catch (err) {
+    console.error('GET /comments/deleted error:', err)
+    res.status(500).json({ error: 'Failed to fetch deleted comments' })
+  }
+})
+
 router.get('/', async (req, res) => {
   try {
     const { widget_key, page_url, cursor } = req.query as { widget_key: string, page_url?: string, cursor?: string }
-    const baseWhere: any = { widgetKey: widget_key, parentId: null }
+
+    const baseWhere: any = {
+      widgetKey: widget_key,
+      status: 'approved',
+      deletedAt: null,
+      parentId: null,
+    }
     if (page_url) baseWhere.pageUrl = page_url
     if (cursor) {
       const cursorComment = await prisma.comment.findUnique({ where: { id: cursor } })
@@ -18,14 +76,21 @@ router.get('/', async (req, res) => {
         baseWhere.createdAt = { lt: cursorComment.createdAt }
       }
     }
-    const countWhere: any = { widgetKey: widget_key, parentId: null }
+
+    const countWhere: any = {
+      widgetKey: widget_key,
+      status: 'approved',
+      deletedAt: null,
+      parentId: null,
+    }
     if (page_url) countWhere.pageUrl = page_url
+
     const total = await prisma.comment.count({ where: countWhere })
     const comments = await prisma.comment.findMany({
       where: baseWhere,
       orderBy: { createdAt: 'desc' },
       take: TAKE,
-      include: { replies: { orderBy: { createdAt: 'asc' } } }
+      include: { replies: { where: { deletedAt: null }, orderBy: { createdAt: 'asc' } } },
     })
     const hasMore = comments.length === TAKE
     res.json({ comments, hasMore, total })
@@ -47,9 +112,10 @@ router.post('/', commentBurstLimiter, commentHourlyLimiter, async (req, res) => 
       res.status(400).json({ error: 'Comment must be under 1000 characters' })
       return
     }
+
     const widget = await prisma.widget.findUnique({
       where: { widgetKey: widget_key },
-      include: { site: true }
+      include: { site: true },
     })
     if (!widget) {
       res.status(404).json({ error: 'Invalid widget key' })
@@ -59,6 +125,7 @@ router.post('/', commentBurstLimiter, commentHourlyLimiter, async (req, res) => 
       res.status(403).json({ error: 'Site verification expired. Please re-register your domain.' })
       return
     }
+
     const origin = req.headers.origin ?? req.headers.referer ?? ''
     const originHostname = new URL(origin).hostname
     const siteHostname = new URL(`https://${widget.site.domain}`).hostname
@@ -66,17 +133,20 @@ router.post('/', commentBurstLimiter, commentHourlyLimiter, async (req, res) => 
       res.status(403).json({ error: 'Domain not allowed' })
       return
     }
+
     if (!widget.site.verified) {
       await prisma.site.update({
         where: { id: widget.site.id },
         data: { verified: true, expiresAt: null },
       })
     }
+
     const comment = await prisma.comment.create({
       data: {
         widgetKey: widget_key,
         pageUrl: page_url,
         body: cleanBody,
+        status: 'pending',
         parentId: parent_id ?? null,
       },
     })
@@ -87,28 +157,126 @@ router.post('/', commentBurstLimiter, commentHourlyLimiter, async (req, res) => 
   }
 })
 
-router.delete('/:id', requireAuth, async (req, res) => {
+router.patch('/:id/approve', requireAuth, async (req, res) => {
   try {
     const id = req.params.id as string
     const { user } = res.locals.session
+
     const comment = await prisma.comment.findUnique({ where: { id } })
     if (!comment) {
       res.status(404).json({ error: 'Comment not found' })
       return
     }
+
     const widget = await prisma.widget.findUnique({
       where: { widgetKey: comment.widgetKey },
-      include: { site: true }
+      include: { site: true },
     })
     if (!widget || widget.site.userId !== user.id) {
       res.status(403).json({ error: 'Forbidden' })
       return
     }
-    await prisma.comment.deleteMany({ where: { parentId: id } })
-    await prisma.comment.delete({ where: { id } })
+
+    const updated = await prisma.comment.update({
+      where: { id },
+      data: { status: 'approved' },
+    })
+    res.json(updated)
+  } catch (err) {
+    console.error('PATCH /comments/:id/approve error:', err)
+    res.status(500).json({ error: 'Failed to approve comment' })
+  }
+})
+
+router.patch('/:id/reject', requireAuth, async (req, res) => {
+  try {
+    const id = req.params.id as string
+    const { user } = res.locals.session
+
+    const comment = await prisma.comment.findUnique({ where: { id } })
+    if (!comment) {
+      res.status(404).json({ error: 'Comment not found' })
+      return
+    }
+
+    const widget = await prisma.widget.findUnique({
+      where: { widgetKey: comment.widgetKey },
+      include: { site: true },
+    })
+    if (!widget || widget.site.userId !== user.id) {
+      res.status(403).json({ error: 'Forbidden' })
+      return
+    }
+
+    await prisma.comment.update({
+      where: { id },
+      data: { deletedAt: new Date() },
+    })
     res.json({ success: true })
   } catch (err) {
-    console.error('DELETE /comments error:', err)
+    console.error('PATCH /comments/:id/reject error:', err)
+    res.status(500).json({ error: 'Failed to reject comment' })
+  }
+})
+
+router.patch('/:id/restore', requireAuth, async (req, res) => {
+  try {
+    const id = req.params.id as string
+    const { user } = res.locals.session
+
+    const comment = await prisma.comment.findUnique({ where: { id } })
+    if (!comment) {
+      res.status(404).json({ error: 'Comment not found' })
+      return
+    }
+
+    const widget = await prisma.widget.findUnique({
+      where: { widgetKey: comment.widgetKey },
+      include: { site: true },
+    })
+    if (!widget || widget.site.userId !== user.id) {
+      res.status(403).json({ error: 'Forbidden' })
+      return
+    }
+
+    const updated = await prisma.comment.update({
+      where: { id },
+      data: { deletedAt: null, status: 'approved' },
+    })
+    res.json(updated)
+  } catch (err) {
+    console.error('PATCH /comments/:id/restore error:', err)
+    res.status(500).json({ error: 'Failed to restore comment' })
+  }
+})
+
+router.delete('/:id', requireAuth, async (req, res) => {
+  try {
+    const id = req.params.id as string
+    const { user } = res.locals.session
+
+    const comment = await prisma.comment.findUnique({ where: { id } })
+    if (!comment) {
+      res.status(404).json({ error: 'Comment not found' })
+      return
+    }
+
+    const widget = await prisma.widget.findUnique({
+      where: { widgetKey: comment.widgetKey },
+      include: { site: true },
+    })
+    if (!widget || widget.site.userId !== user.id) {
+      res.status(403).json({ error: 'Forbidden' })
+      return
+    }
+
+    await prisma.comment.update({
+      where: { id },
+      data: { deletedAt: new Date() },
+    })
+    res.json({ success: true })
+  } catch (err) {
+    console.error('DELETE /comments/:id error:', err)
     res.status(500).json({ error: 'Failed to delete comment' })
   }
 })

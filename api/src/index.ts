@@ -3,6 +3,7 @@ import cors from 'cors'
 import { toNodeHandler } from 'better-auth/node'
 import { auth } from './lib/auth.js'
 import { startCronJobs } from './lib/cron.js'
+import { startCommentCronJobs } from './lib/commentCron.js'
 import commentsRouter from './routes/comments.js'
 import sitesRouter from './routes/sites.js'
 import widgetsRouter from './routes/widgets.js'
@@ -33,6 +34,7 @@ app.use('/sites', sitesRouter)
 app.use('/widgets', widgetsRouter)
 
 startCronJobs()
+startCommentCronJobs()
 
 app.listen(3000, () => {
   console.log('Server running on port 3000')

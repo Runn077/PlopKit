@@ -90,13 +90,15 @@ model Widget {
 
 
 model Comment {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   widgetKey String
-  widget    Widget   @relation(fields: [widgetKey], references: [widgetKey])
+  widget    Widget    @relation(fields: [widgetKey], references: [widgetKey])
   pageUrl   String
   body      String
-  createdAt DateTime @default(now())
+  status    String    @default("pending")
+  deletedAt DateTime?
+  createdAt DateTime  @default(now())
   parentId  String?
-  parent    Comment? @relation("Replies", fields: [parentId], references: [id], onDelete: Cascade)
+  parent    Comment?  @relation("Replies", fields: [parentId], references: [id], onDelete: Cascade)
   replies   Comment[] @relation("Replies")
 }
