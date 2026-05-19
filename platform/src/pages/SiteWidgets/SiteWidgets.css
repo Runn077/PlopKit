@@ -391,25 +391,15 @@
 }
 
 .settings-layout {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 24px;
-  padding: 0 24px;
-}
-
-.settings-sidenav {
-  display: flex;
-  flex-direction: column;
-  min-width: 140px;
-  flex-shrink: 0;
-  border-right: 1px solid #e4e2dc;
-  padding-right: 24px;
-  gap: 2px;
+  position: relative;
 }
 
 .settings-content {
   max-width: 680px;
-  min-width: 0;
-  flex-shrink: 0;
+  margin: 0 auto;
+}
+
+.settings-sidenav {
+  position: absolute;
+  right: calc(50% + 380px);
 }
