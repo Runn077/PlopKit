@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import type { Comment } from '../components/CommentRow'
 import CommentRow from '../components/CommentRow'
 import '../SiteComments.css'
