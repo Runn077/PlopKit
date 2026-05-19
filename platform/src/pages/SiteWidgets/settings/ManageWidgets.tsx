@@ -124,7 +124,7 @@ function WidgetRow({ widget, onOpen, onDelete, onRename }: {
               onClick={() => setEditing(true)}
               title="Click to edit"
             >
-              {widget.name}
+              {widget.name} ✎
             </p>
             <p className="sw-manage-widget-type">{widget.type}</p>
           </div>
