@@ -281,4 +281,33 @@ router.delete('/:id', requireAuth, async (req, res) => {
   }
 })
 
+router.delete('/:id/permanent', requireAuth, async (req, res) => {
+  try {
+    const id = req.params.id as string
+    const { user } = res.locals.session
+
+    const comment = await prisma.comment.findUnique({ where: { id } })
+    if (!comment) {
+      res.status(404).json({ error: 'Comment not found' })
+      return
+    }
+
+    const widget = await prisma.widget.findUnique({
+      where: { widgetKey: comment.widgetKey },
+      include: { site: true },
+    })
+    if (!widget || widget.site.userId !== user.id) {
+      res.status(403).json({ error: 'Forbidden' })
+      return
+    }
+
+    await prisma.comment.deleteMany({ where: { parentId: id } })
+    await prisma.comment.delete({ where: { id } })
+    res.json({ success: true })
+  } catch (err) {
+    console.error('DELETE /comments/:id/permanent error:', err)
+    res.status(500).json({ error: 'Failed to permanently delete comment' })
+  }
+})
+
 export default router

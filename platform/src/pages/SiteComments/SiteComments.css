@@ -218,3 +218,73 @@
 
 .sc-load-more:hover { background: #f5f5f5; }
 .sc-load-more:disabled { opacity: 0.5; cursor: not-allowed; }
+
+
+/* SubNav */
+.sc-subnav {
+  display: flex;
+  border-bottom: 1px solid #000;
+  background: #fff;
+  padding: 0 24px;
+}
+
+.sc-subnav-tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: sans-serif;
+  color: #888;
+  cursor: pointer;
+  margin-bottom: -1px;
+  transition: color 0.15s;
+}
+
+.sc-subnav-tab:hover { color: #000; }
+
+.sc-subnav-tab-active {
+  color: #000;
+  border-bottom-color: #000;
+}
+
+/* Breadcrumb */
+.sc-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  font-size: 13px;
+}
+
+.sc-breadcrumb-link {
+  color: #888;
+  cursor: pointer;
+}
+
+.sc-breadcrumb-link:hover { color: #000; }
+
+.sc-breadcrumb-sep { color: #ccc; }
+
+.sc-breadcrumb-current {
+  color: #000;
+  font-weight: 500;
+}
+
+/* Comment actions */
+.sc-comment-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.sc-btn-approve {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+  font-size: 12px;
+  padding: 4px 10px;
+}
+
+.sc-btn-approve:hover { background: #333; }
