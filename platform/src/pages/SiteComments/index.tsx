@@ -6,33 +6,8 @@ import CommentsTab from './tabs/CommentsTab'
 import PendingTab from './tabs/PendingTab'
 import DeletedTab from './tabs/DeletedTab'
 import './SiteComments.css'
-
-interface Reply {
-  id: string
-  body: string
-  createdAt: string
-}
-
-interface Comment {
-  id: string
-  body: string
-  pageUrl: string
-  createdAt: string
-  deletedAt?: string | null
-  replies: Reply[]
-}
-
-interface Widget {
-  id: string
-  name: string
-  widgetKey: string
-  siteId: string
-}
-
-interface Site {
-  id: string
-  name: string
-}
+import type { Comment, Widget, Site } from '../../types'
+import { apiFetch } from '../../lib/api'
 
 type Tab = 'comments' | 'pending' | 'deleted'
 
@@ -61,8 +36,8 @@ function SiteComments() {
 
   async function fetchData() {
     const [widgetRes, siteRes] = await Promise.all([
-      fetch(`${import.meta.env.VITE_API_URL}/widgets/single/${widgetId}`, { credentials: 'include' }),
-      fetch(`${import.meta.env.VITE_API_URL}/sites/${siteId}`, { credentials: 'include' }),
+      apiFetch(`/widgets/single/${widgetId}`),
+      apiFetch(`/sites/${siteId}`),
     ])
     const widgetData = await widgetRes.json()
     const siteData = await siteRes.json()
@@ -74,7 +49,7 @@ function SiteComments() {
   async function fetchComments(widgetKey: string, cursor?: string) {
     const params = new URLSearchParams({ widget_key: widgetKey })
     if (cursor) params.set('cursor', cursor)
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/comments?${params}`, { credentials: 'include' })
+    const res = await apiFetch(`/comments?${params}`)
     const data = await res.json()
     setComments(prev => cursor ? [...prev, ...data.comments] : data.comments)
     setHasMore(data.hasMore)
@@ -84,21 +59,20 @@ function SiteComments() {
   }
 
   async function fetchPending(widgetKey: string) {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/comments/pending?widget_key=${widgetKey}`, { credentials: 'include' })
+    const res = await apiFetch(`/comments/pending?widget_key=${widgetKey}`)
     const data = await res.json()
     setPendingComments(data)
   }
 
   async function fetchDeleted(widgetKey: string) {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/comments/deleted?widget_key=${widgetKey}`, { credentials: 'include' })
+    const res = await apiFetch(`/comments/deleted?widget_key=${widgetKey}`)
     const data = await res.json()
     setDeletedComments(data)
   }
 
   async function handleDelete(commentId: string, parentId?: string) {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/comments/${commentId}`, {
+    const res = await apiFetch(`/comments/${commentId}`, {
       method: 'DELETE',
-      credentials: 'include',
     })
     if (res.ok) {
       if (parentId) {
@@ -112,9 +86,8 @@ function SiteComments() {
   }
 
   async function handleApprove(commentId: string) {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/comments/${commentId}/approve`, {
+    const res = await apiFetch(`/comments/${commentId}/approve`, {
       method: 'PATCH',
-      credentials: 'include',
     })
     if (res.ok) {
       setPendingComments(prev => prev.filter(c => c.id !== commentId))
@@ -122,9 +95,8 @@ function SiteComments() {
   }
 
   async function handleReject(commentId: string) {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/comments/${commentId}`, {
+    const res = await apiFetch(`/comments/${commentId}`, {
       method: 'DELETE',
-      credentials: 'include',
     })
     if (res.ok) {
       setPendingComments(prev => prev.filter(c => c.id !== commentId))
@@ -132,9 +104,8 @@ function SiteComments() {
   }
 
   async function handleRestore(commentId: string) {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/comments/${commentId}/restore`, {
+    const res = await apiFetch(`/comments/${commentId}/restore`, {
       method: 'PATCH',
-      credentials: 'include',
     })
     if (res.ok) {
       setDeletedComments(prev => prev.filter(c => c.id !== commentId))
@@ -142,9 +113,8 @@ function SiteComments() {
   }
 
   async function handlePermanentDelete(commentId: string) {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/comments/${commentId}/permanent`, {
+    const res = await apiFetch(`/comments/${commentId}/permanent`, {
       method: 'DELETE',
-      credentials: 'include',
     })
     if (res.ok) {
       setDeletedComments(prev => prev.filter(c => c.id !== commentId))

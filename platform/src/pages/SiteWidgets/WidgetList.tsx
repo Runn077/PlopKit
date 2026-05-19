@@ -1,11 +1,6 @@
 import { useState } from 'react'
 import './SiteWidgets.css'
-
-interface Widget {
-  id: string
-  type: string
-  name: string
-}
+import type { Widget } from '../../types'
 
 interface Props {
   widgets: Widget[]

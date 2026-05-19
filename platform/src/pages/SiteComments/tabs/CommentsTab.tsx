@@ -1,4 +1,4 @@
-import type { Comment } from '../components/CommentRow'
+import type { Comment } from '../../../types'
 import CommentRow from '../components/CommentRow'
 import '../SiteComments.css'
 

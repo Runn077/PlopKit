@@ -6,21 +6,8 @@ import WidgetList from './WidgetList'
 import AddWidgetModal from './AddWidgetModal'
 import SiteSettings from './settings/SiteSettings'
 import './SiteWidgets.css'
-
-interface Site {
-  id: string
-  name: string
-  domain: string
-  siteKey: string
-}
-
-interface Widget {
-  id: string
-  type: string
-  name: string
-  siteId: string
-  createdAt: string
-}
+import type { Site, Widget } from '../../types'
+import { apiFetch } from '../../lib/api'
 
 function SiteWidgets() {
   const { siteId } = useParams()
@@ -35,8 +22,8 @@ function SiteWidgets() {
 
   async function fetchData() {
     const [siteRes, widgetsRes] = await Promise.all([
-      fetch(`${import.meta.env.VITE_API_URL}/sites/${siteId}`, { credentials: 'include' }),
-      fetch(`${import.meta.env.VITE_API_URL}/widgets/${siteId}`, { credentials: 'include' }),
+      apiFetch(`/sites/${siteId}`),
+      apiFetch(`/widgets/${siteId}`),
     ])
     const siteData = await siteRes.json()
     const widgetsData = await widgetsRes.json()
@@ -46,10 +33,8 @@ function SiteWidgets() {
   }
 
   async function handleAddWidget(type: string, name: string) {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/widgets`, {
+    const res = await apiFetch('/widgets', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
       body: JSON.stringify({ siteId, type, name }),
     })
     if (!res.ok) {
@@ -61,10 +46,8 @@ function SiteWidgets() {
   }
 
   async function handleSaveSite(name: string, domain: string) {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/sites/${siteId}`, {
+    const res = await apiFetch(`/sites/${siteId}`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
       body: JSON.stringify({ name, domain }),
     })
     if (!res.ok) {
@@ -76,9 +59,8 @@ function SiteWidgets() {
   }
 
   async function handleDeleteSite() {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/sites/${siteId}`, {
+    const res = await apiFetch(`/sites/${siteId}`, {
       method: 'DELETE',
-      credentials: 'include',
     })
     if (!res.ok) {
       const data = await res.json()
@@ -88,9 +70,8 @@ function SiteWidgets() {
   }
 
   async function handleDeleteWidget(widgetId: string) {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/widgets/${widgetId}`, {
+    const res = await apiFetch(`/widgets/${widgetId}`, {
       method: 'DELETE',
-      credentials: 'include',
     })
     if (!res.ok) {
       const data = await res.json()
@@ -100,10 +81,8 @@ function SiteWidgets() {
   }
 
   async function handleRenameWidget(widgetId: string, name: string) {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/widgets/${widgetId}`, {
+    const res = await apiFetch(`/widgets/${widgetId}`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
       body: JSON.stringify({ name }),
     })
     if (!res.ok) {

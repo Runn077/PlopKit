@@ -1,13 +1,7 @@
 import { useState } from 'react'
 import '../SiteWidgets.css'
 import DeleteSiteModal from './DeleteSiteModal'
-
-interface Site {
-  id: string
-  name: string
-  domain: string
-  siteKey: string
-}
+import type { Site } from '../../../types'
 
 interface Props {
   site: Site

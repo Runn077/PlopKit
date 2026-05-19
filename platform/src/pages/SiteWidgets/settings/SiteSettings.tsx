@@ -3,21 +3,9 @@ import '../SiteWidgets.css'
 import SettingsSideNav from './SettingsSideNav'
 import GeneralSettings from './GeneralSettings'
 import ManageWidgets from './ManageWidgets'
+import type { Site, Widget } from '../../../types'
 
 type SettingsSection = 'general' | 'manage-widgets'
-
-interface Site {
-  id: string
-  name: string
-  domain: string
-  siteKey: string
-}
-
-interface Widget {
-  id: string
-  type: string
-  name: string
-}
 
 interface Props {
   site: Site

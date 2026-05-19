@@ -1,20 +1,6 @@
 import { useState } from 'react'
 import '../SiteComments.css'
-
-interface Reply {
-  id: string
-  body: string
-  createdAt: string
-}
-
-export interface Comment {
-  id: string
-  body: string
-  pageUrl: string
-  createdAt: string
-  deletedAt?: string | null
-  replies: Reply[]
-}
+import type { Comment, Reply } from '../../../types'
 
 interface Props {
   comment: Comment

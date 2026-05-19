@@ -1,10 +1,5 @@
 import './Dashboard.css'
-
-interface Site {
-  id: string
-  name: string
-  domain: string
-}
+import type { Site } from '../../types'
 
 interface Props {
   sites: Site[]

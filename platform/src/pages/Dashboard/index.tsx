@@ -4,14 +4,8 @@ import Navbar from '../../components/Navbar'
 import SiteList from './SiteList'
 import AddSiteModal from './AddSiteModal'
 import './Dashboard.css'
-
-interface Site {
-  id: string
-  name: string
-  domain: string
-  siteKey: string
-  createdAt: string
-}
+import type { Site } from '../../types'
+import { apiFetch } from '../../lib/api'
 
 function Dashboard() {
   const navigate = useNavigate()
@@ -22,17 +16,15 @@ function Dashboard() {
   useEffect(() => { fetchSites() }, [])
 
   async function fetchSites() {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/sites`, { credentials: 'include' })
+    const res = await apiFetch('/sites')
     const data = await res.json()
     setSites(data)
     setLoading(false)
   }
 
   async function handleAddSite(name: string, domain: string) {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/sites`, {
+    const res = await apiFetch('/sites', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
       body: JSON.stringify({ name, domain }),
     })
     if (!res.ok) {
