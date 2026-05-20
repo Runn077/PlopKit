@@ -181,6 +181,17 @@ function SiteComments() {
     }
   }
 
+  async function handleDeleteAll() {
+    if (!widget) return
+    const res = await apiFetch(`/comments/deleteAll?widget_key=${widget.widgetKey}`, {
+      method: 'DELETE',
+    })
+    if (res.ok) {
+      setDeletedComments([])
+      setOrphanedDeletedReplies([])
+    }
+  }
+
   if (loading) return <div>Loading...</div>
   if (!widget || !site) return <div>Not found</div>
 
@@ -242,6 +253,7 @@ function SiteComments() {
             onPermanentDelete={handlePermanentDelete}
             onRestoreReply={handleRestoreReply}
             onPermanentDeleteReply={handlePermanentDeleteReply}
+            onDeleteAll={handleDeleteAll}
           />
         )}
       </div>

@@ -353,3 +353,11 @@
   transform: translateX(18px);
   background: #fff;
 }
+
+.sc-tab-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px 0;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #e4e2dc;
+}

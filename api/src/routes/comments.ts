@@ -293,6 +293,31 @@ router.patch('/:id/restore', requireAuth, async (req, res) => {
   }
 })
 
+
+router.delete('/deleteAll', requireAuth, async (req, res) => {
+  try {
+    const { widget_key } = req.query as { widget_key: string }
+    const { user } = res.locals.session
+
+    const widget = await getWidgetByKey(widget_key)
+    if (!widget?.commentWidget || widget.site.userId !== user.id) {
+      res.status(404).json({ error: 'Widget not found' })
+      return
+    }
+
+    await prisma.comment.deleteMany({
+      where: {
+        commentWidgetId: widget.commentWidget.id,
+        deletedAt: { not: null },
+      },
+    })
+    res.json({ success: true })
+  } catch (err) {
+    console.error('DELETE /comments/deleteAll error:', err)
+    res.status(500).json({ error: 'Failed to delete all comments' })
+  }
+})
+
 router.delete('/:id', requireAuth, async (req, res) => {
   try {
     const id = req.params.id as string
