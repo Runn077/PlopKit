@@ -153,14 +153,14 @@ function SiteComments() {
     }
   }
 
-  async function handleRestoreReply(replyId: string, parentId: string) {
+  async function handleRestoreReply(replyId: string) {
     const res = await apiFetch(`/comments/${replyId}/restore`, { method: 'PATCH' })
     if (res.ok) {
       setOrphanedDeletedReplies(prev => prev.filter(r => r.id !== replyId))
     }
   }
 
-  async function handlePermanentDeleteReply(replyId: string, parentId: string) {
+  async function handlePermanentDeleteReply(replyId: string) {
     const res = await apiFetch(`/comments/${replyId}/permanent`, { method: 'DELETE' })
     if (res.ok) {
       setOrphanedDeletedReplies(prev => prev.filter(r => r.id !== replyId))

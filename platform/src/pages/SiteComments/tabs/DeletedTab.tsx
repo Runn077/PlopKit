@@ -7,8 +7,8 @@ interface Props {
   orphanedReplies: Reply[]
   onRestore: (commentId: string) => Promise<void>
   onPermanentDelete: (commentId: string) => Promise<void>
-  onRestoreReply: (replyId: string, parentId: string) => Promise<void>
-  onPermanentDeleteReply: (replyId: string, parentId: string) => Promise<void>
+  onRestoreReply: (replyId: string) => Promise<void>
+  onPermanentDeleteReply: (replyId: string) => Promise<void>
 }
 
 function DeletedTab({ comments, orphanedReplies, onRestore, onPermanentDelete, onRestoreReply, onPermanentDeleteReply }: Props) {
@@ -43,8 +43,8 @@ function DeletedTab({ comments, orphanedReplies, onRestore, onPermanentDelete, o
                   <div className="sc-reply-meta">
                     <span className="sc-reply-date">{new Date(reply.createdAt).toLocaleDateString()}</span>
                     <div className="sc-comment-actions">
-                      <button className="sc-btn" onClick={() => onRestoreReply(reply.id, reply.parentId!)}>Restore</button>
-                      <button className="sc-btn sc-btn-danger" onClick={() => onPermanentDeleteReply(reply.id, reply.parentId!)}>Delete</button>
+                      <button className="sc-btn" onClick={() => onRestoreReply(reply.id)}>Restore</button>
+                      <button className="sc-btn sc-btn-danger" onClick={() => onPermanentDeleteReply(reply.id)}>Delete</button>
                     </div>
                   </div>
                 </div>
