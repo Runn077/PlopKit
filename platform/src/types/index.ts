@@ -1,3 +1,20 @@
+export interface CommentWidget {
+  id: string
+  widgetId: string
+  autoApprove: boolean
+  createdAt: string
+}
+
+export interface Widget {
+  id: string
+  type: string
+  name: string
+  widgetKey: string
+  siteId: string
+  commentWidget: CommentWidget | null
+  createdAt: string
+}
+
 export interface Reply {
   id: string
   body: string
@@ -16,15 +33,6 @@ export interface Comment {
   deletedAt?: string | null
   createdAt: string
   replies: Reply[]
-}
-
-export interface Widget {
-  id: string
-  type: string
-  name: string
-  widgetKey: string
-  siteId: string
-  createdAt: string
 }
 
 export interface Site {

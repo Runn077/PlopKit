@@ -167,6 +167,20 @@ function SiteComments() {
     }
   }
 
+  async function handleToggleAutoApprove(value: boolean) {
+    if (!widget) return
+    const res = await apiFetch(`/widgets/${widget.id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ autoApprove: value }),
+    })
+    if (res.ok) {
+      setWidget(prev => prev?.commentWidget
+        ? { ...prev, commentWidget: { ...prev.commentWidget, autoApprove: value } }
+        : prev
+      )
+    }
+  }
+
   if (loading) return <div>Loading...</div>
   if (!widget || !site) return <div>Not found</div>
 
@@ -212,10 +226,12 @@ function SiteComments() {
           <PendingTab
             comments={pendingComments}
             orphanedReplies={orphanedReplies}
+            autoApprove={widget.commentWidget?.autoApprove ?? false}
             onApprove={handleApprove}
             onReject={handleReject}
             onApproveReply={handleApproveReply}
             onRejectReply={handleRejectReply}
+            onToggleAutoApprove={handleToggleAutoApprove}
           />
         )}
         {activeTab === 'deleted' && (
