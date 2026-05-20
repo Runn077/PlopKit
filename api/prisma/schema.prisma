@@ -7,6 +7,19 @@ datasource db {
   provider = "postgresql"
 }
 
+
+
+enum WidgetType {
+  comments
+}
+
+enum CommentStatus {
+  pending
+  approved
+}
+
+
+
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -79,23 +92,32 @@ model Site {
 
 model Widget {
   id        String   @id @default(cuid())
-  type      String
+  type      WidgetType
   name      String
   widgetKey String   @unique
   siteId    String
   site      Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
-  comments  Comment[]
+  commentWidget CommentWidget?
   createdAt DateTime @default(now())
 }
 
+model CommentWidget {
+  id          String    @id @default(cuid())
+  widgetId    String    @unique
+  widget      Widget    @relation(fields: [widgetId], references: [id], onDelete: Cascade)
+  autoApprove Boolean   @default(false)
+  comments    Comment[]
+  createdAt   DateTime  @default(now())
+}
 
 model Comment {
   id        String    @id @default(cuid())
+  commentWidgetId String
+  commentWidget   CommentWidget @relation(fields: [commentWidgetId], references: [id])
   widgetKey String
-  widget    Widget    @relation(fields: [widgetKey], references: [widgetKey])
   pageUrl   String
   body      String
-  status    String    @default("pending")
+  status    CommentStatus @default(pending)
   deletedAt DateTime?
   createdAt DateTime  @default(now())
   parentId  String?

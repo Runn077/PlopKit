@@ -3,30 +3,37 @@ import prisma from '../lib/prisma.js'
 import sanitizeHtml from 'sanitize-html'
 import { requireAuth } from '../middleware/requireAuth.js'
 import { commentBurstLimiter, commentHourlyLimiter } from '../middleware/commentLimiter.js'
+import { CommentStatus } from '../generated/prisma/enums.js'
 
 const router = Router()
 const TAKE = 20
+
+async function getWidgetByKey(widgetKey: string) {
+  return prisma.widget.findUnique({
+    where: { widgetKey },
+    include: { site: true, commentWidget: true },
+  })
+}
 
 router.get('/pending', requireAuth, async (req, res) => {
   try {
     const { widget_key } = req.query as { widget_key: string }
     const { user } = res.locals.session
 
-    const widget = await prisma.widget.findUnique({
-      where: { widgetKey: widget_key },
-      include: { site: true },
-    })
-    if (!widget || widget.site.userId !== user.id) {
+    const widget = await getWidgetByKey(widget_key)
+    if (!widget?.commentWidget || widget.site.userId !== user.id) {
       res.status(404).json({ error: 'Widget not found' })
       return
     }
 
+    const commentWidgetId = widget.commentWidget.id
+
     const comments = await prisma.comment.findMany({
-      where: { widgetKey: widget_key, status: 'pending', deletedAt: null, parentId: null },
+      where: { commentWidgetId, status: CommentStatus.pending, deletedAt: null, parentId: null },
       orderBy: { createdAt: 'desc' },
       include: {
         replies: {
-          where: { status: 'pending', deletedAt: null },
+          where: { status: CommentStatus.pending, deletedAt: null },
           orderBy: { createdAt: 'asc' },
         },
       },
@@ -34,11 +41,11 @@ router.get('/pending', requireAuth, async (req, res) => {
 
     const orphanedReplies = await prisma.comment.findMany({
       where: {
-        widgetKey: widget_key,
-        status: 'pending',
+        commentWidgetId,
+        status: CommentStatus.pending,
         deletedAt: null,
         parentId: { not: null },
-        parent: { status: { not: 'pending' } },
+        parent: { status: { not: CommentStatus.pending } },
       },
       include: { parent: true },
       orderBy: { createdAt: 'desc' },
@@ -56,24 +63,28 @@ router.get('/deleted', requireAuth, async (req, res) => {
     const { widget_key } = req.query as { widget_key: string }
     const { user } = res.locals.session
 
-    const widget = await prisma.widget.findUnique({
-      where: { widgetKey: widget_key },
-      include: { site: true },
-    })
-    if (!widget || widget.site.userId !== user.id) {
+    const widget = await getWidgetByKey(widget_key)
+    if (!widget?.commentWidget || widget.site.userId !== user.id) {
       res.status(404).json({ error: 'Widget not found' })
       return
     }
 
+    const commentWidgetId = widget.commentWidget.id
+
     const comments = await prisma.comment.findMany({
-      where: { widgetKey: widget_key, deletedAt: { not: null }, parentId: null },
+      where: { commentWidgetId, deletedAt: { not: null }, parentId: null },
       orderBy: { deletedAt: 'desc' },
-      include: { replies: { where: { deletedAt: { not: null } }, orderBy: { createdAt: 'asc' } } },
+      include: {
+        replies: {
+          where: { deletedAt: { not: null } },
+          orderBy: { createdAt: 'asc' },
+        },
+      },
     })
 
     const orphanedReplies = await prisma.comment.findMany({
       where: {
-        widgetKey: widget_key,
+        commentWidgetId,
         deletedAt: { not: null },
         parentId: { not: null },
         parent: { deletedAt: null },
@@ -93,9 +104,17 @@ router.get('/', async (req, res) => {
   try {
     const { widget_key, page_url, cursor } = req.query as { widget_key: string, page_url?: string, cursor?: string }
 
+    const widget = await getWidgetByKey(widget_key)
+    if (!widget?.commentWidget) {
+      res.status(404).json({ error: 'Widget not found' })
+      return
+    }
+
+    const commentWidgetId = widget.commentWidget.id
+
     const baseWhere: any = {
-      widgetKey: widget_key,
-      status: 'approved',
+      commentWidgetId,
+      status: CommentStatus.approved,
       deletedAt: null,
       parentId: null,
     }
@@ -108,8 +127,8 @@ router.get('/', async (req, res) => {
     }
 
     const countWhere: any = {
-      widgetKey: widget_key,
-      status: 'approved',
+      commentWidgetId,
+      status: CommentStatus.approved,
       deletedAt: null,
       parentId: null,
     }
@@ -120,7 +139,12 @@ router.get('/', async (req, res) => {
       where: baseWhere,
       orderBy: { createdAt: 'desc' },
       take: TAKE,
-      include: { replies: { where: { status: 'approved', deletedAt: null }, orderBy: { createdAt: 'asc' } } },
+      include: {
+        replies: {
+          where: { status: CommentStatus.approved, deletedAt: null },
+          orderBy: { createdAt: 'asc' },
+        },
+      },
     })
     const hasMore = comments.length === TAKE
     res.json({ comments, hasMore, total })
@@ -143,11 +167,8 @@ router.post('/', commentBurstLimiter, commentHourlyLimiter, async (req, res) => 
       return
     }
 
-    const widget = await prisma.widget.findUnique({
-      where: { widgetKey: widget_key },
-      include: { site: true },
-    })
-    if (!widget) {
+    const widget = await getWidgetByKey(widget_key)
+    if (!widget?.commentWidget) {
       res.status(404).json({ error: 'Invalid widget key' })
       return
     }
@@ -173,10 +194,11 @@ router.post('/', commentBurstLimiter, commentHourlyLimiter, async (req, res) => 
 
     const comment = await prisma.comment.create({
       data: {
+        commentWidgetId: widget.commentWidget.id,
         widgetKey: widget_key,
         pageUrl: page_url,
         body: cleanBody,
-        status: 'pending',
+        status: widget.commentWidget.autoApprove ? CommentStatus.approved : CommentStatus.pending,
         parentId: parent_id ?? null,
       },
     })
@@ -198,10 +220,7 @@ router.patch('/:id/approve', requireAuth, async (req, res) => {
       return
     }
 
-    const widget = await prisma.widget.findUnique({
-      where: { widgetKey: comment.widgetKey },
-      include: { site: true },
-    })
+    const widget = await getWidgetByKey(comment.widgetKey)
     if (!widget || widget.site.userId !== user.id) {
       res.status(403).json({ error: 'Forbidden' })
       return
@@ -209,7 +228,7 @@ router.patch('/:id/approve', requireAuth, async (req, res) => {
 
     const updated = await prisma.comment.update({
       where: { id },
-      data: { status: 'approved' },
+      data: { status: CommentStatus.approved },
     })
     res.json(updated)
   } catch (err) {
@@ -229,10 +248,7 @@ router.patch('/:id/reject', requireAuth, async (req, res) => {
       return
     }
 
-    const widget = await prisma.widget.findUnique({
-      where: { widgetKey: comment.widgetKey },
-      include: { site: true },
-    })
+    const widget = await getWidgetByKey(comment.widgetKey)
     if (!widget || widget.site.userId !== user.id) {
       res.status(403).json({ error: 'Forbidden' })
       return
@@ -260,10 +276,7 @@ router.patch('/:id/restore', requireAuth, async (req, res) => {
       return
     }
 
-    const widget = await prisma.widget.findUnique({
-      where: { widgetKey: comment.widgetKey },
-      include: { site: true },
-    })
+    const widget = await getWidgetByKey(comment.widgetKey)
     if (!widget || widget.site.userId !== user.id) {
       res.status(403).json({ error: 'Forbidden' })
       return
@@ -271,7 +284,7 @@ router.patch('/:id/restore', requireAuth, async (req, res) => {
 
     const updated = await prisma.comment.update({
       where: { id },
-      data: { deletedAt: null, status: 'approved' },
+      data: { deletedAt: null, status: CommentStatus.approved },
     })
     res.json(updated)
   } catch (err) {
@@ -291,10 +304,7 @@ router.delete('/:id', requireAuth, async (req, res) => {
       return
     }
 
-    const widget = await prisma.widget.findUnique({
-      where: { widgetKey: comment.widgetKey },
-      include: { site: true },
-    })
+    const widget = await getWidgetByKey(comment.widgetKey)
     if (!widget || widget.site.userId !== user.id) {
       res.status(403).json({ error: 'Forbidden' })
       return
@@ -322,10 +332,7 @@ router.delete('/:id/permanent', requireAuth, async (req, res) => {
       return
     }
 
-    const widget = await prisma.widget.findUnique({
-      where: { widgetKey: comment.widgetKey },
-      include: { site: true },
-    })
+    const widget = await getWidgetByKey(comment.widgetKey)
     if (!widget || widget.site.userId !== user.id) {
       res.status(403).json({ error: 'Forbidden' })
       return
