@@ -1,7 +1,11 @@
 export interface Reply {
   id: string
   body: string
+  status: string
+  parentId: string
+  deletedAt?: string | null
   createdAt: string
+  parent?: { body: string }
 }
 
 export interface Comment {

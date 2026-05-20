@@ -6,7 +6,7 @@ import CommentsTab from './tabs/CommentsTab'
 import PendingTab from './tabs/PendingTab'
 import DeletedTab from './tabs/DeletedTab'
 import './SiteComments.css'
-import type { Comment, Widget, Site } from '../../types'
+import type { Comment, Widget, Site, Reply } from '../../types'
 import { apiFetch } from '../../lib/api'
 
 type Tab = 'comments' | 'pending' | 'deleted'
@@ -25,6 +25,7 @@ function SiteComments() {
   const [loading, setLoading] = useState(true)
   const [loadingMore, setLoadingMore] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [orphanedReplies, setOrphanedReplies] = useState<Reply[]>([])
 
   useEffect(() => { fetchData() }, [widgetId])
 
@@ -61,7 +62,8 @@ function SiteComments() {
   async function fetchPending(widgetKey: string) {
     const res = await apiFetch(`/comments/pending?widget_key=${widgetKey}`)
     const data = await res.json()
-    setPendingComments(data)
+    setPendingComments(data.comments)
+    setOrphanedReplies(data.orphanedReplies)
   }
 
   async function fetchDeleted(widgetKey: string) {
@@ -86,20 +88,18 @@ function SiteComments() {
   }
 
   async function handleApprove(commentId: string) {
-    const res = await apiFetch(`/comments/${commentId}/approve`, {
-      method: 'PATCH',
-    })
+    const res = await apiFetch(`/comments/${commentId}/approve`, { method: 'PATCH' })
     if (res.ok) {
       setPendingComments(prev => prev.filter(c => c.id !== commentId))
+      setOrphanedReplies(prev => prev.filter(r => r.id !== commentId))
     }
   }
 
   async function handleReject(commentId: string) {
-    const res = await apiFetch(`/comments/${commentId}`, {
-      method: 'DELETE',
-    })
+    const res = await apiFetch(`/comments/${commentId}`, { method: 'DELETE' })
     if (res.ok) {
       setPendingComments(prev => prev.filter(c => c.id !== commentId))
+      setOrphanedReplies(prev => prev.filter(r => r.id !== commentId))
     }
   }
 
@@ -125,6 +125,30 @@ function SiteComments() {
     navigator.clipboard.writeText(text)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+  }
+
+  async function handleApproveReply(replyId: string, parentId: string) {
+  const res = await apiFetch(`/comments/${replyId}/approve`, { method: 'PATCH' })
+  if (res.ok) {
+    setPendingComments(prev => prev.map(c =>
+      c.id === parentId
+        ? { ...c, replies: c.replies.filter(r => r.id !== replyId) }
+        : c
+    ))
+    setOrphanedReplies(prev => prev.filter(r => r.id !== replyId))
+  }
+}
+
+  async function handleRejectReply(replyId: string, parentId: string) {
+    const res = await apiFetch(`/comments/${replyId}`, { method: 'DELETE' })
+    if (res.ok) {
+      setPendingComments(prev => prev.map(c =>
+        c.id === parentId
+          ? { ...c, replies: c.replies.filter(r => r.id !== replyId) }
+          : c
+      ))
+      setOrphanedReplies(prev => prev.filter(r => r.id !== replyId))
+    }
   }
 
   if (loading) return <div>Loading...</div>
@@ -171,8 +195,11 @@ function SiteComments() {
         {activeTab === 'pending' && (
           <PendingTab
             comments={pendingComments}
+            orphanedReplies={orphanedReplies}
             onApprove={handleApprove}
             onReject={handleReject}
+            onApproveReply={handleApproveReply}
+            onRejectReply={handleRejectReply}
           />
         )}
         {activeTab === 'deleted' && (

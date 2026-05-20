@@ -288,3 +288,12 @@
 }
 
 .sc-btn-approve:hover { background: #333; }
+
+.sc-section-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #888;
+  margin: 24px 0 0;
+}

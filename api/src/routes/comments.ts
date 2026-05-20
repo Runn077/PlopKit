@@ -24,9 +24,27 @@ router.get('/pending', requireAuth, async (req, res) => {
     const comments = await prisma.comment.findMany({
       where: { widgetKey: widget_key, status: 'pending', deletedAt: null, parentId: null },
       orderBy: { createdAt: 'desc' },
-      include: { replies: { orderBy: { createdAt: 'asc' } } },
+      include: {
+        replies: {
+          where: { status: 'pending', deletedAt: null },
+          orderBy: { createdAt: 'asc' },
+        },
+      },
     })
-    res.json(comments)
+
+    const orphanedReplies = await prisma.comment.findMany({
+      where: {
+        widgetKey: widget_key,
+        status: 'pending',
+        deletedAt: null,
+        parentId: { not: null },
+        parent: { status: { not: 'pending' } },
+      },
+      include: { parent: true },
+      orderBy: { createdAt: 'desc' },
+    })
+
+    res.json({ comments, orphanedReplies })
   } catch (err) {
     console.error('GET /comments/pending error:', err)
     res.status(500).json({ error: 'Failed to fetch pending comments' })
