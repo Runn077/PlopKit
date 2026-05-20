@@ -1,15 +1,18 @@
-import type { Comment } from '../../../types'
+import type { Comment, Reply } from '../../../types'
 import CommentRow from '../components/CommentRow'
 import '../SiteComments.css'
 
 interface Props {
   comments: Comment[]
+  orphanedReplies: Reply[]
   onRestore: (commentId: string) => Promise<void>
   onPermanentDelete: (commentId: string) => Promise<void>
+  onRestoreReply: (replyId: string, parentId: string) => Promise<void>
+  onPermanentDeleteReply: (replyId: string, parentId: string) => Promise<void>
 }
 
-function DeletedTab({ comments, onRestore, onPermanentDelete }: Props) {
-  if (comments.length === 0) {
+function DeletedTab({ comments, orphanedReplies, onRestore, onPermanentDelete, onRestoreReply, onPermanentDeleteReply }: Props) {
+  if (comments.length === 0 && orphanedReplies.length === 0) {
     return <p className="sc-empty">No recently deleted comments.</p>
   }
 
@@ -21,16 +24,35 @@ function DeletedTab({ comments, onRestore, onPermanentDelete }: Props) {
           comment={comment}
           actions={
             <div style={{ display: 'flex', gap: 8 }}>
-              <button className="sc-btn" onClick={() => onRestore(comment.id)}>
-                Restore
-              </button>
-              <button className="sc-btn sc-btn-danger" onClick={() => onPermanentDelete(comment.id)}>
-                Delete
-              </button>
+              <button className="sc-btn" onClick={() => onRestore(comment.id)}>Restore</button>
+              <button className="sc-btn sc-btn-danger" onClick={() => onPermanentDelete(comment.id)}>Delete</button>
             </div>
           }
         />
       ))}
+
+      {orphanedReplies.length > 0 && (
+        <>
+          <p className="sc-section-label">Replies to active comments</p>
+          {orphanedReplies.map(reply => (
+            <div key={reply.id} className="sc-comment">
+              <p className="sc-comment-body">{reply.parent?.body}</p>
+              <div className="sc-replies">
+                <div className="sc-reply">
+                  <p className="sc-reply-body">{reply.body}</p>
+                  <div className="sc-reply-meta">
+                    <span className="sc-reply-date">{new Date(reply.createdAt).toLocaleDateString()}</span>
+                    <div className="sc-comment-actions">
+                      <button className="sc-btn" onClick={() => onRestoreReply(reply.id, reply.parentId!)}>Restore</button>
+                      <button className="sc-btn sc-btn-danger" onClick={() => onPermanentDeleteReply(reply.id, reply.parentId!)}>Delete</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </>
+      )}
     </div>
   )
 }

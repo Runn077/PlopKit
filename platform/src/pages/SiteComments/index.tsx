@@ -26,6 +26,7 @@ function SiteComments() {
   const [loadingMore, setLoadingMore] = useState(false)
   const [copied, setCopied] = useState(false)
   const [orphanedReplies, setOrphanedReplies] = useState<Reply[]>([])
+  const [orphanedDeletedReplies, setOrphanedDeletedReplies] = useState<Reply[]>([])
 
   useEffect(() => { fetchData() }, [widgetId])
 
@@ -69,7 +70,8 @@ function SiteComments() {
   async function fetchDeleted(widgetKey: string) {
     const res = await apiFetch(`/comments/deleted?widget_key=${widgetKey}`)
     const data = await res.json()
-    setDeletedComments(data)
+    setDeletedComments(data.comments)
+    setOrphanedDeletedReplies(data.orphanedReplies)
   }
 
   async function handleDelete(commentId: string, parentId?: string) {
@@ -151,6 +153,20 @@ function SiteComments() {
     }
   }
 
+  async function handleRestoreReply(replyId: string, parentId: string) {
+    const res = await apiFetch(`/comments/${replyId}/restore`, { method: 'PATCH' })
+    if (res.ok) {
+      setOrphanedDeletedReplies(prev => prev.filter(r => r.id !== replyId))
+    }
+  }
+
+  async function handlePermanentDeleteReply(replyId: string, parentId: string) {
+    const res = await apiFetch(`/comments/${replyId}/permanent`, { method: 'DELETE' })
+    if (res.ok) {
+      setOrphanedDeletedReplies(prev => prev.filter(r => r.id !== replyId))
+    }
+  }
+
   if (loading) return <div>Loading...</div>
   if (!widget || !site) return <div>Not found</div>
 
@@ -205,8 +221,11 @@ function SiteComments() {
         {activeTab === 'deleted' && (
           <DeletedTab
             comments={deletedComments}
+            orphanedReplies={orphanedDeletedReplies}
             onRestore={handleRestore}
             onPermanentDelete={handlePermanentDelete}
+            onRestoreReply={handleRestoreReply}
+            onPermanentDeleteReply={handlePermanentDeleteReply}
           />
         )}
       </div>

@@ -68,9 +68,21 @@ router.get('/deleted', requireAuth, async (req, res) => {
     const comments = await prisma.comment.findMany({
       where: { widgetKey: widget_key, deletedAt: { not: null }, parentId: null },
       orderBy: { deletedAt: 'desc' },
-      include: { replies: { orderBy: { createdAt: 'asc' } } },
+      include: { replies: { where: { deletedAt: { not: null } }, orderBy: { createdAt: 'asc' } } },
     })
-    res.json(comments)
+
+    const orphanedReplies = await prisma.comment.findMany({
+      where: {
+        widgetKey: widget_key,
+        deletedAt: { not: null },
+        parentId: { not: null },
+        parent: { deletedAt: null },
+      },
+      include: { parent: true },
+      orderBy: { deletedAt: 'desc' },
+    })
+
+    res.json({ comments, orphanedReplies })
   } catch (err) {
     console.error('GET /comments/deleted error:', err)
     res.status(500).json({ error: 'Failed to fetch deleted comments' })
