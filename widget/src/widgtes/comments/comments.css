@@ -278,3 +278,27 @@
     font-size: 14px;
     padding: 16px 0;
   }
+
+  .toast {
+    font-size: 13px;
+    color: #fff;
+    background: #0f0f0f;
+    padding: 10px 16px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    animation: fade-in 0.2s ease;
+  }
+
+  .toast-fade-out {
+    animation: fade-out 0.5s ease forwards;
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fade-out {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-4px); }
+  }

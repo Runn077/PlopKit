@@ -26,6 +26,8 @@ export default function Comments({ widgetKey, pageUrl }: Props) {
   const [loading, setLoading] = useState(false)
   const [body, setBody] = useState('')
   const [total, setTotal] = useState(0)
+  const [toast, setToast] = useState(false)
+  const [toastFading, setToastFading] = useState(false)
 
   const fetchComments = async (cursor?: string) => {
     setLoading(true)
@@ -54,6 +56,9 @@ export default function Comments({ widgetKey, pageUrl }: Props) {
       body: JSON.stringify({ widget_key: widgetKey, page_url: pageUrl, body }),
     })
     setBody('')
+    setToast(true)
+    setTimeout(() => setToastFading(true), 2500)
+    setTimeout(() => { setToast(false); setToastFading(false) }, 3000)
   }
 
   return (
@@ -75,6 +80,7 @@ export default function Comments({ widgetKey, pageUrl }: Props) {
             </button>
           </div>
         </div>
+        {toast && <div className={`toast ${toastFading ? 'toast-fade-out' : ''}`}>Your comment is awaiting approval.</div>}
         <div className="comments-list">
           {comments.length === 0 && !loading && <p className="empty">No comments yet. Be the first!</p>}
           {comments.map(c => (
