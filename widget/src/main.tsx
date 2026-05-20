@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import Comments from './widgtes/comments/Comments'
+import Comments from './widgets/comments/Comments'
 
 const script = document.currentScript as HTMLScriptElement
 const widgetKey = script?.getAttribute('data-widget-key') ?? ''
