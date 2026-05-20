@@ -18,10 +18,9 @@ interface Props {
   comment: Comment
   widgetKey: string
   pageUrl: string
-  onReplyPosted: (commentId: string, reply: Reply) => void
 }
 
-export default function CommentItem({ comment, widgetKey, pageUrl, onReplyPosted }: Props) {
+export default function CommentItem({ comment, widgetKey, pageUrl }: Props) {
   const [expanded, setExpanded] = useState(false)
   const [showReplies, setShowReplies] = useState(false)
   const [replyOpen, setReplyOpen] = useState(false)
@@ -45,12 +44,11 @@ export default function CommentItem({ comment, widgetKey, pageUrl, onReplyPosted
 
   const postReply = async () => {
     if (!replyBody.trim()) return
-    const reply = await fetch(`${import.meta.env.VITE_API_URL}/comments`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/comments`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ widget_key: widgetKey, page_url: pageUrl, body: replyBody, parent_id: comment.id }),
-    }).then(res => res.json())
-    onReplyPosted(comment.id, reply)
+    })
     setReplyOpen(false)
     setReplyBody('')
   }

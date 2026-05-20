@@ -48,19 +48,12 @@ export default function Comments({ widgetKey, pageUrl }: Props) {
 
   const postComment = async () => {
     if (!body.trim()) return
-    const comment = await fetch(`${import.meta.env.VITE_API_URL}/comments`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/comments`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ widget_key: widgetKey, page_url: pageUrl, body }),
-    }).then(res => res.json())
-    setComments(prev => [{ ...comment, replies: [] }, ...prev])
+    })
     setBody('')
-  }
-
-  const handleReplyPosted = (commentId: string, reply: Reply) => {
-    setComments(prev => prev.map(c =>
-      c.id === commentId ? { ...c, replies: [...c.replies, reply] } : c
-    ))
   }
 
   return (
@@ -90,7 +83,6 @@ export default function Comments({ widgetKey, pageUrl }: Props) {
               comment={c}
               widgetKey={widgetKey}
               pageUrl={pageUrl}
-              onReplyPosted={handleReplyPosted}
             />
           ))}
           {hasMore && (
