@@ -108,7 +108,7 @@ router.get('/', async (req, res) => {
       where: baseWhere,
       orderBy: { createdAt: 'desc' },
       take: TAKE,
-      include: { replies: { where: { deletedAt: null }, orderBy: { createdAt: 'asc' } } },
+      include: { replies: { where: { status: 'approved', deletedAt: null }, orderBy: { createdAt: 'asc' } } },
     })
     const hasMore = comments.length === TAKE
     res.json({ comments, hasMore, total })
