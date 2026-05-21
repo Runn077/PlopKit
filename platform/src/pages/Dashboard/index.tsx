@@ -11,15 +11,23 @@ function Dashboard() {
   const navigate = useNavigate()
   const [sites, setSites] = useState<Site[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
   const [showModal, setShowModal] = useState(false)
 
   useEffect(() => { fetchSites() }, [])
 
   async function fetchSites() {
-    const res = await apiFetch('/sites')
-    const data = await res.json()
-    setSites(data)
-    setLoading(false)
+    try {
+      setError('')
+      const res = await apiFetch('/sites')
+      if (!res.ok) throw new Error('Failed to load sites')
+      const data = await res.json()
+      setSites(data)
+    } catch (err: any) {
+      setError(err.message ?? 'Something went wrong')
+    } finally {
+      setLoading(false)
+    }
   }
 
   async function handleAddSite(name: string, domain: string) {
@@ -35,7 +43,17 @@ function Dashboard() {
     setSites(prev => [site, ...prev])
   }
 
-  if (loading) return <div>Loading...</div>
+  if (loading) return <div className="page-loading">Loading...</div>
+
+  if (error) return (
+    <div>
+      <Navbar />
+      <div className="page-error">
+        <p className="page-error-message">{error}</p>
+        <button className="page-error-retry" onClick={fetchSites}>Try again</button>
+      </div>
+    </div>
+  )
 
   return (
     <div>

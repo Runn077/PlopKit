@@ -15,21 +15,30 @@ function SiteWidgets() {
   const [site, setSite] = useState<Site | null>(null)
   const [widgets, setWidgets] = useState<Widget[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [activeTab, setActiveTab] = useState<'widgets' | 'settings'>('widgets')
 
   useEffect(() => { fetchData() }, [siteId])
 
   async function fetchData() {
-    const [siteRes, widgetsRes] = await Promise.all([
-      apiFetch(`/sites/${siteId}`),
-      apiFetch(`/widgets/${siteId}`),
-    ])
-    const siteData = await siteRes.json()
-    const widgetsData = await widgetsRes.json()
-    setSite(siteData)
-    setWidgets(widgetsData)
-    setLoading(false)
+    try {
+      setError('')
+      const [siteRes, widgetsRes] = await Promise.all([
+        apiFetch(`/sites/${siteId}`),
+        apiFetch(`/widgets/${siteId}`),
+      ])
+      if (!siteRes.ok) throw new Error('Failed to load site')
+      if (!widgetsRes.ok) throw new Error('Failed to load widgets')
+      const siteData = await siteRes.json()
+      const widgetsData = await widgetsRes.json()
+      setSite(siteData)
+      setWidgets(widgetsData)
+    } catch (err: any) {
+      setError(err.message ?? 'Something went wrong')
+    } finally {
+      setLoading(false)
+    }
   }
 
   async function handleAddWidget(type: string, name: string) {
@@ -59,9 +68,7 @@ function SiteWidgets() {
   }
 
   async function handleDeleteSite() {
-    const res = await apiFetch(`/sites/${siteId}`, {
-      method: 'DELETE',
-    })
+    const res = await apiFetch(`/sites/${siteId}`, { method: 'DELETE' })
     if (!res.ok) {
       const data = await res.json()
       throw new Error(data.error ?? 'Something went wrong')
@@ -70,9 +77,7 @@ function SiteWidgets() {
   }
 
   async function handleDeleteWidget(widgetId: string) {
-    const res = await apiFetch(`/widgets/${widgetId}`, {
-      method: 'DELETE',
-    })
+    const res = await apiFetch(`/widgets/${widgetId}`, { method: 'DELETE' })
     if (!res.ok) {
       const data = await res.json()
       throw new Error(data.error ?? 'Something went wrong')
@@ -93,20 +98,28 @@ function SiteWidgets() {
     setWidgets(prev => prev.map(w => w.id === widgetId ? { ...w, name: updated.name } : w))
   }
 
-  if (loading) return <div>Loading...</div>
-  if (!site) return <div>Site not found</div>
+  if (loading) return <div className="page-loading">Loading...</div>
+
+  if (error) return (
+    <div>
+      <Navbar />
+      <div className="page-error">
+        <p className="page-error-message">{error}</p>
+        <button className="page-error-retry" onClick={fetchData}>Try again</button>
+      </div>
+    </div>
+  )
 
   return (
     <div>
       <Navbar />
       <SubNav activeTab={activeTab} onTabChange={setActiveTab} />
-
       {activeTab === 'widgets' && (
         <div className="sw-container">
           <div className="sw-breadcrumb">
             <span className="sw-breadcrumb-link" onClick={() => navigate('/dashboard')}>Sites</span>
             <span className="sw-breadcrumb-sep">/</span>
-            <span className="sw-breadcrumb-current">{site.name}</span>
+            <span className="sw-breadcrumb-current">{site!.name}</span>
           </div>
           <div className="sw-header">
             <h2 className="sw-title">Widgets</h2>
@@ -126,11 +139,10 @@ function SiteWidgets() {
           )}
         </div>
       )}
-
       {activeTab === 'settings' && (
         <div style={{ paddingTop: 32 }}>
           <SiteSettings
-            site={site}
+            site={site!}
             widgets={widgets}
             onSave={handleSaveSite}
             onDelete={handleDeleteSite}

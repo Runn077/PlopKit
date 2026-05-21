@@ -27,6 +27,7 @@ function SiteComments() {
   const [copied, setCopied] = useState(false)
   const [orphanedReplies, setOrphanedReplies] = useState<Reply[]>([])
   const [orphanedDeletedReplies, setOrphanedDeletedReplies] = useState<Reply[]>([])
+  const [error, setError] = useState('')
 
   useEffect(() => { fetchData() }, [widgetId])
 
@@ -37,15 +38,23 @@ function SiteComments() {
   }, [activeTab, widget])
 
   async function fetchData() {
-    const [widgetRes, siteRes] = await Promise.all([
-      apiFetch(`/widgets/single/${widgetId}`),
-      apiFetch(`/sites/${siteId}`),
-    ])
-    const widgetData = await widgetRes.json()
-    const siteData = await siteRes.json()
-    setWidget(widgetData)
-    setSite(siteData)
-    fetchComments(widgetData.widgetKey)
+    try {
+      setError('')
+      const [widgetRes, siteRes] = await Promise.all([
+        apiFetch(`/widgets/single/${widgetId}`),
+        apiFetch(`/sites/${siteId}`),
+      ])
+      if (!widgetRes.ok) throw new Error('Failed to load widget')
+      if (!siteRes.ok) throw new Error('Failed to load site')
+      const widgetData = await widgetRes.json()
+      const siteData = await siteRes.json()
+      setWidget(widgetData)
+      setSite(siteData)
+      fetchComments(widgetData.widgetKey)
+    } catch (err: any) {
+      setError(err.message ?? 'Something went wrong')
+      setLoading(false)
+    }
   }
 
   async function fetchComments(widgetKey: string, cursor?: string) {
@@ -192,7 +201,16 @@ function SiteComments() {
     }
   }
 
-  if (loading) return <div>Loading...</div>
+  if (loading) return <div className="page-loading">Loading...</div>
+  if (error) return (
+    <div>
+      <Navbar />
+      <div className="page-error">
+        <p className="page-error-message">{error}</p>
+        <button className="page-error-retry" onClick={fetchData}>Try again</button>
+      </div>
+    </div>
+  )
   if (!widget || !site) return <div>Not found</div>
 
   const scriptTag = `<script src="${import.meta.env.VITE_WIDGET_URL}/widget.js" data-widget-key="${widget.widgetKey}" data-widget="comments"></script>`
