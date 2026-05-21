@@ -23,33 +23,46 @@ function Navbar() {
       zIndex: 10,
     }}>
       <span
-      style={{
-        fontFamily: 'sans-serif',
-        fontSize: '18px',
-        fontWeight: 600,
-        color: '#000000',
-        letterSpacing: '-0.02em',
-        marginRight: 'auto',
-        cursor: 'pointer',
-      }}
-      onClick={() => navigate('/dashboard')}
-    >
-      PlopKit
-    </span>
-
-      {session ? (
-        <button onClick={handleSignOut} style={{
-          background: 'none',
-          border: '1px solid #ccc9c0',
-          borderRadius: '5px',
-          padding: '6px 12px',
-          fontSize: '13px',
-          fontWeight: 500,
+        style={{
+          fontFamily: 'sans-serif',
+          fontSize: '18px',
+          fontWeight: 600,
+          color: '#000000',
+          letterSpacing: '-0.02em',
+          marginRight: 'auto',
           cursor: 'pointer',
-          color: '#1a1917',
-        }}>
-          Sign out
-        </button>
+        }}
+        onClick={() => navigate('/dashboard')}
+      >
+        PlopKit
+      </span>
+      {session ? (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <button onClick={() => navigate('/account')} style={{
+            background: 'none',
+            border: 'none',
+            padding: '6px 12px',
+            fontSize: '13px',
+            fontWeight: 500,
+            cursor: 'pointer',
+            color: '#888',
+            fontFamily: 'sans-serif',
+          }}>
+            {session.user.name ?? session.user.email}
+          </button>
+          <button onClick={handleSignOut} style={{
+            background: 'none',
+            border: '1px solid #ccc9c0',
+            borderRadius: '5px',
+            padding: '6px 12px',
+            fontSize: '13px',
+            fontWeight: 500,
+            cursor: 'pointer',
+            color: '#1a1917',
+          }}>
+            Sign out
+          </button>
+        </div>
       ) : (
         <button onClick={() => navigate('/login')} style={{
           background: '#9370DB',

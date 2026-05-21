@@ -7,6 +7,7 @@ import { startCommentCronJobs } from './lib/commentCron.js'
 import commentsRouter from './routes/comments.js'
 import sitesRouter from './routes/sites.js'
 import widgetsRouter from './routes/widgets.js'
+import accountRouter from './routes/account.js'
 
 
 const app = express()
@@ -32,6 +33,7 @@ app.use(express.json())
 app.use('/comments', commentsRouter)
 app.use('/sites', sitesRouter)
 app.use('/widgets', widgetsRouter)
+app.use('/account', accountRouter)
 
 startCronJobs()
 startCommentCronJobs()
