@@ -192,12 +192,33 @@ router.post('/', commentBurstLimiter, commentHourlyLimiter, async (req, res) => 
       })
     }
 
+    const bannedWords: string[] = widget.commentWidget.bannedWords ?? []
+    const autoDelete = widget.commentWidget.autoDeleteBannedWords
+
+    let processedBody = cleanBody
+
+    if (bannedWords.length > 0) {
+      const lowerBody = cleanBody.toLowerCase()
+      const hasBannedWord = bannedWords.some(word => lowerBody.includes(word.toLowerCase()))
+
+      if (hasBannedWord) {
+        if (autoDelete) {
+          res.status(400).json({ error: 'Your comment contains prohibited words.' })
+          return
+        }
+        bannedWords.forEach(word => {
+          const regex = new RegExp(word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi')
+          processedBody = processedBody.replace(regex, '*'.repeat(word.length))
+        })
+      }
+    }
+
     const comment = await prisma.comment.create({
       data: {
         commentWidgetId: widget.commentWidget.id,
         widgetKey: widget_key,
         pageUrl: page_url,
-        body: cleanBody,
+        body: processedBody,
         status: widget.commentWidget.autoApprove ? CommentStatus.approved : CommentStatus.pending,
         parentId: parent_id ?? null,
       },

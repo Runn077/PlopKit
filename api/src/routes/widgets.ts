@@ -137,4 +137,33 @@ router.delete('/:id', requireAuth, async (req, res) => {
   }
 })
 
+router.patch('/:id/banned-words', requireAuth, async (req, res) => {
+  try {
+    const { user } = res.locals.session
+    const id = req.params.id as string
+    const { bannedWords, autoDeleteBannedWords } = req.body
+
+    const widget = await prisma.widget.findUnique({
+      where: { id },
+      include: { site: true, commentWidget: true },
+    })
+    if (!widget?.commentWidget || widget.site.userId !== user.id) {
+      res.status(404).json({ error: 'Widget not found' })
+      return
+    }
+
+    const updated = await prisma.commentWidget.update({
+      where: { id: widget.commentWidget.id },
+      data: {
+        ...(bannedWords !== undefined && { bannedWords }),
+        ...(autoDeleteBannedWords !== undefined && { autoDeleteBannedWords }),
+      },
+    })
+    res.json(updated)
+  } catch (err) {
+    console.error('PATCH /widgets/:id/banned-words error:', err)
+    res.status(500).json({ error: 'Failed to update banned words' })
+  }
+})
+
 export default router

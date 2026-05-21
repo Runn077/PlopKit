@@ -108,6 +108,8 @@ model CommentWidget {
   autoApprove Boolean   @default(false)
   comments    Comment[]
   createdAt   DateTime  @default(now())
+  bannedWords String[] @default([])
+  autoDeleteBannedWords Boolean @default(false)
 }
 
 model Comment {

@@ -2,6 +2,8 @@ export interface CommentWidget {
   id: string
   widgetId: string
   autoApprove: boolean
+  bannedWords: string[]
+  autoDeleteBannedWords: boolean
   createdAt: string
 }
 

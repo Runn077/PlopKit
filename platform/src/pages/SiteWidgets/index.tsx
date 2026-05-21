@@ -98,6 +98,23 @@ function SiteWidgets() {
     setWidgets(prev => prev.map(w => w.id === widgetId ? { ...w, name: updated.name } : w))
   }
 
+  async function handleUpdateBannedWords(widgetId: string, bannedWords: string[], autoDelete: boolean) {
+    const res = await apiFetch(`/widgets/${widgetId}/banned-words`, {
+      method: 'PATCH',
+      body: JSON.stringify({ bannedWords, autoDeleteBannedWords: autoDelete }),
+    })
+    if (!res.ok) {
+      const data = await res.json()
+      throw new Error(data.error ?? 'Something went wrong')
+    }
+    const updated = await res.json()
+    setWidgets(prev => prev.map(w =>
+      w.id === widgetId && w.commentWidget
+        ? { ...w, commentWidget: { ...w.commentWidget, bannedWords: updated.bannedWords, autoDeleteBannedWords: updated.autoDeleteBannedWords } }
+        : w
+    ))
+  }
+
   if (loading) return <div className="page-loading">Loading...</div>
 
   if (error) return (
@@ -130,6 +147,7 @@ function SiteWidgets() {
           <WidgetList
             widgets={widgets}
             onOpen={(widget) => navigate(`/dashboard/sites/${siteId}/widgets/${widget.id}/comments`)}
+            onUpdateBannedWords={handleUpdateBannedWords}
           />
           {showModal && (
             <AddWidgetModal
