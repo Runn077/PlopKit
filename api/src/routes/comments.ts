@@ -251,6 +251,15 @@ router.patch('/:id/approve', requireAuth, async (req, res) => {
       where: { id },
       data: { status: CommentStatus.approved },
     })
+
+    // Cascade to replies
+    if (!comment.parentId) {
+      await prisma.comment.updateMany({
+        where: { parentId: id, deletedAt: null },
+        data: { status: CommentStatus.approved },
+      })
+    }
+
     res.json(updated)
   } catch (err) {
     console.error('PATCH /comments/:id/approve error:', err)
@@ -279,6 +288,15 @@ router.patch('/:id/reject', requireAuth, async (req, res) => {
       where: { id },
       data: { deletedAt: new Date() },
     })
+
+    // Cascade to replies
+    if (!comment.parentId) {
+      await prisma.comment.updateMany({
+        where: { parentId: id },
+        data: { deletedAt: new Date() },
+      })
+    }
+
     res.json({ success: true })
   } catch (err) {
     console.error('PATCH /comments/:id/reject error:', err)
@@ -303,11 +321,27 @@ router.patch('/:id/restore', requireAuth, async (req, res) => {
       return
     }
 
-    const updated = await prisma.comment.update({
+    await prisma.comment.update({
       where: { id },
       data: { deletedAt: null, status: CommentStatus.approved },
     })
-    res.json(updated)
+
+    // Cascade to replies
+    if (!comment.parentId) {
+      await prisma.comment.updateMany({
+        where: {
+          parentId: id,
+          deletedByParent: true,
+        },
+        data: {
+          deletedAt: null,
+          deletedByParent: false,
+          status: CommentStatus.approved,
+        },
+      })
+    }
+
+    res.json({ success: true })
   } catch (err) {
     console.error('PATCH /comments/:id/restore error:', err)
     res.status(500).json({ error: 'Failed to restore comment' })
@@ -360,6 +394,23 @@ router.delete('/:id', requireAuth, async (req, res) => {
       where: { id },
       data: { deletedAt: new Date() },
     })
+
+    // Cascade to replies
+    if (!comment.parentId) {
+      const deletedAt = new Date()
+
+      await prisma.comment.updateMany({
+        where: {
+          parentId: id,
+          deletedAt: null,
+        },
+        data: {
+          deletedAt,
+          deletedByParent: true,
+        },
+      })
+    }
+
     res.json({ success: true })
   } catch (err) {
     console.error('DELETE /comments/:id error:', err)

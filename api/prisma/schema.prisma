@@ -121,6 +121,7 @@ model Comment {
   body      String
   status    CommentStatus @default(pending)
   deletedAt DateTime?
+  deletedByParent Boolean        @default(false)
   createdAt DateTime  @default(now())
   parentId  String?
   parent    Comment?  @relation("Replies", fields: [parentId], references: [id], onDelete: Cascade)
