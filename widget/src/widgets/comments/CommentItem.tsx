@@ -25,8 +25,8 @@ export default function CommentItem({ comment, widgetKey, pageUrl }: Props) {
   const [showReplies, setShowReplies] = useState(false)
   const [replyOpen, setReplyOpen] = useState(false)
   const [replyBody, setReplyBody] = useState('')
-  const [toast, setToast] = useState(false)
-  const [toastFading, setToastFading] = useState(false)
+  const [message, setMessage] = useState('')
+  const [messageFading, setMessageFading] = useState(false)
 
   const LIMIT = 1000
   const MAX_LINES = 3
@@ -46,15 +46,40 @@ export default function CommentItem({ comment, widgetKey, pageUrl }: Props) {
 
   const postReply = async () => {
     if (!replyBody.trim()) return
-    await fetch(`${import.meta.env.VITE_API_URL}/comments`, {
+
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/comments`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ widget_key: widgetKey, page_url: pageUrl, body: replyBody, parent_id: comment.id }),
+      body: JSON.stringify({
+        widget_key: widgetKey,
+        page_url: pageUrl,
+        body: replyBody,
+        parent_id: comment.id,
+      }),
     })
+
+    const data = await res.json()
+
+    if (!res.ok) {
+      setMessage(data.error || 'Failed to post reply')
+
+      setTimeout(() => setMessageFading(true), 2500)
+      setTimeout(() => {
+        setMessage('')
+        setMessageFading(false)
+      }, 3000)
+
+      return
+    }
+
     setReplyBody('')
-    setToast(true)
-    setTimeout(() => setToastFading(true), 2500)
-    setTimeout(() => { setToast(false); setToastFading(false) }, 3000)
+    setMessage('Your reply is awaiting approval.')
+
+    setTimeout(() => setMessageFading(true), 2500)
+    setTimeout(() => {
+      setMessage('')
+      setMessageFading(false)
+    }, 3000)
   }
 
   return (
@@ -82,7 +107,11 @@ export default function CommentItem({ comment, widgetKey, pageUrl }: Props) {
             placeholder="Add a reply..."
             autoFocus
           />
-          {toast && <div className={`toast ${toastFading ? 'toast-fade-out' : ''}`}>Your comment is awaiting approval.</div>}
+          {message && (
+            <div className={`toast ${messageFading ? 'toast-fade-out' : ''}`}>
+              {message}
+            </div>
+          )}
           <div className="reply-actions">
             <span className="char-count">{replyBody.length}/1000</span>
             <div style={{ display: 'flex', gap: '8px' }}>

@@ -26,8 +26,8 @@ export default function Comments({ widgetKey, pageUrl }: Props) {
   const [loading, setLoading] = useState(false)
   const [body, setBody] = useState('')
   const [total, setTotal] = useState(0)
-  const [toast, setToast] = useState(false)
-  const [toastFading, setToastFading] = useState(false)
+  const [message, setMessage] = useState('')
+  const [messageFading, setMessageFading] = useState(false)
 
   const fetchComments = async (cursor?: string) => {
     setLoading(true)
@@ -50,15 +50,37 @@ export default function Comments({ widgetKey, pageUrl }: Props) {
 
   const postComment = async () => {
     if (!body.trim()) return
-    await fetch(`${import.meta.env.VITE_API_URL}/comments`, {
+
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/comments`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ widget_key: widgetKey, page_url: pageUrl, body }),
+      body: JSON.stringify({
+        widget_key: widgetKey,
+        page_url: pageUrl,
+        body,
+      }),
     })
+
+    const data = await res.json()
+
+    if (!res.ok) {
+      setMessage(data.error || 'Failed to post comment')
+      setTimeout(() => setMessageFading(true), 2500)
+      setTimeout(() => {
+        setMessage('')
+        setMessageFading(false)
+      }, 3000)
+      return
+    }
+
     setBody('')
-    setToast(true)
-    setTimeout(() => setToastFading(true), 2500)
-    setTimeout(() => { setToast(false); setToastFading(false) }, 3000)
+    setMessage('Your comment is awaiting approval.')
+
+    setTimeout(() => setMessageFading(true), 2500)
+    setTimeout(() => {
+      setMessage('')
+      setMessageFading(false)
+    }, 3000)
   }
 
   return (
@@ -80,7 +102,11 @@ export default function Comments({ widgetKey, pageUrl }: Props) {
             </button>
           </div>
         </div>
-        {toast && <div className={`toast ${toastFading ? 'toast-fade-out' : ''}`}>Your comment is awaiting approval.</div>}
+        {message && (
+          <div className={`toast ${messageFading ? 'toast-fade-out' : ''}`}>
+            {message}
+          </div>
+        )}
         <div className="comments-list">
           {comments.length === 0 && !loading && <p className="empty">No comments yet. Be the first!</p>}
           {comments.map(c => (
