@@ -1,8 +1,3 @@
-export const COMMENT_STATUS = {
-  PENDING: 'pending',
-  APPROVED: 'approved',
-} as const
-
 export const PROVIDER_IDS = {
   CREDENTIAL: 'credential',
 } as const

@@ -2,7 +2,7 @@ import sanitizeHtml from 'sanitize-html'
 import prisma from '../lib/prisma.js'
 import { AppError } from '../errors/appError.js'
 import { getWidgetByKey } from './widget.service.js'
-import { COMMENT_STATUS, LIMITS } from '../constants/index.js'
+import { LIMITS } from '../constants/index.js'
 import { CommentStatus } from '../generated/prisma/enums.js'
 
 async function getCommentAndVerifyOwnership(commentId: string, userId: string) {
@@ -181,6 +181,14 @@ export async function createComment(
         processedBody = processedBody.replace(regex, '*'.repeat(word.length))
       })
     }
+  }
+
+  if (parentId) {
+    const parent = await prisma.comment.findUnique({ where: { id: parentId } })
+    if (!parent) throw new AppError(404, 'Parent comment not found')
+    if (parent.commentWidgetId !== widget.commentWidget.id) throw new AppError(403, 'Parent comment does not belong to this widget')
+    if (parent.parentId) throw new AppError(400, 'Cannot reply to a reply')
+    if (parent.deletedAt) throw new AppError(400, 'Cannot reply to a deleted comment')
   }
 
   return prisma.comment.create({
