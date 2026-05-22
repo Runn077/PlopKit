@@ -1,129 +1,53 @@
 import { Router } from 'express'
 import { requireAuth } from '../middleware/requireAuth.js'
-import prisma from '../lib/prisma.js'
-import { randomBytes } from 'crypto'
+import { validate } from '../middleware/validate.js'
+import { createSiteSchema, updateSiteSchema } from '../validators/site.validators.js'
+import * as siteService from '../services/site.service.js'
 
 const router = Router()
 
-router.post('/', requireAuth, async (req, res) => {
-  try {
-    const { name, domain } = req.body
-    const { user } = res.locals.session
-    if (!name) {
-      res.status(400).json({ error: 'Name is required' })
-      return
-    }
-    if (!domain) {
-      res.status(400).json({ error: 'Domain is required' })
-      return
-    }
-    const existing = await prisma.site.findUnique({ where: { domain } })
-    if (existing) {
-      res.status(409).json({ error: 'This domain is already registered' })
-      return
-    }
-    const expiresAt = new Date()
-    expiresAt.setDate(expiresAt.getDate() + 7)
-    const site = await prisma.site.create({
-      data: {
-        name,
-        domain,
-        siteKey: randomBytes(16).toString('hex'),
-        userId: user.id,
-        verified: false,
-        expiresAt,
-      },
-    })
-    res.status(201).json(site)
-  } catch (err) {
-    console.error('POST /sites error:', err)
-    res.status(500).json({ error: 'Failed to create site' })
-  }
-})
-
-router.get('/', requireAuth, async (req, res) => {
+router.get('/', requireAuth, async (req, res, next) => {
   try {
     const { user } = res.locals.session
-    const sites = await prisma.site.findMany({
-      where: { userId: user.id },
-      orderBy: { createdAt: 'desc' },
-    })
+    const sites = await siteService.getSitesByUser(user.id)
     res.json(sites)
-  } catch (err) {
-    console.error('GET /sites error:', err)
-    res.status(500).json({ error: 'Failed to fetch sites' })
-  }
+  } catch (err) { next(err) }
 })
 
-router.get('/:id', requireAuth, async (req, res) => {
+router.get('/:id', requireAuth, async (req, res, next) => {
   try {
     const { user } = res.locals.session
-    const site = await prisma.site.findUnique({
-      where: { id: req.params.id as string },
-    })
-    if (!site || site.userId !== user.id) {
-      res.status(404).json({ error: 'Site not found' })
-      return
-    }
+    const { id } = req.params as { id: string }
+    const site = await siteService.getSiteById(id, user.id)
     res.json(site)
-  } catch (err) {
-    console.error('GET /sites/:id error:', err)
-    res.status(500).json({ error: 'Failed to fetch site' })
-  }
+  } catch (err) { next(err) }
 })
 
-router.patch('/:id', requireAuth, async (req, res) => {
+router.post('/', requireAuth, validate(createSiteSchema), async (req, res, next) => {
   try {
     const { user } = res.locals.session
-    const id = req.params.id as string
     const { name, domain } = req.body
-
-    const site = await prisma.site.findUnique({ where: { id } })
-    if (!site || site.userId !== user.id) {
-      res.status(404).json({ error: 'Site not found' })
-      return
-    }
-
-    if (domain && domain !== site.domain) {
-      const existing = await prisma.site.findUnique({ where: { domain } })
-      if (existing) {
-        res.status(409).json({ error: 'This domain is already registered' })
-        return
-      }
-    }
-
-    const updated = await prisma.site.update({
-      where: { id },
-      data: {
-        ...(name && { name }),
-        ...(domain && { domain }),
-      },
-    })
-
-    res.json(updated)
-  } catch (err) {
-    console.error('PATCH /sites/:id error:', err)
-    res.status(500).json({ error: 'Failed to update site' })
-  }
+    const site = await siteService.createSite(user.id, name, domain)
+    res.status(201).json(site)
+  } catch (err) { next(err) }
 })
 
-router.delete('/:id', requireAuth, async (req, res) => {
+router.patch('/:id', requireAuth, validate(updateSiteSchema), async (req, res, next) => {
   try {
     const { user } = res.locals.session
-    const id = req.params.id as string
+    const { id } = req.params as { id: string }
+    const site = await siteService.updateSite(id, user.id, req.body)
+    res.json(site)
+  } catch (err) { next(err) }
+})
 
-    const site = await prisma.site.findUnique({ where: { id } })
-    if (!site || site.userId !== user.id) {
-      res.status(404).json({ error: 'Site not found' })
-      return
-    }
-
-    await prisma.site.delete({ where: { id } })
+router.delete('/:id', requireAuth, async (req, res, next) => {
+  try {
+    const { user } = res.locals.session
+    const { id } = req.params as { id: string }
+    await siteService.deleteSite(id, user.id)
     res.json({ success: true })
-  } catch (err) {
-    console.error('DELETE /sites/:id error:', err)
-    res.status(500).json({ error: 'Failed to delete site' })
-  }
+  } catch (err) { next(err) }
 })
 
 export default router

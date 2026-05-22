@@ -1,169 +1,63 @@
 import { Router } from 'express'
-import prisma from '../lib/prisma.js'
 import { requireAuth } from '../middleware/requireAuth.js'
-import { randomBytes } from 'crypto'
-import { WidgetType } from '../generated/prisma/enums.js'
+import { validate } from '../middleware/validate.js'
+import { createWidgetSchema, updateWidgetSchema, updateBannedWordsSchema } from '../validators/widget.validators.js'
+import * as widgetService from '../services/widget.service.js'
 
 const router = Router()
 
-router.get('/:siteId', requireAuth, async (req, res) => {
+router.get('/:siteId', requireAuth, async (req, res, next) => {
   try {
     const { user } = res.locals.session
-    const siteId = req.params.siteId as string
-
-    const site = await prisma.site.findUnique({ where: { id: siteId } })
-    if (!site || site.userId !== user.id) {
-      res.status(404).json({ error: 'Site not found' })
-      return
-    }
-
-    const widgets = await prisma.widget.findMany({
-      where: { siteId },
-      orderBy: { createdAt: 'desc' },
-      include: { commentWidget: true },
-    })
+    const { siteId } = req.params as { siteId: string }
+    const widgets = await widgetService.getWidgetsBySite(siteId, user.id)
     res.json(widgets)
-  } catch (err) {
-    console.error('GET /widgets/:siteId error:', err)
-    res.status(500).json({ error: 'Failed to fetch widgets' })
-  }
+  } catch (err) { next(err) }
 })
 
-router.get('/single/:widgetId', requireAuth, async (req, res) => {
+router.get('/single/:widgetId', requireAuth, async (req, res, next) => {
   try {
     const { user } = res.locals.session
-    const widgetId = req.params.widgetId as string
-
-    const widget = await prisma.widget.findUnique({
-      where: { id: widgetId },
-      include: { site: true, commentWidget: true },
-    })
-    if (!widget || widget.site.userId !== user.id) {
-      res.status(404).json({ error: 'Widget not found' })
-      return
-    }
+    const { widgetId } = req.params as { widgetId: string }
+    const widget = await widgetService.getWidgetById(widgetId, user.id)
     res.json(widget)
-  } catch (err) {
-    console.error('GET /widgets/single/:widgetId error:', err)
-    res.status(500).json({ error: 'Failed to fetch widget' })
-  }
+  } catch (err) { next(err) }
 })
 
-router.post('/', requireAuth, async (req, res) => {
+router.post('/', requireAuth, validate(createWidgetSchema), async (req, res, next) => {
   try {
     const { user } = res.locals.session
     const { siteId, type, name } = req.body
-
-    const site = await prisma.site.findUnique({ where: { id: siteId as string } })
-    if (!site || site.userId !== user.id) {
-      res.status(404).json({ error: 'Site not found' })
-      return
-    }
-
-    const widget = await prisma.widget.create({
-      data: {
-        siteId,
-        type,
-        name,
-        widgetKey: randomBytes(16).toString('hex'),
-        ...(type === WidgetType.comments && {
-          commentWidget: {
-            create: { autoApprove: false },
-          },
-        }),
-      },
-      include: { commentWidget: true },
-    })
+    const widget = await widgetService.createWidget(siteId, user.id, type, name)
     res.status(201).json(widget)
-  } catch (err) {
-    console.error('POST /widgets error:', err)
-    res.status(500).json({ error: 'Failed to create widget' })
-  }
+  } catch (err) { next(err) }
 })
 
-router.patch('/:id', requireAuth, async (req, res) => {
+router.patch('/:id', requireAuth, validate(updateWidgetSchema), async (req, res, next) => {
   try {
     const { user } = res.locals.session
-    const id = req.params.id as string
-    const { name, autoApprove } = req.body
-
-    const widget = await prisma.widget.findUnique({
-      where: { id },
-      include: { site: true, commentWidget: true },
-    })
-    if (!widget || widget.site.userId !== user.id) {
-      res.status(404).json({ error: 'Widget not found' })
-      return
-    }
-
-    const updated = await prisma.widget.update({
-      where: { id },
-      data: {
-        ...(name && { name }),
-        ...(autoApprove !== undefined && widget.commentWidget && {
-          commentWidget: {
-            update: { autoApprove },
-          },
-        }),
-      },
-      include: { commentWidget: true },
-    })
-    res.json(updated)
-  } catch (err) {
-    console.error('PATCH /widgets/:id error:', err)
-    res.status(500).json({ error: 'Failed to update widget' })
-  }
+    const { id } = req.params as { id: string }
+    const widget = await widgetService.updateWidget(id, user.id, req.body)
+    res.json(widget)
+  } catch (err) { next(err) }
 })
 
-router.delete('/:id', requireAuth, async (req, res) => {
+router.delete('/:id', requireAuth, async (req, res, next) => {
   try {
     const { user } = res.locals.session
-    const id = req.params.id as string
-
-    const widget = await prisma.widget.findUnique({
-      where: { id },
-      include: { site: true },
-    })
-    if (!widget || widget.site.userId !== user.id) {
-      res.status(404).json({ error: 'Widget not found' })
-      return
-    }
-
-    await prisma.widget.delete({ where: { id } })
+    const { id } = req.params as { id: string }
+    await widgetService.deleteWidget(id, user.id)
     res.json({ success: true })
-  } catch (err) {
-    console.error('DELETE /widgets/:id error:', err)
-    res.status(500).json({ error: 'Failed to delete widget' })
-  }
+  } catch (err) { next(err) }
 })
 
-router.patch('/:id/banned-words', requireAuth, async (req, res) => {
+router.patch('/:id/banned-words', requireAuth, validate(updateBannedWordsSchema), async (req, res, next) => {
   try {
     const { user } = res.locals.session
-    const id = req.params.id as string
-    const { bannedWords, autoDeleteBannedWords } = req.body
-
-    const widget = await prisma.widget.findUnique({
-      where: { id },
-      include: { site: true, commentWidget: true },
-    })
-    if (!widget?.commentWidget || widget.site.userId !== user.id) {
-      res.status(404).json({ error: 'Widget not found' })
-      return
-    }
-
-    const updated = await prisma.commentWidget.update({
-      where: { id: widget.commentWidget.id },
-      data: {
-        ...(bannedWords !== undefined && { bannedWords }),
-        ...(autoDeleteBannedWords !== undefined && { autoDeleteBannedWords }),
-      },
-    })
+    const { id } = req.params as { id: string }
+    const updated = await widgetService.updateBannedWords(id, user.id, req.body)
     res.json(updated)
-  } catch (err) {
-    console.error('PATCH /widgets/:id/banned-words error:', err)
-    res.status(500).json({ error: 'Failed to update banned words' })
-  }
+  } catch (err) { next(err) }
 })
 
 export default router
