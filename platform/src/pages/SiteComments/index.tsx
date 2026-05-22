@@ -5,11 +5,12 @@ import SubNav from './SubNav'
 import CommentsTab from './tabs/CommentsTab'
 import PendingTab from './tabs/PendingTab'
 import DeletedTab from './tabs/DeletedTab'
+import WordFilterTab from './tabs/WordFilterTab'
 import './SiteComments.css'
 import type { Comment, Widget, Site, Reply } from '../../types'
 import { apiFetch } from '../../lib/api'
 
-type Tab = 'comments' | 'pending' | 'deleted'
+type Tab = 'comments' | 'pending' | 'deleted' | 'filter'
 
 function SiteComments() {
   const { siteId, widgetId } = useParams()
@@ -201,6 +202,23 @@ function SiteComments() {
     }
   }
 
+  async function handleUpdateBannedWords(bannedWords: string[], autoDelete: boolean) {
+    if (!widget) return
+    const res = await apiFetch(`/widgets/${widget.id}/banned-words`, {
+      method: 'PATCH',
+      body: JSON.stringify({ bannedWords, autoDeleteBannedWords: autoDelete }),
+    })
+    if (!res.ok) {
+      const data = await res.json()
+      throw new Error(data.error ?? 'Something went wrong')
+    }
+    const updated = await res.json()
+    setWidget(prev => prev?.commentWidget
+      ? { ...prev, commentWidget: { ...prev.commentWidget, bannedWords: updated.bannedWords, autoDeleteBannedWords: updated.autoDeleteBannedWords } }
+      : prev
+    )
+  }
+
   if (loading) return <div className="page-loading">Loading...</div>
   if (error) return (
     <div>
@@ -272,6 +290,13 @@ function SiteComments() {
             onRestoreReply={handleRestoreReply}
             onPermanentDeleteReply={handlePermanentDeleteReply}
             onDeleteAll={handleDeleteAll}
+          />
+        )}
+        {activeTab === 'filter' && (
+          <WordFilterTab
+            bannedWords={widget.commentWidget?.bannedWords ?? []}
+            autoDelete={widget.commentWidget?.autoDeleteBannedWords ?? false}
+            onSave={handleUpdateBannedWords}
           />
         )}
       </div>

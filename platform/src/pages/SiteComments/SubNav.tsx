@@ -1,6 +1,6 @@
 import './SiteComments.css'
 
-type Tab = 'comments' | 'pending' | 'deleted'
+type Tab = 'comments' | 'pending' | 'deleted' | 'filter'
 
 interface Props {
   activeTab: Tab
@@ -27,6 +27,12 @@ function SubNav({ activeTab, onTabChange }: Props) {
         onClick={() => onTabChange('deleted')}
       >
         Recently Deleted
+      </button>
+      <button
+        className={`sc-subnav-tab ${activeTab === 'filter' ? 'sc-subnav-tab-active' : ''}`}
+        onClick={() => onTabChange('filter')}
+      >
+        Word Filter
       </button>
     </div>
   )
