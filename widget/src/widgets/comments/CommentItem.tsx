@@ -31,6 +31,11 @@ export default function CommentItem({ comment, widgetKey, pageUrl }: Props) {
       : comment.body.slice(0, LIMIT) + '...'
   }
 
+  const handleReplyPosted = (reply: Reply) => {
+    setReplies(prev => [...prev, reply])
+    setShowReplies(true)
+  }
+
   const postReply = async () => {
     if (!replyBody.trim()) return
 
@@ -56,9 +61,9 @@ export default function CommentItem({ comment, widgetKey, pageUrl }: Props) {
     setReplyOpen(false)
 
     if (data.status === 'approved') {
-      setReplies(prev => [...prev, { id: data.id, body: data.body, createdAt: data.createdAt }])
+      setReplies(prev => [...prev, { id: data.id, body: data.body, createdAt: data.createdAt, quotedId: null, quoted: null }])
       setShowReplies(true)
-      show('Reply posted')
+      show('Reply posted!')
     } else {
       show('Your reply has been submitted and is awaiting approval.')
     }
@@ -113,7 +118,14 @@ export default function CommentItem({ comment, widgetKey, pageUrl }: Props) {
           {showReplies && (
             <div className="replies">
               {replies.map(r => (
-                <ReplyItem key={r.id} reply={r} widgetKey={widgetKey} pageUrl={pageUrl} />
+                <ReplyItem
+                  key={r.id}
+                  reply={r}
+                  widgetKey={widgetKey}
+                  pageUrl={pageUrl}
+                  parentId={comment.id}
+                  onReplyPosted={handleReplyPosted}
+                />
               ))}
             </div>
           )}

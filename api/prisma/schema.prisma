@@ -126,4 +126,7 @@ model Comment {
   parentId  String?
   parent    Comment?  @relation("Replies", fields: [parentId], references: [id], onDelete: Cascade)
   replies   Comment[] @relation("Replies")
+  quotedId  String?
+  quoted    Comment?  @relation("QuotedComment", fields: [quotedId], references: [id], onDelete: SetNull)
+  quotedBy  Comment[] @relation("QuotedComment")
 }

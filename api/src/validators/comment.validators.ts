@@ -19,4 +19,5 @@ export const createCommentSchema = z.object({
     `Comment must be under ${LIMITS.COMMENT_MAX_LENGTH} characters`
   ),
   parent_id: z.string().optional(),
+  quoted_id: z.string().optional(),
 })

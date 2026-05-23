@@ -35,9 +35,9 @@ router.get('/', validate(getCommentsSchema, 'query'), async (req, res, next) => 
 
 router.post('/', commentBurstLimiter, commentHourlyLimiter, validate(createCommentSchema), async (req, res, next) => {
   try {
-    const { widget_key, page_url, body, parent_id } = req.body
+    const { widget_key, page_url, body, parent_id, quoted_id } = req.body
     const origin = req.headers.origin ?? req.headers.referer ?? ''
-    const comment = await commentService.createComment(widget_key, page_url, body, parent_id, origin)
+    const comment = await commentService.createComment(widget_key, page_url, body, parent_id, quoted_id, origin)
     res.json(comment)
   } catch (err) { next(err) }
 })

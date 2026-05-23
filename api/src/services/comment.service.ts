@@ -55,6 +55,11 @@ export async function getApprovedComments(
         replies: {
           where: { status: CommentStatus.approved, deletedAt: null },
           orderBy: { createdAt: 'asc' },
+          include: {
+            quoted: {
+              select: { id: true, body: true, deletedAt: true, status: true },
+            },
+          },
         },
       },
     }),
@@ -137,6 +142,7 @@ export async function createComment(
   pageUrl: string,
   rawBody: string,
   parentId: string | undefined,
+  quotedId: string | undefined,
   origin: string,
 ) {
   const cleanBody = sanitizeHtml(rawBody, { allowedTags: [], allowedAttributes: {} })
@@ -191,6 +197,13 @@ export async function createComment(
     if (parent.deletedAt) throw new AppError(400, 'Cannot reply to a deleted comment')
   }
 
+  if (quotedId) {
+    const quoted = await prisma.comment.findUnique({ where: { id: quotedId } })
+    if (!quoted) throw new AppError(404, 'Quoted comment not found')
+    if (quoted.commentWidgetId !== widget.commentWidget.id) throw new AppError(403, 'Quoted comment does not belong to this widget')
+    if (!quoted.parentId) throw new AppError(400, 'Can only quote a reply')
+  }
+
   return prisma.comment.create({
     data: {
       commentWidgetId: widget.commentWidget.id,
@@ -199,6 +212,12 @@ export async function createComment(
       body: processedBody,
       status: widget.commentWidget.autoApprove ? CommentStatus.approved : CommentStatus.pending,
       parentId: parentId ?? null,
+      quotedId: quotedId ?? null,
+    },
+    include: {
+      quoted: {
+        select: { id: true, body: true, deletedAt: true, status: true },
+      },
     },
   })
 }
