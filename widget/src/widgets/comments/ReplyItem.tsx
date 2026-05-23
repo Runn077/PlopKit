@@ -1,11 +1,9 @@
-interface Reply {
-  id: string
-  body: string
-  createdAt: string
-}
+import type { Reply } from './types'
 
 interface Props {
   reply: Reply
+  widgetKey: string
+  pageUrl: string
 }
 
 export default function ReplyItem({ reply }: Props) {

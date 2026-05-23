@@ -1,18 +1,7 @@
 import { useState } from 'react'
 import ReplyItem from './ReplyItem'
-
-interface Reply {
-  id: string
-  body: string
-  createdAt: string
-}
-
-interface Comment {
-  id: string
-  body: string
-  createdAt: string
-  replies: Reply[]
-}
+import { useToast } from './useToast'
+import type { Comment, Reply, NewComment } from './types'
 
 interface Props {
   comment: Comment
@@ -21,12 +10,12 @@ interface Props {
 }
 
 export default function CommentItem({ comment, widgetKey, pageUrl }: Props) {
+  const [replies, setReplies] = useState<Reply[]>(comment.replies)
   const [expanded, setExpanded] = useState(false)
   const [showReplies, setShowReplies] = useState(false)
   const [replyOpen, setReplyOpen] = useState(false)
   const [replyBody, setReplyBody] = useState('')
-  const [message, setMessage] = useState('')
-  const [messageFading, setMessageFading] = useState(false)
+  const { message, fading, show } = useToast()
 
   const LIMIT = 1000
   const MAX_LINES = 3
@@ -37,11 +26,9 @@ export default function CommentItem({ comment, widgetKey, pageUrl }: Props) {
   if (expanded || !isLong) {
     displayBody = comment.body
   } else {
-    if (lines.length > MAX_LINES) {
-      displayBody = lines.slice(0, MAX_LINES).join('\n') + '...'
-    } else {
-      displayBody = comment.body.slice(0, LIMIT) + '...'
-    }
+    displayBody = lines.length > MAX_LINES
+      ? lines.slice(0, MAX_LINES).join('\n') + '...'
+      : comment.body.slice(0, LIMIT) + '...'
   }
 
   const postReply = async () => {
@@ -58,33 +45,28 @@ export default function CommentItem({ comment, widgetKey, pageUrl }: Props) {
       }),
     })
 
-    const data = await res.json()
+    const data: NewComment = await res.json()
 
     if (!res.ok) {
-      setMessage(data.error || 'Failed to post reply')
-
-      setTimeout(() => setMessageFading(true), 2500)
-      setTimeout(() => {
-        setMessage('')
-        setMessageFading(false)
-      }, 3000)
-
+      show((data as any).error || 'Failed to post reply')
       return
     }
 
     setReplyBody('')
-    setMessage('Your reply is awaiting approval.')
+    setReplyOpen(false)
 
-    setTimeout(() => setMessageFading(true), 2500)
-    setTimeout(() => {
-      setMessage('')
-      setMessageFading(false)
-    }, 3000)
+    if (data.status === 'approved') {
+      setReplies(prev => [...prev, { id: data.id, body: data.body, createdAt: data.createdAt }])
+      setShowReplies(true)
+      show('Reply posted')
+    } else {
+      show('Your reply has been submitted and is awaiting approval.')
+    }
   }
 
   return (
     <div className="comment">
-      <p className={`comment-body ${expanded ? 'expanded' : ''}`}>{displayBody}</p>
+      <p className="comment-body">{displayBody}</p>
       {isLong && (
         <button className="btn-show-more" onClick={() => setExpanded(!expanded)}>
           {expanded ? 'Show less' : 'Show more'}
@@ -108,28 +90,30 @@ export default function CommentItem({ comment, widgetKey, pageUrl }: Props) {
             autoFocus
           />
           {message && (
-            <div className={`toast ${messageFading ? 'toast-fade-out' : ''}`}>
-              {message}
-            </div>
+            <div className={`toast ${fading ? 'toast-fade-out' : ''}`}>{message}</div>
           )}
           <div className="reply-actions">
             <span className="char-count">{replyBody.length}/1000</span>
             <div style={{ display: 'flex', gap: '8px' }}>
-              <button className="btn-cancel" onClick={() => { setReplyOpen(false); setReplyBody('') }}>Cancel</button>
-              <button className="btn-post-reply" onClick={postReply} disabled={!replyBody.trim()}>Reply</button>
+              <button className="btn-cancel" onClick={() => { setReplyOpen(false); setReplyBody('') }}>
+                Cancel
+              </button>
+              <button className="btn-post-reply" onClick={postReply} disabled={!replyBody.trim()}>
+                Reply
+              </button>
             </div>
           </div>
         </div>
       )}
-      {comment.replies.length > 0 && (
+      {replies.length > 0 && (
         <>
           <button className="btn-show-replies" onClick={() => setShowReplies(!showReplies)}>
-            {showReplies ? 'Hide replies' : `Show ${comment.replies.length} ${comment.replies.length === 1 ? 'reply' : 'replies'}`}
+            {showReplies ? 'Hide replies' : `Show ${replies.length} ${replies.length === 1 ? 'reply' : 'replies'}`}
           </button>
           {showReplies && (
             <div className="replies">
-              {comment.replies.map(r => (
-                <ReplyItem key={r.id} reply={r} />
+              {replies.map(r => (
+                <ReplyItem key={r.id} reply={r} widgetKey={widgetKey} pageUrl={pageUrl} />
               ))}
             </div>
           )}
