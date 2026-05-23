@@ -31,7 +31,10 @@ const globalLimiter = rateLimit({
   legacyHeaders: false,
 })
 
-app.use(globalLimiter)
+app.use((req, res, next) => {
+  if (req.method === 'GET' && req.path.startsWith('/comments')) return next()
+  globalLimiter(req, res, next)
+})
 
 app.all('/api/auth/*splat', toNodeHandler(auth))
 
