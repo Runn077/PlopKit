@@ -5,35 +5,6 @@
   font-family: sans-serif;
 }
 
-.sc-back {
-  background: none;
-  border: none;
-  font-size: 13px;
-  color: #888;
-  cursor: pointer;
-  padding: 0;
-  margin-bottom: 24px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-family: sans-serif;
-}
-
-.sc-back:hover { color: #000; }
-
-.sc-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 32px;
-}
-
-.sc-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #000;
-}
-
 /* Script tag */
 .sc-script-block {
   border: 1px solid #000;
@@ -98,13 +69,6 @@
 }
 
 /* Comments */
-.sc-comments-title {
-  font-size: 15px;
-  font-weight: 600;
-  color: #000;
-  margin-bottom: 16px;
-}
-
 .sc-empty {
   font-size: 14px;
   color: #888;

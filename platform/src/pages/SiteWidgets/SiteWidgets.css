@@ -5,22 +5,6 @@
   font-family: sans-serif;
 }
 
-.sw-back {
-  background: none;
-  border: none;
-  font-size: 13px;
-  color: #888;
-  cursor: pointer;
-  padding: 0;
-  margin-bottom: 24px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-family: sans-serif;
-}
-
-.sw-back:hover { color: #000; }
-
 .sw-header {
   display: flex;
   justify-content: space-between;
