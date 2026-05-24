@@ -21,3 +21,12 @@ export const createCommentSchema = z.object({
   parent_id: z.string().optional(),
   quoted_id: z.string().optional(),
 })
+
+export const ownerPostSchema = z.object({
+  body: z.string().min(1, 'Body is required').max(
+    LIMITS.COMMENT_MAX_LENGTH,
+    `Comment must be under ${LIMITS.COMMENT_MAX_LENGTH} characters`
+  ),
+  page_url: z.string().min(1, 'Page URL is required'),
+  widget_key: z.string().min(1, 'Widget key is required'),
+})

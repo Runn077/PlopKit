@@ -469,3 +469,50 @@
 .sc-btn-primary:hover {
   background: #333;
 }
+
+.sc-pin-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  color: #000;
+  background: #f0f0f0;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+.sc-comment-pinned {
+  border-top: 2px solid #000;
+}
+
+.sc-owner-post {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e4e2dc;
+}
+
+.sc-btn-reply-text {
+  background: none;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: #000;
+  cursor: pointer;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.sc-btn-reply-text:hover { color: #555; }
+
+.sc-btn-cancel-text {
+  background: none;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: #555;
+  cursor: pointer;
+  padding: 0;
+  font-family: sans-serif;
+}

@@ -24,6 +24,7 @@ export async function getApprovedComments(
   if (!widget?.commentWidget) throw new AppError(404, 'Widget not found')
 
   const commentWidgetId = widget.commentWidget.id
+  const pinnedCommentId = widget.commentWidget.pinnedCommentId
 
   const baseWhere: any = {
     commentWidgetId,
@@ -65,7 +66,16 @@ export async function getApprovedComments(
     }),
   ])
 
-  return { comments, hasMore: comments.length === LIMITS.COMMENT_PAGE_SIZE, total }
+  // Move pinned comment to top if present and not already paginated out
+  let ordered = comments
+  if (pinnedCommentId && !cursor) {
+    const pinned = comments.find(c => c.id === pinnedCommentId)
+    if (pinned) {
+      ordered = [pinned, ...comments.filter(c => c.id !== pinnedCommentId)]
+    }
+  }
+
+  return { comments: ordered, hasMore: comments.length === LIMITS.COMMENT_PAGE_SIZE, total, pinnedCommentId }
 }
 
 export async function getPendingComments(widgetKey: string, userId: string) {
@@ -340,5 +350,55 @@ export async function createOwnerReply(
         select: { id: true, body: true, deletedAt: true, status: true },
       },
     },
+  })
+}
+
+export async function createOwnerComment(
+  widgetKey: string,
+  pageUrl: string,
+  rawBody: string,
+  userId: string,
+) {
+  const cleanBody = sanitizeHtml(rawBody, { allowedTags: [], allowedAttributes: {} })
+  if (!cleanBody || cleanBody.trim().length === 0) throw new AppError(400, 'Body is required')
+  if (cleanBody.length > LIMITS.COMMENT_MAX_LENGTH) throw new AppError(400, `Comment must be under ${LIMITS.COMMENT_MAX_LENGTH} characters`)
+
+  const widget = await getWidgetByKey(widgetKey)
+  if (!widget?.commentWidget) throw new AppError(404, 'Widget not found')
+  if (widget.site.userId !== userId) throw new AppError(403, 'Forbidden')
+
+  return prisma.comment.create({
+    data: {
+      commentWidgetId: widget.commentWidget.id,
+      widgetKey,
+      pageUrl,
+      body: cleanBody,
+      status: CommentStatus.approved,
+      isOwnerReply: true,
+    },
+  })
+}
+
+export async function pinComment(commentId: string, userId: string) {
+  const comment = await prisma.comment.findUnique({ where: { id: commentId } })
+  if (!comment) throw new AppError(404, 'Comment not found')
+  if (comment.parentId) throw new AppError(400, 'Cannot pin a reply')
+
+  const widget = await getWidgetByKey(comment.widgetKey)
+  if (!widget?.commentWidget || widget.site.userId !== userId) throw new AppError(403, 'Forbidden')
+
+  return prisma.commentWidget.update({
+    where: { id: widget.commentWidget.id },
+    data: { pinnedCommentId: commentId },
+  })
+}
+
+export async function unpinComment(widgetKey: string, userId: string) {
+  const widget = await getWidgetByKey(widgetKey)
+  if (!widget?.commentWidget || widget.site.userId !== userId) throw new AppError(403, 'Forbidden')
+
+  return prisma.commentWidget.update({
+    where: { id: widget.commentWidget.id },
+    data: { pinnedCommentId: null },
   })
 }

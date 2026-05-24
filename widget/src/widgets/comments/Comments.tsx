@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import CommentItem from './CommentItem'
 import { useToast } from './useToast'
-import type { Comment, NewComment } from './types'
+import type { Comment, NewComment, CommentsResponse } from './types'
 import styles from './comments.css?inline'
 
 interface Props {
@@ -15,21 +15,21 @@ export default function Comments({ widgetKey, pageUrl }: Props) {
   const [loading, setLoading] = useState(false)
   const [body, setBody] = useState('')
   const [total, setTotal] = useState(0)
+  const [pinnedCommentId, setPinnedCommentId] = useState<string | null>(null)
   const { message, fading, show } = useToast()
 
   const fetchComments = async (cursor?: string) => {
     setLoading(true)
     const url = `${import.meta.env.VITE_API_URL}/comments?widget_key=${widgetKey}&page_url=${encodeURIComponent(pageUrl)}${cursor ? `&cursor=${cursor}` : ''}`
-    const data = await fetch(url).then(res => res.json())
+    const data: CommentsResponse = await fetch(url).then(res => res.json())
     setComments(prev => cursor ? [...prev, ...data.comments] : data.comments)
     setHasMore(data.hasMore)
     setTotal(data.total ?? (cursor ? total : data.comments.length))
+    if (!cursor) setPinnedCommentId(data.pinnedCommentId)
     setLoading(false)
   }
 
-  useEffect(() => {
-    fetchComments()
-  }, [])
+  useEffect(() => { fetchComments() }, [])
 
   const loadMore = () => {
     const lastComment = comments[comments.length - 1]
@@ -57,7 +57,7 @@ export default function Comments({ widgetKey, pageUrl }: Props) {
     if (data.status === 'approved') {
       setComments(prev => [{ ...data, replies: [] }, ...prev])
       setTotal(prev => prev + 1)
-      show('Comment posted')
+      show('Comment posted!')
     } else {
       show('Your comment has been submitted and is awaiting approval.')
     }
@@ -95,6 +95,7 @@ export default function Comments({ widgetKey, pageUrl }: Props) {
               comment={c}
               widgetKey={widgetKey}
               pageUrl={pageUrl}
+              isPinned={pinnedCommentId === c.id}
             />
           ))}
           {hasMore && (

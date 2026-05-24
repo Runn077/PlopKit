@@ -108,8 +108,10 @@ model CommentWidget {
   autoApprove Boolean   @default(false)
   comments    Comment[]
   createdAt   DateTime  @default(now())
-  bannedWords String[] @default([])
+  bannedWords String[]  @default([])
   autoDeleteBannedWords Boolean @default(false)
+  pinnedCommentId String? @unique
+  pinnedComment   Comment? @relation("PinnedComment", fields: [pinnedCommentId], references: [id], onDelete: SetNull)
 }
 
 model Comment {
@@ -130,4 +132,5 @@ model Comment {
   quoted    Comment?  @relation("QuotedComment", fields: [quotedId], references: [id], onDelete: SetNull)
   quotedBy  Comment[] @relation("QuotedComment")
   isOwnerReply Boolean @default(false)
+  pinnedIn CommentWidget? @relation("PinnedComment")
 }

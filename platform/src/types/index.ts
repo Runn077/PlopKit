@@ -4,6 +4,7 @@ export interface CommentWidget {
   autoApprove: boolean
   bannedWords: string[]
   autoDeleteBannedWords: boolean
+  pinnedCommentId: string | null
   createdAt: string
 }
 

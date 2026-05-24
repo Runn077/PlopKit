@@ -32,3 +32,10 @@ export interface NewComment {
   quoted: QuotedComment | null
   isOwnerReply: boolean
 }
+
+export interface CommentsResponse {
+  comments: Comment[]
+  hasMore: boolean
+  total: number
+  pinnedCommentId: string | null
+}

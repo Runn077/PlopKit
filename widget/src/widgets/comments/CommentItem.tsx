@@ -7,9 +7,10 @@ interface Props {
   comment: Comment
   widgetKey: string
   pageUrl: string
+  isPinned: boolean
 }
 
-export default function CommentItem({ comment, widgetKey, pageUrl }: Props) {
+export default function CommentItem({ comment, widgetKey, pageUrl, isPinned }: Props) {
   const [replies, setReplies] = useState<Reply[]>(comment.replies)
   const [expanded, setExpanded] = useState(false)
   const [showReplies, setShowReplies] = useState(false)
@@ -77,8 +78,11 @@ export default function CommentItem({ comment, widgetKey, pageUrl }: Props) {
   }
 
   return (
-    <div className="comment">
-      {comment.isOwnerReply && <span className="owner-badge">Site owner</span>}
+    <div className={`comment ${isPinned ? 'comment-pinned' : ''}`}>
+      <div style={{ display: 'flex', gap: '6px', marginBottom: isPinned || comment.isOwnerReply ? '6px' : '0' }}>
+        {isPinned && <span className="pinned-badge">Pinned</span>}
+        {comment.isOwnerReply && <span className="owner-badge">Site owner</span>}
+      </div>
       <p className="comment-body">{displayBody}</p>
       {isLong && (
         <button className="btn-show-more" onClick={() => setExpanded(!expanded)}>

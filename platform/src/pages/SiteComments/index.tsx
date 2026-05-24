@@ -24,6 +24,7 @@ function SiteComments() {
   const [hasMore, setHasMore] = useState(false)
   const [cursor, setCursor] = useState<string | undefined>()
   const [loading, setLoading] = useState(true)
+  const [total, setTotal] = useState(0)
   const [loadingMore, setLoadingMore] = useState(false)
   const [copied, setCopied] = useState(false)
   const [orphanedReplies, setOrphanedReplies] = useState<Reply[]>([])
@@ -64,6 +65,7 @@ function SiteComments() {
     const res = await apiFetch(`/comments?${params}`)
     const data = await res.json()
     setComments(prev => cursor ? [...prev, ...data.comments] : data.comments)
+    if (!cursor) setTotal(data.total ?? 0)
     setHasMore(data.hasMore)
     if (data.comments.length > 0) setCursor(data.comments[data.comments.length - 1].id)
     setLoading(false)
@@ -231,6 +233,44 @@ function SiteComments() {
     ))
   }
 
+  async function handleOwnerPost(body: string) {
+    if (!widget) return
+    const res = await apiFetch('/comments/owner-post', {
+      method: 'POST',
+      body: JSON.stringify({
+        widget_key: widget.widgetKey,
+        page_url: `https://${widget.widgetKey}`,
+        body,
+      }),
+    })
+    if (res.ok) {
+      const newComment = await res.json()
+      setComments(prev => [{ ...newComment, replies: [] }, ...prev])
+      setTotal(prev => prev + 1)
+    }
+  }
+
+  async function handlePin(commentId: string) {
+    const res = await apiFetch(`/comments/${commentId}/pin`, { method: 'PATCH' })
+    if (res.ok) {
+      setWidget(prev => prev?.commentWidget
+        ? { ...prev, commentWidget: { ...prev.commentWidget, pinnedCommentId: commentId } }
+        : prev
+      )
+    }
+  }
+
+  async function handleUnpin() {
+    if (!widget) return
+    const res = await apiFetch(`/comments/unpin?widget_key=${widget.widgetKey}`, { method: 'PATCH' })
+    if (res.ok) {
+      setWidget(prev => prev?.commentWidget
+        ? { ...prev, commentWidget: { ...prev.commentWidget, pinnedCommentId: null } }
+        : prev
+      )
+    }
+  }
+
   if (loading) return <div className="page-loading">Loading...</div>
   if (error) return (
     <div>
@@ -273,8 +313,13 @@ function SiteComments() {
             comments={comments}
             hasMore={hasMore}
             loadingMore={loadingMore}
+            widgetKey={widget.widgetKey}
+            pinnedCommentId={widget.commentWidget?.pinnedCommentId ?? null}
             onDelete={handleDelete}
             onReplyPosted={handleReplyPosted}
+            onPin={handlePin}
+            onUnpin={handleUnpin}
+            onOwnerPost={handleOwnerPost}
             onLoadMore={() => {
               if (!widget || !cursor) return
               setLoadingMore(true)

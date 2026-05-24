@@ -5,6 +5,7 @@ import { commentBurstLimiter, commentHourlyLimiter } from '../middleware/comment
 import { getCommentsSchema, getWidgetCommentsSchema, createCommentSchema } from '../validators/comment.validators.js'
 import * as commentService from '../services/comment.service.js'
 import { AppError } from '../errors/appError.js'
+import { ownerPostSchema } from '../validators/comment.validators.js'
 
 const router = Router()
 
@@ -105,6 +106,36 @@ router.delete('/:id/permanent', requireAuth, async (req, res, next) => {
     const { user } = res.locals.session
     const { id } = req.params as { id: string }
     await commentService.permanentDeleteComment(id, user.id)
+    res.json({ success: true })
+  } catch (err) { next(err) }
+})
+
+// Owner top-level comment
+router.post('/owner-post', requireAuth, validate(ownerPostSchema), async (req, res, next) => {
+  try {
+    const { user } = res.locals.session
+    const { widget_key, page_url, body } = req.body
+    const comment = await commentService.createOwnerComment(widget_key, page_url, body, user.id)
+    res.json(comment)
+  } catch (err) { next(err) }
+})
+
+// Pin comment
+router.patch('/:id/pin', requireAuth, async (req, res, next) => {
+  try {
+    const { user } = res.locals.session
+    const { id } = req.params as { id: string }
+    await commentService.pinComment(id, user.id)
+    res.json({ success: true })
+  } catch (err) { next(err) }
+})
+
+// Unpin comment
+router.patch('/unpin', requireAuth, validate(getWidgetCommentsSchema, 'query'), async (req, res, next) => {
+  try {
+    const { user } = res.locals.session
+    const { widget_key } = req.query as { widget_key: string }
+    await commentService.unpinComment(widget_key, user.id)
     res.json({ success: true })
   } catch (err) { next(err) }
 })
