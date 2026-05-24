@@ -1,0 +1,65 @@
+.navbar {
+  height: var(--pk-nav-height);
+  background: var(--pk-color-bg);
+  border-bottom: 1px solid var(--pk-color-border-muted);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--pk-space-page-x);
+  position: sticky;
+  top: 0;
+  z-index: var(--pk-z-nav);
+}
+
+.navbar-brand {
+  font-family: var(--pk-font);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--pk-color-text);
+  letter-spacing: -0.02em;
+  margin-right: auto;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.navbar-link {
+  background: none;
+  border: none;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--pk-color-text-muted);
+  font-family: var(--pk-font);
+}
+
+.navbar-btn-outline {
+  background: none;
+  border: 1px solid var(--pk-color-border-nav);
+  border-radius: 5px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #1a1917;
+  font-family: var(--pk-font);
+}
+
+.navbar-btn-accent {
+  background: var(--pk-color-accent);
+  border: none;
+  border-radius: 5px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--pk-color-on-primary);
+  font-family: var(--pk-font);
+}

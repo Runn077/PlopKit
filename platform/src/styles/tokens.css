@@ -1,0 +1,41 @@
+/* PlopKit design tokens — change colors/fonts here */
+:root {
+  --pk-font: sans-serif;
+  --pk-font-mono: monospace;
+
+  --pk-color-text: #000;
+  --pk-color-text-muted: #888;
+  --pk-color-text-subtle: #aaa;
+  --pk-color-text-secondary: #555;
+  --pk-color-text-sep: #ccc;
+
+  --pk-color-bg: #fff;
+  --pk-color-bg-hover: #f5f5f5;
+  --pk-color-bg-subtle: #fafafa;
+  --pk-color-bg-muted: #f0f0f0;
+
+  --pk-color-border: #000;
+  --pk-color-border-muted: #e4e2dc;
+  --pk-color-border-nav: #ccc9c0;
+
+  --pk-color-primary: #000;
+  --pk-color-primary-hover: #333;
+  --pk-color-on-primary: #fff;
+
+  --pk-color-accent: #9370db;
+  --pk-color-danger: red;
+
+  --pk-radius-sm: 4px;
+  --pk-radius: 6px;
+  --pk-radius-lg: 8px;
+  --pk-radius-pill: 20px;
+  --pk-radius-full: 999px;
+
+  --pk-content-max: 680px;
+  --pk-space-page-x: 24px;
+  --pk-space-page-y: 40px;
+
+  --pk-nav-height: 56px;
+  --pk-z-nav: 10;
+  --pk-z-modal: 100;
+}

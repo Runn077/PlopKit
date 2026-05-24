@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useSession, signOut } from '../lib/auth-client'
+import './Navbar.css'
 
 function Navbar() {
   const navigate = useNavigate()
@@ -11,69 +12,21 @@ function Navbar() {
   }
 
   return (
-    <nav style={{
-      height: '56px',
-      background: '#ffffff',
-      borderBottom: '1px solid #e4e2dc',
-      display: 'flex',
-      alignItems: 'center',
-      padding: '0 24px',
-      position: 'sticky',
-      top: 0,
-      zIndex: 10,
-    }}>
-      <span
-        style={{
-          fontFamily: 'sans-serif',
-          fontSize: '18px',
-          fontWeight: 600,
-          color: '#000000',
-          letterSpacing: '-0.02em',
-          marginRight: 'auto',
-          cursor: 'pointer',
-        }}
-        onClick={() => navigate('/dashboard')}
-      >
+    <nav className="navbar">
+      <button type="button" className="navbar-brand" onClick={() => navigate('/dashboard')}>
         PlopKit
-      </span>
+      </button>
       {session ? (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <button onClick={() => navigate('/account')} style={{
-            background: 'none',
-            border: 'none',
-            padding: '6px 12px',
-            fontSize: '13px',
-            fontWeight: 500,
-            cursor: 'pointer',
-            color: '#888',
-            fontFamily: 'sans-serif',
-          }}>
+        <div className="navbar-actions">
+          <button type="button" className="navbar-link" onClick={() => navigate('/account')}>
             {session.user.name ?? session.user.email}
           </button>
-          <button onClick={handleSignOut} style={{
-            background: 'none',
-            border: '1px solid #ccc9c0',
-            borderRadius: '5px',
-            padding: '6px 12px',
-            fontSize: '13px',
-            fontWeight: 500,
-            cursor: 'pointer',
-            color: '#1a1917',
-          }}>
+          <button type="button" className="navbar-btn-outline" onClick={handleSignOut}>
             Sign out
           </button>
         </div>
       ) : (
-        <button onClick={() => navigate('/login')} style={{
-          background: '#9370DB',
-          border: 'none',
-          borderRadius: '5px',
-          padding: '6px 12px',
-          fontSize: '13px',
-          fontWeight: 500,
-          cursor: 'pointer',
-          color: '#fff',
-        }}>
+        <button type="button" className="navbar-btn-accent" onClick={() => navigate('/login')}>
           Sign in
         </button>
       )}
