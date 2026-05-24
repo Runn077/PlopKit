@@ -24,7 +24,6 @@ function SiteComments() {
   const [hasMore, setHasMore] = useState(false)
   const [cursor, setCursor] = useState<string | undefined>()
   const [loading, setLoading] = useState(true)
-  const [total, setTotal] = useState(0)
   const [loadingMore, setLoadingMore] = useState(false)
   const [copied, setCopied] = useState(false)
   const [orphanedReplies, setOrphanedReplies] = useState<Reply[]>([])
@@ -65,7 +64,6 @@ function SiteComments() {
     const res = await apiFetch(`/comments?${params}`)
     const data = await res.json()
     setComments(prev => cursor ? [...prev, ...data.comments] : data.comments)
-    if (!cursor) setTotal(data.total ?? 0)
     setHasMore(data.hasMore)
     if (data.comments.length > 0) setCursor(data.comments[data.comments.length - 1].id)
     setLoading(false)
@@ -109,7 +107,6 @@ function SiteComments() {
       setOrphanedReplies(prev => prev.filter(r => r.id !== commentId))
       if (approved) {
         setComments(prev => [approved, ...prev])
-        setTotal(prev => prev + 1)
       }
     }
   }
@@ -128,7 +125,6 @@ function SiteComments() {
       setDeletedComments(prev => prev.filter(c => c.id !== commentId))
       if (restored) {
         setComments(prev => [{ ...restored, deletedAt: null }, ...prev])
-        setTotal(prev => prev + 1)
       }
     }
   }
@@ -267,7 +263,6 @@ function SiteComments() {
     if (res.ok) {
       const newComment = await res.json()
       setComments(prev => [{ ...newComment, replies: [] }, ...prev])
-      setTotal(prev => prev + 1)
     }
   }
 
@@ -334,7 +329,6 @@ function SiteComments() {
             comments={comments}
             hasMore={hasMore}
             loadingMore={loadingMore}
-            widgetKey={widget.widgetKey}
             pinnedCommentId={widget.commentWidget?.pinnedCommentId ?? null}
             onDelete={handleDelete}
             onReplyPosted={handleReplyPosted}

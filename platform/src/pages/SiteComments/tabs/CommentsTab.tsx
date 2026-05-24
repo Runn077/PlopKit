@@ -7,7 +7,6 @@ interface Props {
   comments: Comment[]
   hasMore: boolean
   loadingMore: boolean
-  widgetKey: string
   pinnedCommentId: string | null
   onDelete: (commentId: string, parentId?: string) => Promise<void>
   onLoadMore: () => void
@@ -18,7 +17,7 @@ interface Props {
 }
 
 function CommentsTab({
-  comments, hasMore, loadingMore, widgetKey, pinnedCommentId,
+  comments, hasMore, loadingMore, pinnedCommentId,
   onDelete, onLoadMore, onReplyPosted, onPin, onUnpin, onOwnerPost,
 }: Props) {
   const [postBody, setPostBody] = useState('')
