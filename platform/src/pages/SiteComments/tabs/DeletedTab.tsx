@@ -2,6 +2,16 @@ import type { Comment, Reply } from '../../../types'
 import CommentRow from '../components/CommentRow'
 import '../SiteComments.css'
 
+const SOFT_DELETE_EXPIRY_DAYS = 7
+
+function getDeletedExpiry(deletedAt: string) {
+  const expires = new Date(deletedAt)
+  expires.setDate(expires.getDate() + SOFT_DELETE_EXPIRY_DAYS)
+  const days = Math.ceil((expires.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+  if (days <= 0) return 'Expires today'
+  if (days === 1) return 'Expires in 1 day'
+  return `Expires in ${days} days`
+}
 interface Props {
   comments: Comment[]
   orphanedReplies: Reply[]
@@ -33,9 +43,9 @@ function DeletedTab({ comments, orphanedReplies, onRestore, onPermanentDelete, o
                 <button className="sc-btn sc-btn-danger" onClick={() => onPermanentDelete(comment.id)}>Delete</button>
               </div>
             }
+            expiry={comment.deletedAt ? getDeletedExpiry(comment.deletedAt) : undefined}
           />
         ))}
-
         {orphanedReplies.length > 0 && (
           <>
             <p className="sc-section-label">Replies to active comments</p>
@@ -46,7 +56,12 @@ function DeletedTab({ comments, orphanedReplies, onRestore, onPermanentDelete, o
                   <div className="sc-reply">
                     <p className="sc-reply-body">{reply.body}</p>
                     <div className="sc-reply-meta">
-                      <span className="sc-reply-date">{new Date(reply.createdAt).toLocaleDateString()}</span>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                        <span className="sc-reply-date">{new Date(reply.createdAt).toLocaleDateString()}</span>
+                        {reply.deletedAt && (
+                          <span className="sc-expiry">Expires {getDeletedExpiry(reply.deletedAt)}</span>
+                        )}
+                      </div>
                       <div className="sc-comment-actions">
                         <button className="sc-btn" onClick={() => onRestoreReply(reply.id)}>Restore</button>
                         <button className="sc-btn sc-btn-danger" onClick={() => onPermanentDeleteReply(reply.id)}>Delete</button>

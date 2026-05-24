@@ -6,9 +6,10 @@ interface Props {
   comment: Comment
   actions: React.ReactNode
   replyActions?: (reply: Reply) => React.ReactNode
+  expiry?: string
 }
 
-function CommentRow({ comment, actions, replyActions }: Props) {
+function CommentRow({ comment, actions, replyActions, expiry }: Props) {
   const [showReplies, setShowReplies] = useState(false)
 
   return (
@@ -18,9 +19,8 @@ function CommentRow({ comment, actions, replyActions }: Props) {
       <div className="sc-comment-meta">
         <div className="sc-comment-info">
           <span className="sc-comment-url">{comment.pageUrl}</span>
-          <span className="sc-comment-date">
-            {new Date(comment.createdAt).toLocaleDateString()}
-          </span>
+          <span className="sc-comment-date">{new Date(comment.createdAt).toLocaleDateString()}</span>
+          {expiry && <span className="sc-expiry">{expiry}</span>}
         </div>
         <div className="sc-comment-actions">{actions}</div>
       </div>
@@ -38,9 +38,7 @@ function CommentRow({ comment, actions, replyActions }: Props) {
                   {reply.isOwnerReply && <span className="sc-owner-badge">Site owner</span>}
                   <p className="sc-reply-body">{reply.body}</p>
                   <div className="sc-reply-meta">
-                    <span className="sc-reply-date">
-                      {new Date(reply.createdAt).toLocaleDateString()}
-                    </span>
+                    <span className="sc-reply-date">{new Date(reply.createdAt).toLocaleDateString()}</span>
                     {replyActions && replyActions(reply)}
                   </div>
                 </div>

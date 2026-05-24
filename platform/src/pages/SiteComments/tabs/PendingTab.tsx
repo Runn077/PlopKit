@@ -2,6 +2,17 @@ import type { Comment, Reply } from '../../../types'
 import CommentRow from '../components/CommentRow'
 import '../SiteComments.css'
 
+const PENDING_EXPIRY_DAYS = 30
+
+function getPendingExpiry(createdAt: string) {
+  const expires = new Date(createdAt)
+  expires.setDate(expires.getDate() + PENDING_EXPIRY_DAYS)
+  const days = Math.ceil((expires.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+  if (days <= 0) return 'Expires today'
+  if (days === 1) return 'Expires in 1 day'
+  return `Expires in ${days} days`
+}
+
 interface Props {
   comments: Comment[]
   orphanedReplies: Reply[]
@@ -28,7 +39,6 @@ function PendingTab({ comments, orphanedReplies, autoApprove, onApprove, onRejec
           <span className="sc-toggle-knob" />
         </button>
       </div>
-
       {comments.length === 0 && orphanedReplies.length === 0
         ? <p className="sc-empty">No pending comments.</p>
         : (
@@ -49,9 +59,9 @@ function PendingTab({ comments, orphanedReplies, autoApprove, onApprove, onRejec
                     <button className="sc-btn sc-btn-danger" onClick={() => onRejectReply(reply.id, comment.id)}>Reject</button>
                   </div>
                 )}
+                expiry={getPendingExpiry(comment.createdAt)}
               />
             ))}
-
             {orphanedReplies.length > 0 && (
               <>
                 <p className="sc-section-label">Replies to approved comments</p>
@@ -62,7 +72,10 @@ function PendingTab({ comments, orphanedReplies, autoApprove, onApprove, onRejec
                       <div className="sc-reply">
                         <p className="sc-reply-body">{reply.body}</p>
                         <div className="sc-reply-meta">
-                          <span className="sc-reply-date">{new Date(reply.createdAt).toLocaleDateString()}</span>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                            <span className="sc-reply-date">{new Date(reply.createdAt).toLocaleDateString()}</span>
+                            <span className="sc-expiry">Expires {getPendingExpiry(reply.createdAt)}</span>
+                          </div>
                           <div className="sc-comment-actions">
                             <button className="sc-btn sc-btn-approve" onClick={() => onApproveReply(reply.id, reply.parentId!)}>Approve</button>
                             <button className="sc-btn sc-btn-danger" onClick={() => onRejectReply(reply.id, reply.parentId!)}>Reject</button>
