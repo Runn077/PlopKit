@@ -81,7 +81,6 @@ model Site {
   domain    String    @unique
   siteKey   String    @unique
   verified  Boolean   @default(false)
-  expiresAt DateTime?
   widgets   Widget[]
   userId    String
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)

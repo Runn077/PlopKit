@@ -1,7 +1,6 @@
 import { randomBytes } from 'crypto'
 import prisma from '../lib/prisma.js'
 import { AppError } from '../errors/appError.js'
-import { LIMITS } from '../constants/index.js'
 
 export async function getSitesByUser(userId: string) {
   return prisma.site.findMany({
@@ -18,10 +17,14 @@ export async function getSiteById(id: string, userId: string) {
 
 export async function createSite(userId: string, name: string, domain: string) {
   const existing = await prisma.site.findUnique({ where: { domain } })
-  if (existing) throw new AppError(409, 'This domain is already registered')
-
-  const expiresAt = new Date()
-  expiresAt.setDate(expiresAt.getDate() + LIMITS.SITE_EXPIRY_DAYS)
+  if (existing?.verified) throw new AppError(409, 'This domain is already registered and verified')
+  if (existing && existing.userId !== userId) {
+    // Domain registered but unverified by someone else — allow re-registration by new user
+    await prisma.site.delete({ where: { id: existing.id } })
+  }
+  if (existing && existing.userId === userId) {
+    throw new AppError(409, 'You already have a site with this domain')
+  }
 
   return prisma.site.create({
     data: {
@@ -30,7 +33,6 @@ export async function createSite(userId: string, name: string, domain: string) {
       siteKey: randomBytes(16).toString('hex'),
       userId,
       verified: false,
-      expiresAt,
     },
   })
 }
@@ -38,12 +40,10 @@ export async function createSite(userId: string, name: string, domain: string) {
 export async function updateSite(id: string, userId: string, data: { name?: string; domain?: string }) {
   const site = await prisma.site.findUnique({ where: { id } })
   if (!site || site.userId !== userId) throw new AppError(404, 'Site not found')
-
   if (data.domain && data.domain !== site.domain) {
     const existing = await prisma.site.findUnique({ where: { domain: data.domain } })
-    if (existing) throw new AppError(409, 'This domain is already registered')
+    if (existing?.verified) throw new AppError(409, 'This domain is already registered and verified')
   }
-
   return prisma.site.update({
     where: { id },
     data: {

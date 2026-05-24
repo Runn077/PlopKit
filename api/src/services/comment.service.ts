@@ -162,10 +162,6 @@ export async function createComment(
   const widget = await getWidgetByKey(widgetKey)
   if (!widget?.commentWidget) throw new AppError(404, 'Invalid widget key')
 
-  if (!widget.site.verified && widget.site.expiresAt && widget.site.expiresAt < new Date()) {
-    throw new AppError(403, 'Site verification expired. Please re-register your domain.')
-  }
-
   try {
     const originHostname = new URL(origin).hostname
     const siteHostname = new URL(`https://${widget.site.domain}`).hostname
@@ -178,7 +174,7 @@ export async function createComment(
   if (!widget.site.verified) {
     await prisma.site.update({
       where: { id: widget.site.id },
-      data: { verified: true, expiresAt: null },
+      data: { verified: true },
     })
   }
 
