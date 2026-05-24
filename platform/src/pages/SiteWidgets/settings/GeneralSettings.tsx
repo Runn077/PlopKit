@@ -72,6 +72,28 @@ function GeneralSettings({ site, onSave, onDelete }: Props) {
         </button>
       </form>
 
+      <div style={{ marginBottom: 40 }}>
+        <p className="sw-settings-section-title">Domain verification</p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 8 }}>
+          <span style={{
+            display: 'inline-block',
+            width: 8,
+            height: 8,
+            borderRadius: '50%',
+            background: site.verified ? '#22c55e' : '#f59e0b',
+            flexShrink: 0,
+          }} />
+          <span style={{ fontSize: 14, color: '#000', fontWeight: 500 }}>
+            {site.verified ? 'Verified' : 'Unverified'}
+          </span>
+        </div>
+        {!site.verified && (
+          <p style={{ fontSize: 13, color: '#888', marginTop: 8, lineHeight: 1.5 }}>
+            Embed a widget on your site to verify your domain. Once a page with your widget loads, your domain will be automatically verified and locked to your account.
+          </p>
+        )}
+      </div>
+
       <div className="sw-danger-zone">
         <p className="sw-settings-section-title">Danger zone</p>
         <div className="sw-danger-row">
