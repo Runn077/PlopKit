@@ -1,7 +1,3 @@
-export const PROVIDER_IDS = {
-  CREDENTIAL: 'credential',
-} as const
-
 export const LIMITS = {
   COMMENT_MAX_LENGTH: 1000,
   COMMENT_PAGE_SIZE: 20,
