@@ -1,29 +1,8 @@
-import { useState } from 'react'
-import { signUp, signIn } from '../lib/auth-client'
-import { useNavigate, Link } from 'react-router-dom'
+import { signIn } from '../lib/auth-client'
+import { Link } from 'react-router-dom'
 import './auth.css'
 
 function Signup() {
-  const navigate = useNavigate()
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
-    const { error } = await signUp.email({ name, email, password })
-    if (error) {
-      setError(error.message ?? 'Something went wrong')
-      setLoading(false)
-      return
-    }
-    navigate('/dashboard')
-  }
-
   async function handleGoogle() {
     await signIn.social({ provider: 'google', callbackURL: 'http://localhost:5173/dashboard' })
   }
@@ -33,46 +12,6 @@ function Signup() {
       <div className="auth-card">
         <Link to="/" className="auth-wordmark">PlopKit</Link>
         <h1 className="auth-title">Create an account</h1>
-        <form className="auth-form" onSubmit={handleSubmit}>
-          <div className="auth-field">
-            <label className="auth-label">Name</label>
-            <input
-              className="auth-input"
-              type="text"
-              placeholder="Your name"
-              value={name}
-              onChange={e => setName(e.target.value)}
-              required
-            />
-          </div>
-          <div className="auth-field">
-            <label className="auth-label">Email</label>
-            <input
-              className="auth-input"
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="auth-field">
-            <label className="auth-label">Password</label>
-            <input
-              className="auth-input"
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          {error && <p className="auth-error">{error}</p>}
-          <button className="auth-btn" type="submit" disabled={loading}>
-            {loading ? 'Creating account...' : 'Sign up'}
-          </button>
-        </form>
-        <div className="auth-divider"><span>or</span></div>
         <button className="auth-btn-google" onClick={handleGoogle} type="button">
           <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
