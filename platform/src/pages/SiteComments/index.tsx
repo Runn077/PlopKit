@@ -104,11 +104,15 @@ function SiteComments() {
   async function handleApprove(commentId: string) {
     const res = await apiFetch(`/comments/${commentId}/approve`, { method: 'PATCH' })
     if (res.ok) {
+      const approved = pendingComments.find(c => c.id === commentId)
       setPendingComments(prev => prev.filter(c => c.id !== commentId))
       setOrphanedReplies(prev => prev.filter(r => r.id !== commentId))
+      if (approved) {
+        setComments(prev => [approved, ...prev])
+        setTotal(prev => prev + 1)
+      }
     }
   }
-
   async function handleReject(commentId: string) {
     const res = await apiFetch(`/comments/${commentId}`, { method: 'DELETE' })
     if (res.ok) {
@@ -118,11 +122,14 @@ function SiteComments() {
   }
 
   async function handleRestore(commentId: string) {
-    const res = await apiFetch(`/comments/${commentId}/restore`, {
-      method: 'PATCH',
-    })
+    const res = await apiFetch(`/comments/${commentId}/restore`, { method: 'PATCH' })
     if (res.ok) {
+      const restored = deletedComments.find(c => c.id === commentId)
       setDeletedComments(prev => prev.filter(c => c.id !== commentId))
+      if (restored) {
+        setComments(prev => [{ ...restored, deletedAt: null }, ...prev])
+        setTotal(prev => prev + 1)
+      }
     }
   }
 
@@ -142,16 +149,22 @@ function SiteComments() {
   }
 
   async function handleApproveReply(replyId: string, parentId: string) {
-  const res = await apiFetch(`/comments/${replyId}/approve`, { method: 'PATCH' })
-  if (res.ok) {
-    setPendingComments(prev => prev.map(c =>
-      c.id === parentId
-        ? { ...c, replies: c.replies.filter(r => r.id !== replyId) }
-        : c
-    ))
-    setOrphanedReplies(prev => prev.filter(r => r.id !== replyId))
+    const res = await apiFetch(`/comments/${replyId}/approve`, { method: 'PATCH' })
+    if (res.ok) {
+      const parentComment = pendingComments.find(c => c.id === parentId)
+      const approvedReply = parentComment?.replies.find(r => r.id === replyId)
+        ?? orphanedReplies.find(r => r.id === replyId)
+      setPendingComments(prev => prev.map(c =>
+        c.id === parentId ? { ...c, replies: c.replies.filter(r => r.id !== replyId) } : c
+      ))
+      setOrphanedReplies(prev => prev.filter(r => r.id !== replyId))
+      if (approvedReply) {
+        setComments(prev => prev.map(c =>
+          c.id === parentId ? { ...c, replies: [...c.replies, approvedReply] } : c
+        ))
+      }
+    }
   }
-}
 
   async function handleRejectReply(replyId: string, parentId: string) {
     const res = await apiFetch(`/comments/${replyId}`, { method: 'DELETE' })
@@ -168,7 +181,15 @@ function SiteComments() {
   async function handleRestoreReply(replyId: string) {
     const res = await apiFetch(`/comments/${replyId}/restore`, { method: 'PATCH' })
     if (res.ok) {
+      const restoredReply = orphanedDeletedReplies.find(r => r.id === replyId)
       setOrphanedDeletedReplies(prev => prev.filter(r => r.id !== replyId))
+      if (restoredReply) {
+        setComments(prev => prev.map(c =>
+          c.id === restoredReply.parentId
+            ? { ...c, replies: [...c.replies, { ...restoredReply, deletedAt: null }] }
+            : c
+        ))
+      }
     }
   }
 
