@@ -4,6 +4,7 @@ import { validate } from '../middleware/validate.js'
 import { commentBurstLimiter, commentHourlyLimiter } from '../middleware/commentLimiter.js'
 import { getCommentsSchema, getWidgetCommentsSchema, createCommentSchema } from '../validators/comment.validators.js'
 import * as commentService from '../services/comment.service.js'
+import { AppError } from '../errors/appError.js'
 
 const router = Router()
 
@@ -38,6 +39,17 @@ router.post('/', commentBurstLimiter, commentHourlyLimiter, validate(createComme
     const { widget_key, page_url, body, parent_id, quoted_id } = req.body
     const origin = req.headers.origin ?? req.headers.referer ?? ''
     const comment = await commentService.createComment(widget_key, page_url, body, parent_id, quoted_id, origin)
+    res.json(comment)
+  } catch (err) { next(err) }
+})
+
+router.post('/:id/owner-reply', requireAuth, async (req, res, next) => {
+  try {
+    const { user } = res.locals.session
+    const { id } = req.params as { id: string }
+    const { body } = req.body
+    if (!body) throw new AppError(400, 'Body is required')
+    const comment = await commentService.createOwnerReply(id, body, user.id)
     res.json(comment)
   } catch (err) { next(err) }
 })

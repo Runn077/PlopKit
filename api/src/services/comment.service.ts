@@ -300,3 +300,45 @@ export async function permanentDeleteAllDeleted(widgetKey: string, userId: strin
     where: { commentWidgetId: widget.commentWidget.id, deletedAt: { not: null } },
   })
 }
+
+export async function createOwnerReply(
+  commentId: string,
+  rawBody: string,
+  userId: string,
+) {
+  const cleanBody = sanitizeHtml(rawBody, { allowedTags: [], allowedAttributes: {} })
+  if (!cleanBody || cleanBody.trim().length === 0) throw new AppError(400, 'Reply body is required')
+  if (cleanBody.length > LIMITS.COMMENT_MAX_LENGTH) throw new AppError(400, `Reply must be under ${LIMITS.COMMENT_MAX_LENGTH} characters`)
+
+  const parent = await prisma.comment.findUnique({ where: { id: commentId } })
+  if (!parent) throw new AppError(404, 'Comment not found')
+  if (parent.deletedAt) throw new AppError(400, 'Cannot reply to a deleted comment')
+
+  // Resolve to top-level comment
+  const topLevelId = parent.parentId ?? parent.id
+  const topLevel = parent.parentId
+    ? await prisma.comment.findUnique({ where: { id: parent.parentId } })
+    : parent
+  if (!topLevel) throw new AppError(404, 'Parent comment not found')
+
+  const widget = await getWidgetByKey(topLevel.widgetKey)
+  if (!widget || widget.site.userId !== userId) throw new AppError(403, 'Forbidden')
+
+  return prisma.comment.create({
+    data: {
+      commentWidgetId: topLevel.commentWidgetId,
+      widgetKey: topLevel.widgetKey,
+      pageUrl: topLevel.pageUrl,
+      body: cleanBody,
+      status: CommentStatus.approved,
+      parentId: topLevelId,
+      isOwnerReply: true,
+      quotedId: parent.parentId ? commentId : null,
+    },
+    include: {
+      quoted: {
+        select: { id: true, body: true, deletedAt: true, status: true },
+      },
+    },
+  })
+}
