@@ -15,22 +15,9 @@ function Account() {
   const [nameError, setNameError] = useState('')
   const [nameSuccess, setNameSuccess] = useState('')
 
-  const [currentPassword, setCurrentPassword] = useState('')
-  const [newPassword, setNewPassword] = useState('')
-  const [passwordLoading, setPasswordLoading] = useState(false)
-  const [passwordError, setPasswordError] = useState('')
-  const [passwordSuccess, setPasswordSuccess] = useState('')
-
   const [deleteLoading, setDeleteLoading] = useState(false)
   const [deleteError, setDeleteError] = useState('')
   const [confirmDelete, setConfirmDelete] = useState(false)
-  const [hasPassword, setHasPassword] = useState(false)
-
-  useEffect(() => {
-    apiFetch('/account/me')
-      .then(r => r.json())
-      .then(d => setHasPassword(d.hasPassword))
-  }, [])
 
   async function handleSaveName() {
     if (!name.trim()) return
@@ -51,30 +38,6 @@ function Account() {
       setNameError(err.message)
     } finally {
       setNameLoading(false)
-    }
-  }
-
-  async function handleChangePassword() {
-    if (!currentPassword || !newPassword) return
-    setPasswordLoading(true)
-    setPasswordError('')
-    setPasswordSuccess('')
-    try {
-      const res = await apiFetch('/account/password', {
-        method: 'PATCH',
-        body: JSON.stringify({ currentPassword, newPassword }),
-      })
-      if (!res.ok) {
-        const data = await res.json()
-        throw new Error(data.error ?? 'Something went wrong')
-      }
-      setPasswordSuccess('Password updated.')
-      setCurrentPassword('')
-      setNewPassword('')
-    } catch (err: any) {
-      setPasswordError(err.message)
-    } finally {
-      setPasswordLoading(false)
     }
   }
 
@@ -122,41 +85,6 @@ function Account() {
             {nameLoading ? 'Saving...' : 'Save name'}
           </button>
         </div>
-
-        {hasPassword && (
-          <div className="account-section">
-            <p className="account-section-title">Change password</p>
-            <div className="account-field">
-              <label className="account-label">Current password</label>
-              <input
-                className="account-input"
-                type="password"
-                value={currentPassword}
-                onChange={e => setCurrentPassword(e.target.value)}
-                placeholder="••••••••"
-              />
-            </div>
-            <div className="account-field">
-              <label className="account-label">New password</label>
-              <input
-                className="account-input"
-                type="password"
-                value={newPassword}
-                onChange={e => setNewPassword(e.target.value)}
-                placeholder="••••••••"
-              />
-            </div>
-            {passwordError && <p className="account-error">{passwordError}</p>}
-            {passwordSuccess && <p className="account-success">{passwordSuccess}</p>}
-            <button
-              className="account-btn account-btn-primary"
-              onClick={handleChangePassword}
-              disabled={passwordLoading || !currentPassword || !newPassword}
-            >
-              {passwordLoading ? 'Updating...' : 'Update password'}
-            </button>
-          </div>
-        )}
 
         <div className="account-danger-zone">
           <div className="account-danger-row">
