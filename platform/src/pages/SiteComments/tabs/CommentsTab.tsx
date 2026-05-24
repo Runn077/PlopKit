@@ -1,5 +1,5 @@
-import type { Comment } from '../../../types'
-import CommentRow from '../components/CommentRow'
+import type { Comment, Reply } from '../../../types'
+import PlatformCommentItem from '../components/PlatformCommentItem'
 import '../SiteComments.css'
 
 interface Props {
@@ -8,9 +8,10 @@ interface Props {
   loadingMore: boolean
   onDelete: (commentId: string, parentId?: string) => Promise<void>
   onLoadMore: () => void
+  onReplyPosted: (commentId: string, reply: Reply) => void
 }
 
-function CommentsTab({ comments, hasMore, loadingMore, onDelete, onLoadMore }: Props) {
+function CommentsTab({ comments, hasMore, loadingMore, onDelete, onLoadMore, onReplyPosted }: Props) {
   if (comments.length === 0) {
     return <p className="sc-empty">No comments yet.</p>
   }
@@ -19,19 +20,11 @@ function CommentsTab({ comments, hasMore, loadingMore, onDelete, onLoadMore }: P
     <div>
       <div className="sc-comment-list">
         {comments.map(comment => (
-          <CommentRow
+          <PlatformCommentItem
             key={comment.id}
             comment={comment}
-            actions={
-              <button className="sc-btn sc-btn-danger" onClick={() => onDelete(comment.id)}>
-                Delete
-              </button>
-            }
-            replyActions={(reply) => (
-              <button className="sc-btn sc-btn-danger" onClick={() => onDelete(reply.id, comment.id)}>
-                Delete
-              </button>
-            )}
+            onDelete={onDelete}
+            onReplyPosted={onReplyPosted}
           />
         ))}
       </div>

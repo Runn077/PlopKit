@@ -61,7 +61,14 @@ export default function CommentItem({ comment, widgetKey, pageUrl }: Props) {
     setReplyOpen(false)
 
     if (data.status === 'approved') {
-      setReplies(prev => [...prev, { id: data.id, body: data.body, createdAt: data.createdAt, quotedId: null, quoted: null }])
+      setReplies(prev => [...prev, {
+        id: data.id,
+        body: data.body,
+        createdAt: data.createdAt,
+        quotedId: null,
+        quoted: null,
+        isOwnerReply: false,
+      }])
       setShowReplies(true)
       show('Reply posted!')
     } else {
@@ -71,6 +78,7 @@ export default function CommentItem({ comment, widgetKey, pageUrl }: Props) {
 
   return (
     <div className="comment">
+      {comment.isOwnerReply && <span className="owner-badge">Site owner</span>}
       <p className="comment-body">{displayBody}</p>
       {isLong && (
         <button className="btn-show-more" onClick={() => setExpanded(!expanded)}>

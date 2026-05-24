@@ -219,6 +219,18 @@ function SiteComments() {
     )
   }
 
+  function handleReplyPosted(commentId: string, reply: Reply) {
+    setComments(prev => prev.map(c =>
+      c.id === commentId
+        ? { ...c, replies: [...c.replies, reply] }
+        : { ...c, replies: c.replies.map(r => r.id === commentId
+            ? { ...r }
+            : r
+          )
+        }
+    ))
+  }
+
   if (loading) return <div className="page-loading">Loading...</div>
   if (error) return (
     <div>
@@ -262,6 +274,7 @@ function SiteComments() {
             hasMore={hasMore}
             loadingMore={loadingMore}
             onDelete={handleDelete}
+            onReplyPosted={handleReplyPosted}
             onLoadMore={() => {
               if (!widget || !cursor) return
               setLoadingMore(true)

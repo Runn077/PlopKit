@@ -25,6 +25,7 @@ export interface Reply {
   deletedAt?: string | null
   createdAt: string
   parent?: { body: string }
+  isOwnerReply: boolean
 }
 
 export interface Comment {
@@ -35,6 +36,7 @@ export interface Comment {
   deletedAt?: string | null
   createdAt: string
   replies: Reply[]
+  isOwnerReply: boolean
 }
 
 export interface Site {

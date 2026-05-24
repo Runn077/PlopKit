@@ -49,6 +49,7 @@ export default function ReplyItem({ reply, widgetKey, pageUrl, parentId, onReply
         createdAt: data.createdAt,
         quotedId: data.quotedId,
         quoted: data.quoted,
+        isOwnerReply: false,
       })
       show('Reply posted!')
     } else {
@@ -58,6 +59,7 @@ export default function ReplyItem({ reply, widgetKey, pageUrl, parentId, onReply
 
   return (
     <div className="reply">
+      {reply.isOwnerReply && <span className="owner-badge">Site owner</span>}
       {reply.quoted && (
         <div className="quoted-comment">
           <p className="quoted-body">
@@ -76,7 +78,7 @@ export default function ReplyItem({ reply, widgetKey, pageUrl, parentId, onReply
         <div className="reply-input-area">
           <div className="quoted-preview">
             <p className="quoted-preview-body">
-              {isQuoteDeleted ? 'Deleted message' : reply.body}
+              {reply.body}
             </p>
           </div>
           <textarea

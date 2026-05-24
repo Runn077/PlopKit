@@ -413,3 +413,59 @@
 }
 
 .sc-filter-tag-remove:hover { color: #000; }
+
+.sc-owner-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  background: #000;
+  padding: 2px 8px;
+  border-radius: 20px;
+  margin-bottom: 6px;
+}
+
+.sc-reply-input {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sc-reply-textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e4e2dc;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: sans-serif;
+  resize: none;
+  height: 70px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.sc-reply-textarea:focus {
+  border-color: #000;
+}
+
+.sc-reply-input-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sc-char-count {
+  font-size: 12px;
+  color: #888;
+}
+
+.sc-btn-primary {
+  background: #000;
+  color: #fff;
+  border: none;
+}
+
+.sc-btn-primary:hover {
+  background: #333;
+}
