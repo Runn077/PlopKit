@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useSession, signOut } from '../../lib/auth-client'
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../../components/Navbar'
