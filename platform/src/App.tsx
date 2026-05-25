@@ -6,11 +6,13 @@ import Dashboard from './pages/Dashboard/index'
 import SiteWidgets from './pages/SiteWidgets/index'
 import SiteComments from './pages/SiteComments/index'
 import Account from './pages/Account/index'
+import Landing from './pages/Landing/Landing'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path='/' element={<Landing />} />
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/dashboard' element={
