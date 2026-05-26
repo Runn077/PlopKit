@@ -13,8 +13,12 @@ const app = express()
 
 app.use(cors({
   origin: (origin, callback) => {
-    const allowed = ['http://localhost:5173', 'http://localhost:5174']
-    if (!origin || allowed.includes(origin) || origin.startsWith('http://localhost')) {
+    const allowed = [
+      process.env.WIDGET_ORIGIN,
+      process.env.WIDGET_ORIGIN_WWW,
+    ].filter(Boolean)
+    
+    if (!origin || allowed.includes(origin)) {
       callback(null, true)
     } else {
       callback(new Error('Not allowed by CORS'))
