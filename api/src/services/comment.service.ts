@@ -22,7 +22,6 @@ export async function getApprovedComments(
 ) {
   const widget = await getWidgetByKey(widgetKey)
   if (!widget?.commentWidget) throw new AppError(404, 'Widget not found')
-
   const commentWidgetId = widget.commentWidget.id
   const pinnedCommentId = widget.commentWidget.pinnedCommentId
 
@@ -32,7 +31,14 @@ export async function getApprovedComments(
     deletedAt: null,
     parentId: null,
   }
-  if (pageUrl) baseWhere.pageUrl = pageUrl
+
+  if (pageUrl) {
+    baseWhere.OR = [
+      { pageUrl },
+      { isOwnerReply: true },
+    ]
+  }
+
   if (cursor) {
     const cursorComment = await prisma.comment.findUnique({ where: { id: cursor } })
     if (cursorComment) baseWhere.createdAt = { lt: cursorComment.createdAt }
@@ -44,7 +50,13 @@ export async function getApprovedComments(
     deletedAt: null,
     parentId: null,
   }
-  if (pageUrl) countWhere.pageUrl = pageUrl
+
+  if (pageUrl) {
+    countWhere.OR = [
+      { pageUrl },
+      { isOwnerReply: true },
+    ]
+  }
 
   const [total, comments] = await Promise.all([
     prisma.comment.count({ where: countWhere }),
@@ -66,7 +78,6 @@ export async function getApprovedComments(
     }),
   ])
 
-  // Move pinned comment to top if present and not already paginated out
   let ordered = comments
   if (pinnedCommentId && !cursor) {
     const pinned = comments.find(c => c.id === pinnedCommentId)
