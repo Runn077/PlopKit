@@ -4,7 +4,7 @@ import './auth.css'
 
 function Signup() {
   async function handleGoogle() {
-    await signIn.social({ provider: 'google', callbackURL: 'http://localhost:5173/dashboard' })
+    await signIn.social({ provider: 'google', callbackURL: `${import.meta.env.VITE_APP_URL}/dashboard` })
   }
 
   return (
