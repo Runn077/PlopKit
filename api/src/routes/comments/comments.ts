@@ -1,11 +1,9 @@
 import { Router } from 'express'
-import { requireAuth } from '../middleware/requireAuth.js'
-import { validate } from '../middleware/validate.js'
-import { commentBurstLimiter, commentHourlyLimiter } from '../middleware/commentLimiter.js'
-import { getCommentsSchema, getWidgetCommentsSchema, createCommentSchema } from '../validators/comment.validators.js'
-import * as commentService from '../services/comment.service.js'
-import { AppError } from '../errors/appError.js'
-import { ownerPostSchema } from '../validators/comment.validators.js'
+import { requireAuth } from '../../middleware/requireAuth.js'
+import { validate } from '../../middleware/validate.js'
+import { getWidgetCommentsSchema, ownerPostSchema } from '../../validators/comment.validators.js'
+import * as commentService from '../../services/comment.service.js'
+import { AppError } from '../../errors/appError.js'
 
 const router = Router()
 
@@ -27,19 +25,11 @@ router.get('/deleted', requireAuth, validate(getWidgetCommentsSchema, 'query'), 
   } catch (err) { next(err) }
 })
 
-router.get('/', validate(getCommentsSchema, 'query'), async (req, res, next) => {
+router.post('/owner-post', requireAuth, validate(ownerPostSchema), async (req, res, next) => {
   try {
-    const { widget_key, page_url, cursor } = req.query as { widget_key: string; page_url?: string; cursor?: string }
-    const data = await commentService.getApprovedComments(widget_key, page_url, cursor)
-    res.json(data)
-  } catch (err) { next(err) }
-})
-
-router.post('/', commentBurstLimiter, commentHourlyLimiter, validate(createCommentSchema), async (req, res, next) => {
-  try {
-    const { widget_key, page_url, body, parent_id, quoted_id } = req.body
-    const origin = req.headers.origin ?? req.headers.referer ?? ''
-    const comment = await commentService.createComment(widget_key, page_url, body, parent_id, quoted_id, origin)
+    const { user } = res.locals.session
+    const { widget_key, page_url, body } = req.body
+    const comment = await commentService.createOwnerComment(widget_key, page_url, body, user.id)
     res.json(comment)
   } catch (err) { next(err) }
 })
@@ -59,7 +49,6 @@ router.patch('/:id/approve', requireAuth, async (req, res, next) => {
   try {
     const { user } = res.locals.session
     const { id } = req.params as { id: string }
-
     const updated = await commentService.approveComment(id, user.id)
     res.json(updated)
   } catch (err) { next(err) }
@@ -83,20 +72,29 @@ router.patch('/:id/restore', requireAuth, async (req, res, next) => {
   } catch (err) { next(err) }
 })
 
+router.patch('/unpin', requireAuth, validate(getWidgetCommentsSchema, 'query'), async (req, res, next) => {
+  try {
+    const { user } = res.locals.session
+    const { widget_key } = req.query as { widget_key: string }
+    await commentService.unpinComment(widget_key, user.id)
+    res.json({ success: true })
+  } catch (err) { next(err) }
+})
+
+router.patch('/:id/pin', requireAuth, async (req, res, next) => {
+  try {
+    const { user } = res.locals.session
+    const { id } = req.params as { id: string }
+    await commentService.pinComment(id, user.id)
+    res.json({ success: true })
+  } catch (err) { next(err) }
+})
+
 router.delete('/deleteAll', requireAuth, validate(getWidgetCommentsSchema, 'query'), async (req, res, next) => {
   try {
     const { user } = res.locals.session
     const { widget_key } = req.query as { widget_key: string }
     await commentService.permanentDeleteAllDeleted(widget_key, user.id)
-    res.json({ success: true })
-  } catch (err) { next(err) }
-})
-
-router.delete('/:id', requireAuth, async (req, res, next) => {
-  try {
-    const { user } = res.locals.session
-    const { id } = req.params as { id: string }
-    await commentService.softDeleteComment(id, user.id)
     res.json({ success: true })
   } catch (err) { next(err) }
 })
@@ -110,32 +108,11 @@ router.delete('/:id/permanent', requireAuth, async (req, res, next) => {
   } catch (err) { next(err) }
 })
 
-// Owner top-level comment
-router.post('/owner-post', requireAuth, validate(ownerPostSchema), async (req, res, next) => {
-  try {
-    const { user } = res.locals.session
-    const { widget_key, page_url, body } = req.body
-    const comment = await commentService.createOwnerComment(widget_key, page_url, body, user.id)
-    res.json(comment)
-  } catch (err) { next(err) }
-})
-
-// Pin comment
-router.patch('/:id/pin', requireAuth, async (req, res, next) => {
+router.delete('/:id', requireAuth, async (req, res, next) => {
   try {
     const { user } = res.locals.session
     const { id } = req.params as { id: string }
-    await commentService.pinComment(id, user.id)
-    res.json({ success: true })
-  } catch (err) { next(err) }
-})
-
-// Unpin comment
-router.patch('/unpin', requireAuth, validate(getWidgetCommentsSchema, 'query'), async (req, res, next) => {
-  try {
-    const { user } = res.locals.session
-    const { widget_key } = req.query as { widget_key: string }
-    await commentService.unpinComment(widget_key, user.id)
+    await commentService.softDeleteComment(id, user.id)
     res.json({ success: true })
   } catch (err) { next(err) }
 })

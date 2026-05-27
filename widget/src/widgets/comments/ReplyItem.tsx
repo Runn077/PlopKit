@@ -20,7 +20,7 @@ export default function ReplyItem({ reply, widgetKey, pageUrl, parentId, onReply
   const postReply = async () => {
     if (!replyBody.trim()) return
 
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/comments`, {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/public/comments`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
