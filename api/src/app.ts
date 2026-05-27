@@ -15,7 +15,6 @@ app.use(cors({
   origin: (origin, callback) => {
     const allowed = [
       process.env.WIDGET_ORIGIN,
-      process.env.WIDGET_ORIGIN_WWW,
     ].filter(Boolean)
     
     if (!origin || allowed.includes(origin)) {
