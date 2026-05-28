@@ -19,7 +19,10 @@ app.use((req, res, next) => {
   cors({
     origin: (origin, callback) => {
       if (!origin) return callback(null, true)
-      const allowed = [process.env.PLATFORM_URL].filter(Boolean)
+      const allowed = [
+        process.env.PLATFORM_URL,
+        process.env.WWW_PLATFORM_URL
+      ].filter(Boolean)
       allowed.includes(origin) ? callback(null, true) : callback(new Error('Not allowed by CORS'))
     },
     credentials: true,
