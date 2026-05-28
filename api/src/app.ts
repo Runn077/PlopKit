@@ -42,6 +42,10 @@ app.use((req, res, next) => {
   globalLimiter(req, res, next)
 })
 
+app.get('/health', (_, res) => {
+  res.json({ ok: true })
+})
+
 app.all('/api/auth/*splat', toNodeHandler(auth))
 app.use(express.json())
 app.use('/comments', commentsRouter)
