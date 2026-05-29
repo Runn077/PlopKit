@@ -23,5 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 
+#build
+public/widget.js
+
 # Environment Variables
 .env

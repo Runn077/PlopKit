@@ -13,7 +13,7 @@ import accountRouter from './routes/account.js'
 const app = express()
 
 app.use((req, res, next) => {
-  if (req.path.startsWith('/public')) {
+  if (req.path.startsWith('/api/public')) {
     return cors({ origin: '*', credentials: false })(req, res, next)
   }
   cors({
@@ -38,21 +38,21 @@ const globalLimiter = rateLimit({
 })
 
 app.use((req, res, next) => {
-  if (req.method === 'GET' && req.path.startsWith('/public/comments')) return next()
+  if (req.method === 'GET' && req.path.startsWith('/api/public/comments')) return next()
   globalLimiter(req, res, next)
 })
 
-app.get('/health', (_, res) => {
+app.get('/api/health', (_, res) => {
   res.json({ ok: true })
 })
 
 app.all('/api/auth/*splat', toNodeHandler(auth))
 app.use(express.json())
-app.use('/comments', commentsRouter)
-app.use('/public/comments', publicCommentsRouter)
-app.use('/sites', sitesRouter)
-app.use('/widgets', widgetsRouter)
-app.use('/account', accountRouter)
+app.use('/api/comments', commentsRouter)
+app.use('/api/public/comments', publicCommentsRouter)
+app.use('/api/sites', sitesRouter)
+app.use('/api/widgets', widgetsRouter)
+app.use('/api/account', accountRouter)
 app.use(errorHandler)
 
 export default app
