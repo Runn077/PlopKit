@@ -13,7 +13,9 @@ if (!document.getElementById(instanceId)) {
   const mountPoint = document.createElement('div')
   shadow.appendChild(mountPoint)
 
+  // @ts-ignore
   const widgetMap: Record<string, () => Promise<any>> = {
+    // @ts-ignore
     comments: () => import('./widgets/comments/index.svelte'),
   }
 
