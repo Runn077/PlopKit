@@ -84,15 +84,19 @@ We do not sell or share your personal information with third parties for their o
  
 ## 6. Data Retention
  
-| Data | Retention Period |
-|---|---|
-| Publisher account data | Kept until you delete your account |
-| Sites and widgets | Kept until you delete them or your account |
-| Approved comments | Kept until deleted by the publisher or you delete your account |
-| Pending comments (awaiting moderation) | Automatically deleted after **30 days** if not approved |
-| Soft-deleted comments | Permanently deleted after **7 days** |
-| Session cookies | Expire when you sign out or the session expires |
-| IP addresses (rate limiting) | In-memory only, cleared on server restart — never persisted |
+**Publisher account data:** Kept until you delete your account
+
+**Sites and widgets:** Kept until you delete them or your account
+
+**Approved comments:** Kept until deleted by the publisher or you delete your account
+
+**Pending comments (awaiting moderation):** Automatically deleted after 30 days if not approved
+
+**Soft-deleted comments:** Permanently deleted after 7 days
+
+**Session cookies:** Expire when you sign out or the session expires
+
+**IP addresses (rate limiting):** In-memory only, cleared on server restart, never persisted
  
 When a publisher deletes their account, all associated data is permanently deleted in a cascade: sites, widgets, widget settings, and all comments are removed from our database.
  
