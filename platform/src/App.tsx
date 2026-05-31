@@ -8,6 +8,7 @@ import SiteComments from './pages/SiteComments/index'
 import Account from './pages/Account/index'
 import Landing from './pages/Landing/Landing'
 import PrivacyPolicy from './pages/Legal/PrivacyPolicy'
+import Terms from './pages/Legal/Terms'
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         } />
         <Route path='*' element={<Navigate to='/login' />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<Terms />} />
       </Routes>
     </BrowserRouter>
   )
