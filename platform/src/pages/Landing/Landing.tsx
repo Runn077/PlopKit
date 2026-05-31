@@ -1,4 +1,5 @@
 import './Landing.css'
+import Footer from '../../components/Footer'
 
 export default function Landing() {
   return (
@@ -37,14 +38,7 @@ export default function Landing() {
       </section>
 
       <hr className="landing-divider" />
-
-      <footer className="landing-footer">
-        <span>© 2026 PlopKit</span>
-        <div className="landing-footer-links">
-          <a href="/privacy">Privacy policy</a>
-          <a href="/terms">Terms of service</a>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }

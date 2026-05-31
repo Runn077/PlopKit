@@ -7,6 +7,7 @@ import SiteWidgets from './pages/SiteWidgets/index'
 import SiteComments from './pages/SiteComments/index'
 import Account from './pages/Account/index'
 import Landing from './pages/Landing/Landing'
+import PrivacyPolicy from './pages/Legal/PrivacyPolicy'
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <ProtectedRoute><Account /></ProtectedRoute>
         } />
         <Route path='*' element={<Navigate to='/login' />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
       </Routes>
     </BrowserRouter>
   )
