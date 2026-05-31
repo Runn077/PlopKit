@@ -12,11 +12,8 @@
 
   let { comment, widgetKey, pageUrl, isPinned }: Props = $props()
 
-  let replies = $state<Reply[]>([])
-  $effect(() => {
-    replies = [...comment.replies]
-  })
-  
+  let replies = $state<Reply[]>([...comment.replies])
+
   let expanded = $state(false)
   let showReplies = $state(false)
   let replyOpen = $state(false)

@@ -1,3 +1,7 @@
+import { mount } from 'svelte'
+import Comments from './widgets/comments/index.svelte'
+import type { BaseWidgetProps } from './types'
+
 const script = document.currentScript as HTMLScriptElement
 const widgetKey = script?.getAttribute('data-widget-key') ?? ''
 const widget = script?.getAttribute('data-widget') ?? 'comments'
@@ -13,17 +17,10 @@ if (!document.getElementById(instanceId)) {
   const mountPoint = document.createElement('div')
   shadow.appendChild(mountPoint)
 
-  const widgetMap: Record<string, () => Promise<any>> = {
-    comments: () => import('./widgets/comments/index.svelte'),
-  }
-
-  const loader = widgetMap[widget]
-  if (loader) {
-    loader().then(({ default: Widget }) => {
-      new Widget({
-        target: mountPoint,
-        props: { widgetKey, pageUrl: window.location.href, shadowRoot: shadow },
-      })
+  if (widget === 'comments') {
+    mount(Comments, {
+      target: mountPoint,
+      props: { widgetKey, pageUrl: window.location.href, shadowRoot: shadow } as BaseWidgetProps,
     })
   }
 }
