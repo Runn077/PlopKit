@@ -1,0 +1,374 @@
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  .widget {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 14px;
+    color: #0f0f0f;
+    width: 100%;
+  }
+
+  .widget h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  .input-area {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .input-area textarea {
+    width: 100%;
+    padding: 10px 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    outline: none;
+    resize: none;
+    font-size: 14px;
+    font-family: inherit;
+    color: #0f0f0f;
+    background: transparent;
+    height: 80px;
+  }
+
+  .input-area textarea:focus,
+  .input-area textarea:not(:placeholder-shown) {
+    border: 2px solid #0f0f0f;
+  }
+
+  .input-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .char-count {
+    font-size: 12px;
+    color: #999;
+  }
+
+  .btn-post {
+    background: #0f0f0f;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .btn-post:hover {
+    background: #333;
+  }
+
+  .btn-post:disabled {
+    background: #ccc;
+    cursor: default;
+  }
+
+  .comments-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .comment {
+    padding: 12px 0;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .comment-body {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 6px;
+    white-space: pre-wrap;
+  }
+
+  .comment-body.expanded {
+    display: block;
+    overflow: visible;
+    white-space: pre-wrap;
+  }
+
+  .btn-show-more {
+    background: none;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    color: #0f0f0f;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 6px;
+  }
+
+  .btn-show-more:hover {
+    color: #555;
+  }
+
+  .reply-body {
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 4px;
+    white-space: pre-wrap;
+  }
+
+  .comment-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .comment-time {
+    font-size: 12px;
+    color: #999;
+  }
+
+  .btn-reply {
+    background: none;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    color: #0f0f0f;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .btn-reply:hover {
+    color: #555;
+  }
+
+  .reply-input-area {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .reply-input-area textarea {
+    width: 100%;
+    padding: 10px 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    outline: none;
+    resize: none;
+    font-size: 13px;
+    font-family: inherit;
+    color: #0f0f0f;
+    background: transparent;
+    height: 60px;
+  }
+
+  .reply-input-area textarea:focus {
+    border: 2px solid #0f0f0f;
+  }
+
+  .reply-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .comment-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-vote {
+    background: none;
+    border: none;
+    cursor: default;
+    font-size: 14px;
+    padding: 0;
+    opacity: 0.5;
+  }
+
+  .btn-post-reply {
+    background: #0f0f0f;
+    color: #fff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .btn-show-replies {
+    background: none;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    color: #0f0f0f;
+    cursor: pointer;
+    padding: 4px 0;
+  }
+
+  .btn-show-replies:hover {
+    color: #555;
+  }
+
+  .btn-post-reply:hover {
+    background: #333;
+  }
+
+  .btn-cancel {
+    background: none;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .btn-load-more {
+    background: none;
+    border: 1px solid #e0e0e0;
+    font-size: 13px;
+    font-weight: 600;
+    color: #0f0f0f;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 20px;
+    margin-top: 12px;
+    width: 100%;
+  }
+
+  .btn-load-more:hover {
+    background: #f5f5f5;
+  }
+
+  .btn-load-more:disabled {
+    color: #999;
+    cursor: default;
+  }
+
+  .replies {
+    margin-top: 8px;
+    margin-left: 16px;
+    padding-left: 12px;
+    border-left: 2px solid #e0e0e0;
+  }
+
+  .reply {
+    padding: 8px 0;
+  }
+
+  .reply-body {
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 4px;
+  }
+
+  .reply-time {
+    font-size: 12px;
+    color: #999;
+  }
+
+  .empty {
+    color: #999;
+    font-size: 14px;
+    padding: 16px 0;
+  }
+
+  .toast {
+    font-size: 13px;
+    color: #fff;
+    background: #0f0f0f;
+    padding: 10px 16px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    animation: fade-in 0.2s ease;
+  }
+
+  .toast-fade-out {
+    animation: fade-out 0.5s ease forwards;
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fade-out {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-4px); }
+  }
+
+  .quoted-comment {
+    background: #f5f5f5;
+    border-left: 3px solid #ccc;
+    padding: 6px 10px;
+    border-radius: 4px;
+    margin-bottom: 6px;
+  }
+
+  .quoted-body {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .quoted-preview {
+    background: #f5f5f5;
+    border-left: 3px solid #0f0f0f;
+    padding: 6px 10px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+
+  .quoted-preview-body {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .reply-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 4px;
+  }
+
+  .owner-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    background: #0f0f0f;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-bottom: 6px;
+  }
+
+  .pinned-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    color: #0f0f0f;
+    background: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+
+  .comment-pinned {
+    border-top: 2px solid #0f0f0f;
+  }
