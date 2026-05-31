@@ -89,9 +89,6 @@
         maxlength={1000}
         placeholder="Add a reply..."
       ></textarea>
-      {#if toast.message}
-        <div class="toast {toast.fading ? 'toast-fade-out' : ''}">{toast.message}</div>
-      {/if}
       <div class="reply-actions">
         <span class="char-count">{replyBody.length}/1000</span>
         <div style="display:flex;gap:8px">
@@ -104,5 +101,8 @@
         </div>
       </div>
     </div>
+  {/if}
+  {#if toast.message}
+    <div class="toast {toast.fading ? 'toast-fade-out' : ''}">{toast.message}</div>
   {/if}
 </div>

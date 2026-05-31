@@ -61,6 +61,7 @@
 
     replyBody = ''
     replyOpen = false
+    showReplies = true
 
     if (data.status === 'approved') {
       replies = [...replies, {
@@ -71,7 +72,6 @@
         quoted: null,
         isOwnerReply: false,
       }]
-      showReplies = true
       toast.show('Reply posted!')
     } else {
       toast.show('Your reply has been submitted and is awaiting approval.')
@@ -107,9 +107,6 @@
         maxlength={1000}
         placeholder="Add a reply..."
       ></textarea>
-      {#if toast.message}
-        <div class="toast {toast.fading ? 'toast-fade-out' : ''}">{toast.message}</div>
-      {/if}
       <div class="reply-actions">
         <span class="char-count">{replyBody.length}/1000</span>
         <div style="display:flex;gap:8px">
@@ -122,6 +119,9 @@
         </div>
       </div>
     </div>
+  {/if}
+  {#if toast.message}
+    <div class="toast {toast.fading ? 'toast-fade-out' : ''}">{toast.message}</div>
   {/if}
   {#if replies.length > 0}
     <button class="btn-show-replies" onclick={() => showReplies = !showReplies}>
