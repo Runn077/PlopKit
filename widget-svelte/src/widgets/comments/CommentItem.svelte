@@ -12,7 +12,11 @@
 
   let { comment, widgetKey, pageUrl, isPinned }: Props = $props()
 
-  let replies = $state<Reply[]>(comment.replies)
+  let replies = $state<Reply[]>([])
+  $effect(() => {
+    replies = [...comment.replies]
+  })
+  
   let expanded = $state(false)
   let showReplies = $state(false)
   let replyOpen = $state(false)
@@ -105,7 +109,6 @@
         bind:value={replyBody}
         maxlength={1000}
         placeholder="Add a reply..."
-        autofocus
       ></textarea>
       {#if toast.message}
         <div class="toast {toast.fading ? 'toast-fade-out' : ''}">{toast.message}</div>

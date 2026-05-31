@@ -88,7 +88,6 @@
         bind:value={replyBody}
         maxlength={1000}
         placeholder="Add a reply..."
-        autofocus
       ></textarea>
       {#if toast.message}
         <div class="toast {toast.fading ? 'toast-fade-out' : ''}">{toast.message}</div>
