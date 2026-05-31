@@ -58,8 +58,23 @@ export async function getApprovedComments(
     ]
   }
 
-  const [total, comments] = await Promise.all([
+  const replyCountWhere: any = {
+    commentWidgetId,
+    status: CommentStatus.approved,
+    deletedAt: null,
+    parentId: { not: null },
+  }
+
+  if (pageUrl) {
+    replyCountWhere.OR = [
+      { pageUrl },
+      { isOwnerReply: true },
+    ]
+  }
+
+  const [topLevelTotal, replyTotal, comments] = await Promise.all([
     prisma.comment.count({ where: countWhere }),
+    prisma.comment.count({ where: replyCountWhere }),
     prisma.comment.findMany({
       where: baseWhere,
       orderBy: { createdAt: 'desc' },
@@ -86,7 +101,12 @@ export async function getApprovedComments(
     }
   }
 
-  return { comments: ordered, hasMore: comments.length === LIMITS.COMMENT_PAGE_SIZE, total, pinnedCommentId }
+  return { 
+    comments: ordered, 
+    hasMore: comments.length === LIMITS.COMMENT_PAGE_SIZE, 
+    total: topLevelTotal + replyTotal, 
+    pinnedCommentId 
+  }
 }
 
 export async function getPendingComments(widgetKey: string, userId: string) {
