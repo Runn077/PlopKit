@@ -76,14 +76,6 @@ export default function LandingPage() {
           </div>
         </div>
       </main>
-
-      <section className="cta-banner">
-        <h2>Build your widget in minutes.</h2>
-
-        <button className="primary-btn" onClick={() => navigate('/signup')}>
-          Get Started
-        </button>
-      </section>
       <Footer />
     </div>
   )
