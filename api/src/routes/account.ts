@@ -16,6 +16,14 @@ router.get('/me', requireAuth, async (req, res, next) => {
   } catch (err) { next(err) }
 })
 
+router.get('/usage', requireAuth, async (req, res, next) => {
+  try {
+    const { user } = res.locals.session
+    const usage = await accountService.getUsage(user.id)
+    res.json(usage)
+  } catch (err) { next(err) }
+})
+
 router.patch('/name', requireAuth, validate(updateNameSchema), async (req, res, next) => {
   try {
     const { user } = res.locals.session
