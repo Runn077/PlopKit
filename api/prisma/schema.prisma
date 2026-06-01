@@ -22,6 +22,12 @@ enum CommentStatus {
   approved
 }
 
+enum Plan {
+  free
+  hobby
+  pro
+}
+
 
 // --- Auth (better-auth) ---
 
@@ -33,6 +39,7 @@ model User {
   image         String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  plan          Plan @default(free)
   sessions      Session[]
   accounts      Account[]
   sites         Site[]
@@ -120,6 +127,7 @@ model CommentWidget {
   autoDeleteBannedWords Boolean   @default(false)
   pinnedCommentId       String?   @unique
   pinnedComment         Comment?  @relation("PinnedComment", fields: [pinnedCommentId], references: [id], onDelete: SetNull)
+  monthlyLoads          Int @default(0)
 }
 
 model Comment {

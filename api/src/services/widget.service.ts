@@ -15,7 +15,7 @@ async function getWidgetOwnedByUser(widgetId: string, userId: string) {
 export async function getWidgetByKey(widgetKey: string) {
   return prisma.widget.findUnique({
     where: { widgetKey },
-    include: { site: true, commentWidget: true },
+    include: { site: { include: { user: true } }, commentWidget: true },
   })
 }
 

@@ -25,4 +25,12 @@ export function startCommentCronJobs() {
     })
     console.log(`Cleaned up ${expiredPending.count} expired pending comments`)
   })
+
+  // Monthly: reset all widget load counters on the 1st at midnight
+  cron.schedule('0 0 1 * *', async () => {
+    const result = await prisma.commentWidget.updateMany({
+      data: { monthlyLoads: 0 },
+    })
+    console.log(`Reset monthlyLoads for ${result.count} widgets`)
+  })
 }
