@@ -1,9 +1,11 @@
 import { useEffect, useRef } from 'react'
 import './Landing.css'
 import Footer from '../../components/Footer'
+import { useNavigate } from 'react-router-dom'
 
 export default function LandingPage() {
   const widgetRef = useRef<HTMLDivElement>(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const container = widgetRef.current
@@ -35,7 +37,9 @@ export default function LandingPage() {
           <button>About</button>
           <button>Pricing</button>
           <button>Docs</button>
-          <button>Login</button>
+          <button onClick={() => navigate('/login')}>
+            Login
+          </button>
         </div>
       </nav>
 
@@ -51,7 +55,7 @@ export default function LandingPage() {
         </p>
 
         <div className="hero-actions">
-          <button className="primary-btn">
+          <button className="primary-btn" onClick={() => navigate('/signup')}>
             Start Free
           </button>
 
@@ -76,7 +80,7 @@ export default function LandingPage() {
       <section className="cta-banner">
         <h2>Build your widget in minutes.</h2>
 
-        <button className="primary-btn">
+        <button className="primary-btn" onClick={() => navigate('/signup')}>
           Get Started
         </button>
       </section>
