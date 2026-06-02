@@ -54,3 +54,56 @@
   color: var(--pk-color-text-muted);
   margin-top: 2px;
 }
+
+.account-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.account-section-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--pk-color-text-muted);
+  margin-bottom: 4px;
+}
+
+.account-plan-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: var(--pk-radius-full);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  border: 1px solid var(--pk-color-border);
+  color: var(--pk-color-text);
+  width: fit-content;
+}
+
+.account-usage-bar-track {
+  width: 100%;
+  height: 4px;
+  background: var(--pk-color-bg-muted);
+  border-radius: var(--pk-radius-full);
+  overflow: hidden;
+}
+
+.account-usage-bar-fill {
+  height: 100%;
+  background: var(--pk-color-primary);
+  border-radius: var(--pk-radius-full);
+  transition: width 0.3s ease;
+}
+
+.account-error {
+  font-size: 12px;
+  color: var(--pk-color-danger);
+}
+
+.account-success {
+  font-size: 12px;
+  color: var(--pk-color-text-muted);
+}

@@ -1,23 +1,46 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSession, signOut } from '../../lib/auth-client'
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../../components/Navbar'
 import { apiFetch } from '../../lib/api'
 import './Account.css'
 
+type Usage = {
+  plan: 'free' | 'hobby' | 'pro'
+  monthlyLoads: number
+  limit: number
+}
+
 function Account() {
   const { data: session } = useSession()
   const navigate = useNavigate()
   const user = session?.user
-
   const [name, setName] = useState(user?.name ?? '')
   const [nameLoading, setNameLoading] = useState(false)
   const [nameError, setNameError] = useState('')
   const [nameSuccess, setNameSuccess] = useState('')
-
   const [deleteLoading, setDeleteLoading] = useState(false)
   const [deleteError, setDeleteError] = useState('')
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const [usage, setUsage] = useState<Usage | null>(null)
+  const [usageLoading, setUsageLoading] = useState(true)
+  const [usageError, setUsageError] = useState('')
+
+  useEffect(() => {
+    async function fetchUsage() {
+      try {
+        const res = await apiFetch('/account/usage')
+        if (!res.ok) throw new Error('Failed to load usage')
+        const data = await res.json()
+        setUsage(data)
+      } catch (err: any) {
+        setUsageError(err.message)
+      } finally {
+        setUsageLoading(false)
+      }
+    }
+    fetchUsage()
+  }, [])
 
   async function handleSaveName() {
     if (!name.trim()) return
@@ -58,6 +81,8 @@ function Account() {
     }
   }
 
+  const usagePercent = usage ? Math.min((usage.monthlyLoads / usage.limit) * 100, 100) : 0
+
   return (
     <div>
       <Navbar />
@@ -84,6 +109,29 @@ function Account() {
           >
             {nameLoading ? 'Saving...' : 'Save name'}
           </button>
+        </div>
+
+        <div className="account-section">
+          <p className="account-section-title">Plan & usage</p>
+          {usageLoading && <p className="account-label">Loading...</p>}
+          {usageError && <p className="account-error">{usageError}</p>}
+          {usage && (
+            <>
+              <div className="account-plan-badge">{usage.plan}</div>
+              <div className="account-usage-bar-track">
+                <div
+                  className="account-usage-bar-fill"
+                  style={{ width: `${usagePercent}%` }}
+                />
+              </div>
+              <p className="account-label">
+                {usage.monthlyLoads.toLocaleString()} of {usage.limit.toLocaleString()} loads used this month
+              </p>
+              <button className="account-btn account-btn-primary">
+                Upgrade plan
+              </button>
+            </>
+          )}
         </div>
 
         <div className="account-danger-zone">
