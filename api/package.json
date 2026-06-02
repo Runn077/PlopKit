@@ -23,6 +23,7 @@
     "express-rate-limit": "^8.5.2",
     "node-cron": "^4.2.1",
     "sanitize-html": "^2.17.4",
+    "stripe": "^22.2.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {

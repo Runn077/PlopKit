@@ -9,6 +9,7 @@ import publicCommentsRouter from './routes/comments/publicComments.js'
 import sitesRouter from './routes/sites.js'
 import widgetsRouter from './routes/widgets.js'
 import accountRouter from './routes/account.js'
+import billingRouter from './routes/billing.js'
 
 const app = express()
 
@@ -47,6 +48,10 @@ app.get('/api/health', (_, res) => {
 })
 
 app.all('/api/auth/*splat', toNodeHandler(auth))
+
+// Webhook must be registered before express.json()
+app.use('/api/billing', billingRouter)
+
 app.use(express.json())
 app.use('/api/comments', commentsRouter)
 app.use('/api/public/comments', publicCommentsRouter)
