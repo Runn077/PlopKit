@@ -41,6 +41,11 @@ export async function handleWebhook(payload: Buffer, signature: string) {
     const session = event.data.object
     const { userId, plan } = session.metadata as { userId: string; plan: string }
 
+    if (!userId || !plan) {
+      console.warn('Webhook received checkout.session.completed with missing metadata, skipping.')
+      return
+    }
+
     await prisma.user.update({
       where: { id: userId },
       data: { plan: plan as any },
