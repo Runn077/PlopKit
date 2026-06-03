@@ -19,7 +19,7 @@ router.get('/me', requireAuth, async (req, res, next) => {
 router.get('/usage', requireAuth, async (req, res, next) => {
   try {
     const { user } = res.locals.session
-    const usage = await accountService.getUsage(user.id)
+    const usage = await accountService.getUsage(user.id, user.plan)
     res.json(usage)
   } catch (err) { next(err) }
 })

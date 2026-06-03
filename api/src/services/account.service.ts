@@ -1,19 +1,16 @@
 import prisma from '../lib/prisma.js'
 import { PLAN_LIMITS } from '../constants/index.js'
 
-export async function getUsage(userId: string) {
-  const user = await prisma.user.findUnique({ where: { id: userId } })
-  if (!user) throw new Error('User not found')
-
+export async function getUsage(userId: string, plan: string) {
   const { _sum } = await prisma.commentWidget.aggregate({
     _sum: { monthlyLoads: true },
     where: { widget: { site: { userId } } },
   })
 
   return {
-    plan: user.plan,
+    plan,
     monthlyLoads: _sum.monthlyLoads ?? 0,
-    limit: PLAN_LIMITS[user.plan],
+    limit: PLAN_LIMITS[plan as keyof typeof PLAN_LIMITS],
   }
 }
 
