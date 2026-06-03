@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useSession, signOut } from '../../lib/auth-client'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import Navbar from '../../components/Navbar'
 import { apiFetch } from '../../lib/api'
 import './Account.css'
+import UpgradeModal from './UpgradeModal'
 
 type Usage = {
   plan: 'free' | 'hobby' | 'pro'
@@ -25,6 +26,9 @@ function Account() {
   const [usage, setUsage] = useState<Usage | null>(null)
   const [usageLoading, setUsageLoading] = useState(true)
   const [usageError, setUsageError] = useState('')
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false)
+  const [searchParams, setSearchParams] = useSearchParams()
+  const upgradeStatus = searchParams.get('upgrade')
 
   useEffect(() => {
     async function fetchUsage() {
@@ -40,6 +44,12 @@ function Account() {
       }
     }
     fetchUsage()
+  }, [])
+
+  useEffect(() => {
+    if (upgradeStatus) {
+      setSearchParams({}, { replace: true })
+    }
   }, [])
 
   async function handleSaveName() {
@@ -87,6 +97,12 @@ function Account() {
     <div>
       <Navbar />
       <div className="account-container">
+        {upgradeStatus === 'success' && (
+          <p className="account-success">Plan upgraded successfully.</p>
+        )}
+        {upgradeStatus === 'cancelled' && (
+          <p className="account-error">Upgrade cancelled.</p>
+        )}
         <h2 className="account-title">Account settings</h2>
 
         <div className="account-section">
@@ -127,12 +143,22 @@ function Account() {
               <p className="account-label">
                 {usage.monthlyLoads.toLocaleString()} of {usage.limit.toLocaleString()} loads used this month
               </p>
-              <button className="account-btn account-btn-primary">
+              <button
+                className="account-btn account-btn-primary"
+                onClick={() => setShowUpgradeModal(true)}
+              >
                 Upgrade plan
               </button>
             </>
           )}
         </div>
+
+        {showUpgradeModal && usage && (
+          <UpgradeModal
+            currentPlan={usage.plan}
+            onClose={() => setShowUpgradeModal(false)}
+          />
+        )}
 
         <div className="account-danger-zone">
           <div className="account-danger-row">

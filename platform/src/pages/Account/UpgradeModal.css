@@ -1,0 +1,115 @@
+.upgrade-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--pk-z-modal);
+}
+
+.upgrade-modal {
+  background: var(--pk-color-bg);
+  border: 1px solid var(--pk-color-border);
+  border-radius: var(--pk-radius-lg);
+  padding: 24px;
+  width: 100%;
+  max-width: 580px;
+}
+
+.upgrade-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.upgrade-modal-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--pk-color-text);
+}
+
+.upgrade-modal-close {
+  background: none;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  color: var(--pk-color-text-muted);
+  padding: 0;
+}
+
+.upgrade-modal-close:hover {
+  color: var(--pk-color-text);
+}
+
+.upgrade-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.upgrade-card {
+  border: 1px solid var(--pk-color-border-muted);
+  border-radius: var(--pk-radius);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.upgrade-card-current {
+  border-color: var(--pk-color-border);
+}
+
+.upgrade-card-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--pk-color-text);
+}
+
+.upgrade-card-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--pk-color-text);
+}
+
+.upgrade-card-loads {
+  font-size: 12px;
+  color: var(--pk-color-text-muted);
+  margin-bottom: 8px;
+}
+
+.upgrade-card-current-label {
+  font-size: 12px;
+  color: var(--pk-color-text-muted);
+  font-weight: 500;
+}
+
+.upgrade-card-btn {
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--pk-font);
+  padding: 7px 14px;
+  border-radius: var(--pk-radius);
+  cursor: pointer;
+  border: 1px solid var(--pk-color-border);
+  background: var(--pk-color-primary);
+  color: var(--pk-color-on-primary);
+  margin-top: auto;
+}
+
+.upgrade-card-btn:hover:not(:disabled) {
+  background: var(--pk-color-primary-hover);
+}
+
+.upgrade-card-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.upgrade-error {
+  font-size: 12px;
+  color: var(--pk-color-danger);
+  margin-top: 12px;
+}
