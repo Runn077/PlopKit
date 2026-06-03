@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import './Dashboard.css'
+import './AddSiteModal.css'
 
 interface Props {
   onClose: () => void

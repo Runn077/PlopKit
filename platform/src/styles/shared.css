@@ -89,7 +89,7 @@
 .sc-btn-primary:hover,
 .sw-btn-primary:hover,
 .account-btn-primary:hover:not(:disabled) {
-  background: var(--pk-color-primary-hover);
+  background: #74c0fc;
 }
 
 .account-btn:disabled,
