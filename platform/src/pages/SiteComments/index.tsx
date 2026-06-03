@@ -317,9 +317,14 @@ function SiteComments() {
         <div className="sc-script-block">
           <div className="sc-script-header">
             <span className="sc-script-label">Script tag</span>
-            <button className="sc-btn" onClick={() => handleCopy(scriptTag)}>
-              {copied ? 'Copied!' : 'Copy'}
-            </button>
+            <div className="sc-script-header-right">
+              <span className="sc-script-loads">
+                loads this month: {(widget.commentWidget?.monthlyLoads ?? 0).toLocaleString()}
+              </span>
+              <button className="sc-btn" onClick={() => handleCopy(scriptTag)}>
+                {copied ? 'Copied!' : 'Copy'}
+              </button>
+            </div>
           </div>
           <pre className="sc-script-code">{scriptTag}</pre>
         </div>

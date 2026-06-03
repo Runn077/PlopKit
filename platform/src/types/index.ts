@@ -5,6 +5,7 @@ export interface CommentWidget {
   bannedWords: string[]
   autoDeleteBannedWords: boolean
   pinnedCommentId: string | null
+  monthlyLoads: number
   createdAt: string
 }
 
