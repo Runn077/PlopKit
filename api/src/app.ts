@@ -4,6 +4,7 @@ import rateLimit from 'express-rate-limit'
 import { toNodeHandler } from 'better-auth/node'
 import { auth } from './lib/auth.js'
 import { errorHandler } from './errors/errorHandler.js'
+import { handleWebhook } from './services/billing.service.js'
 import commentsRouter from './routes/comments/comments.js'
 import publicCommentsRouter from './routes/comments/publicComments.js'
 import sitesRouter from './routes/sites.js'
@@ -49,8 +50,13 @@ app.get('/api/health', (_, res) => {
 
 app.all('/api/auth/*splat', toNodeHandler(auth))
 
-// Webhook must be registered before express.json()
-app.use('/api/billing', billingRouter)
+app.post('/api/billing/webhook', express.raw({ type: 'application/json' }), async (req, res, next) => {
+  try {
+    const signature = req.headers['stripe-signature'] as string
+    await handleWebhook(req.body, signature)
+    res.json({ received: true })
+  } catch (err) { next(err) }
+})
 
 app.use(express.json())
 app.use('/api/comments', commentsRouter)
@@ -58,6 +64,7 @@ app.use('/api/public/comments', publicCommentsRouter)
 app.use('/api/sites', sitesRouter)
 app.use('/api/widgets', widgetsRouter)
 app.use('/api/account', accountRouter)
+app.use('/api/billing', billingRouter)
 app.use(errorHandler)
 
 export default app

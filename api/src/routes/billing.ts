@@ -20,12 +20,4 @@ router.post('/checkout', requireAuth, validate(checkoutSchema), async (req, res,
   } catch (err) { next(err) }
 })
 
-router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res, next) => {
-  try {
-    const signature = req.headers['stripe-signature'] as string
-    await billingService.handleWebhook(req.body, signature)
-    res.json({ received: true })
-  } catch (err) { next(err) }
-})
-
 export default router
