@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import Navbar from '../../components/Navbar'
-import SubNav from './SubNav'
+import SubNav from '../../components/SubNav'
 import WidgetList from './WidgetList'
 import AddWidgetModal from './AddWidgetModal'
 import SiteSettings from './settings/SiteSettings'
@@ -113,7 +113,14 @@ function SiteWidgets() {
   return (
     <div>
       <Navbar />
-      <SubNav activeTab={activeTab} onTabChange={setActiveTab} />
+      <SubNav
+        tabs={[
+          { id: 'widgets', label: 'Widgets' },
+          { id: 'settings', label: 'Settings' },
+        ]}
+        activeTab={activeTab}
+        onTabChange={(tab) => setActiveTab(tab as 'widgets' | 'settings')}
+      />
       {activeTab === 'widgets' && (
         <div className="sw-container">
           <div className="sw-breadcrumb">

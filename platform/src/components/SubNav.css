@@ -1,0 +1,29 @@
+.subnav {
+  display: flex;
+  border-bottom: 3px solid black;
+  padding: 0 32px;
+  gap: 4px;
+  background: white;
+}
+
+.subnav-tab {
+  padding: 14px 20px;
+  font-size: 0.9rem;
+  font-family: var(--pk-font);
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -3px;
+  cursor: pointer;
+  color: #666;
+  transition: color 0.1s ease;
+}
+
+.subnav-tab:hover {
+  color: #000;
+}
+
+.subnav-tab-active {
+  color: #000;
+  border-bottom: 3px solid black;
+}
