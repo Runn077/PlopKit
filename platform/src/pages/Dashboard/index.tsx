@@ -60,13 +60,21 @@ function Dashboard() {
       <Navbar />
       <div className="dashboard-container">
         <div className="dashboard-header">
-          <h2 className="dashboard-title">Your websites</h2>
+          <div className="dashboard-heading">
+            <h1>Your Websites</h1>
+            <p>Manage comments and widgets across your sites.</p>
+          </div>
+
           {sites.length > 0 && (
-            <button className="btn btn-primary" onClick={() => setShowModal(true)}>
-              + Add website
+            <button
+              className="btn btn-primary"
+              onClick={() => setShowModal(true)}
+            >
+              + Add Website
             </button>
           )}
         </div>
+
         <SiteList
           sites={sites}
           onManage={id => navigate(`/dashboard/sites/${id}`)}

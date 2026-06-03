@@ -11,24 +11,46 @@ function SiteList({ sites, onManage, onAdd }: Props) {
   if (sites.length === 0) {
     return (
       <div className="empty-state">
-        <p>No websites added yet</p>
-        <button className="btn btn-primary" onClick={onAdd}>+ Add website</button>
+        <h2>No websites yet</h2>
+
+        <p>
+          Add your first site and start collecting
+          comments.
+        </p>
+
+        <button
+          className="btn btn-primary"
+          onClick={onAdd}
+        >
+          + Add Website
+        </button>
       </div>
     )
   }
 
   return (
-    <ul className="site-list">
+    <div className="site-grid">
       {sites.map(site => (
-        <li key={site.id} className="site-row">
+        <div key={site.id} className="site-card">
           <div>
-            <div className="site-name">{site.name}</div>
-            <div className="site-domain">{site.domain}</div>
+            <h3 className="site-name">
+              {site.name}
+            </h3>
+
+            <p className="site-domain">
+              {site.domain}
+            </p>
           </div>
-          <button className="btn" onClick={() => onManage(site.id)}>Manage</button>
-        </li>
+
+          <button
+            className="btn btn-primary"
+            onClick={() => onManage(site.id)}
+          >
+            Manage Site
+          </button>
+        </div>
       ))}
-    </ul>
+    </div>
   )
 }
 
