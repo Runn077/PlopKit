@@ -2,7 +2,6 @@
   height: var(--pk-nav-height);
   background: #ffffff;
   border-bottom: 3px solid black;
-  box-shadow: 0 3px 0 black;
   display: flex;
   align-items: center;
   padding: 0 var(--pk-space-page-x);
