@@ -67,3 +67,19 @@ export async function handleWebhook(payload: Buffer, signature: string) {
     }
   }
 }
+
+export async function createPortalSession(userId: string) {
+  const user = await prisma.user.findUnique({ where: { id: userId } })
+  if (!user) throw new AppError(404, 'User not found')
+
+  const customers = await stripe.customers.list({ email: user.email, limit: 1 })
+  const customer = customers.data[0]
+  if (!customer) throw new AppError(404, 'No billing account found')
+
+  const session = await stripe.billingPortal.sessions.create({
+    customer: customer.id,
+    return_url: `${process.env.PLATFORM_URL}/account`,
+  })
+
+  return { url: session.url }
+}

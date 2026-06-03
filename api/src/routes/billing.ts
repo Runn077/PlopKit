@@ -20,4 +20,12 @@ router.post('/checkout', requireAuth, validate(checkoutSchema), async (req, res,
   } catch (err) { next(err) }
 })
 
+router.post('/portal', requireAuth, async (req, res, next) => {
+  try {
+    const { user } = res.locals.session
+    const result = await billingService.createPortalSession(user.id)
+    res.json(result)
+  } catch (err) { next(err) }
+})
+
 export default router

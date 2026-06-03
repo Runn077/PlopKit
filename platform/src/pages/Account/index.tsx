@@ -91,6 +91,17 @@ function Account() {
     }
   }
 
+  async function handleManageBilling() {
+    try {
+      const res = await apiFetch('/billing/portal', { method: 'POST' })
+      if (!res.ok) throw new Error('Something went wrong')
+      const { url } = await res.json()
+      window.location.href = url
+    } catch (err: any) {
+      console.error(err)
+    }
+  }
+
   const usagePercent = usage ? Math.min((usage.monthlyLoads / usage.limit) * 100, 100) : 0
 
   return (
@@ -158,6 +169,15 @@ function Account() {
             currentPlan={usage.plan}
             onClose={() => setShowUpgradeModal(false)}
           />
+        )}
+
+        {usage && usage.plan !== 'free' && (
+          <button
+            className="account-btn"
+            onClick={handleManageBilling}
+          >
+            Manage billing
+          </button>
         )}
 
         <div className="account-danger-zone">
