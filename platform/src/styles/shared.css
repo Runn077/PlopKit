@@ -101,7 +101,7 @@
 .sc-btn-danger,
 .account-btn-danger,
 .sw-btn-danger-outline {
-  border-color: var(--pk-color-border);
+  border-color: #ff6b6b;
   color: var(--pk-color-text);
   background: var(--pk-color-bg);
 }

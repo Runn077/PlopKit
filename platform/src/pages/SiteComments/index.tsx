@@ -299,7 +299,7 @@ function SiteComments() {
   )
   if (!widget || !site) return <div>Not found</div>
 
-  const scriptTag = `<script src="${import.meta.env.VITE_APP_URL}/widget.js" data-widget-key="${widget.widgetKey}" data-widget="comments"></script>`
+  const scriptTag = `<script src="${import.meta.env.VITE_APP_URL}/widget.js" data-widget-key="${widget.widgetKey}"></script>`
 
   return (
     <div>
