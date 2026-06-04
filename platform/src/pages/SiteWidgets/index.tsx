@@ -122,28 +122,34 @@ function SiteWidgets() {
         onTabChange={(tab) => setActiveTab(tab as 'widgets' | 'settings')}
       />
       {activeTab === 'widgets' && (
-        <div className="sw-container">
+        <div>
           <div className="sw-breadcrumb">
             <span className="sw-breadcrumb-link" onClick={() => navigate('/dashboard')}>Sites</span>
             <span className="sw-breadcrumb-sep">/</span>
             <span className="sw-breadcrumb-current">{site!.name}</span>
           </div>
-          <div className="sw-header">
-            <h2 className="sw-title">Widgets</h2>
-            <button className="sw-btn sw-btn-primary" onClick={() => setShowModal(true)}>
-              + Add widget
-            </button>
-          </div>
-          <WidgetList
-            widgets={widgets}
-            onOpen={(widget) => navigate(`/dashboard/sites/${siteId}/widgets/${widget.id}/comments`)}
-          />
-          {showModal && (
-            <AddWidgetModal
-              onClose={() => setShowModal(false)}
-              onSubmit={handleAddWidget}
+          <div className="sw-container">
+            <div className="sw-site-card">
+              <h1>{site!.name}</h1>
+              <p>{site!.domain}</p>
+            </div>
+            <div className="sw-header">
+              <h2 className="sw-title">Widgets</h2>
+              <button className="sw-btn sw-btn-primary" onClick={() => setShowModal(true)}>
+                + Add widget
+              </button>
+            </div>
+            <WidgetList
+              widgets={widgets}
+              onOpen={(widget) => navigate(`/dashboard/sites/${siteId}/widgets/${widget.id}/comments`)}
             />
-          )}
+            {showModal && (
+              <AddWidgetModal
+                onClose={() => setShowModal(false)}
+                onSubmit={handleAddWidget}
+              />
+            )}
+          </div>
         </div>
       )}
       {activeTab === 'settings' && (
