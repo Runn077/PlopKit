@@ -38,6 +38,14 @@
   margin: 0;
 }
 
+.sc-breadcrumb {
+  padding: 14px 52px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+}
+
 /* Comment list */
 .sc-comment-list {
   display: flex;

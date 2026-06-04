@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import Navbar from '../../components/Navbar'
-import SubNav from './SubNav'
+import SubNav from '../../components/SubNav'
 import CommentsTab from './tabs/CommentsTab'
 import PendingTab from './tabs/PendingTab'
 import DeletedTab from './tabs/DeletedTab'
@@ -305,16 +305,24 @@ function SiteComments() {
   return (
     <div>
       <Navbar />
-      <SubNav activeTab={activeTab} onTabChange={setActiveTab} />
+      <SubNav
+        tabs={[
+          { id: 'comments', label: 'Comments' },
+          { id: 'pending', label: 'Pending' },
+          { id: 'deleted', label: 'Recently Deleted' },
+          { id: 'filter', label: 'Filter' },
+        ]}
+        activeTab={activeTab}
+        onTabChange={(tab) => setActiveTab(tab as Tab)}
+      />
+      <div className="sc-breadcrumb">
+        <span className="sc-breadcrumb-link" onClick={() => navigate('/dashboard')}>Sites</span>
+        <span className="sc-breadcrumb-sep">/</span>
+        <span className="sc-breadcrumb-link" onClick={() => navigate(`/dashboard/sites/${siteId}`)}>{site.name}</span>
+        <span className="sc-breadcrumb-sep">/</span>
+        <span className="sc-breadcrumb-current">{widget.name}</span>
+      </div>
       <div className="sc-container">
-        <div className="sc-breadcrumb">
-          <span className="sc-breadcrumb-link" onClick={() => navigate('/dashboard')}>Sites</span>
-          <span className="sc-breadcrumb-sep">/</span>
-          <span className="sc-breadcrumb-link" onClick={() => navigate(`/dashboard/sites/${siteId}`)}>{site.name}</span>
-          <span className="sc-breadcrumb-sep">/</span>
-          <span className="sc-breadcrumb-current">{widget.name}</span>
-        </div>
-
         <div className="sc-script-block">
           <div className="sc-script-header">
             <span className="sc-script-label">Script tag</span>
