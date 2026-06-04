@@ -62,7 +62,7 @@ function SiteComments() {
   async function fetchComments(widgetKey: string, cursor?: string) {
     const params = new URLSearchParams({ widget_key: widgetKey })
     if (cursor) params.set('cursor', cursor)
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/public/comments?${params}`)
+    const res = await apiFetch(`/comments/approved?${params}`)
     const data = await res.json()
     setComments(prev => cursor ? [...prev, ...data.comments] : data.comments)
     setHasMore(data.hasMore)

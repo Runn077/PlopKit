@@ -18,26 +18,24 @@ async function getCommentAndVerifyOwnership(commentId: string, userId: string) {
 export async function getApprovedComments(
   widgetKey: string,
   cursor?: string,
+  skipQuota = false,
 ) {
   const widget = await getWidgetByKey(widgetKey)
   if (!widget?.commentWidget) throw new AppError(404, 'Widget not found')
 
-  // --- Load quota check ---
-  const userId = widget.site.userId
-  const userPlan = widget.site.user.plan
-  const limit = PLAN_LIMITS[userPlan]
+  if (!skipQuota) {
+    const userId = widget.site.userId
+    const userPlan = widget.site.user.plan
+    const limit = PLAN_LIMITS[userPlan]
 
-  const { _sum } = await prisma.commentWidget.aggregate({
-    _sum: { monthlyLoads: true },
-    where: { widget: { site: { userId } } },
-  })
+    const { _sum } = await prisma.commentWidget.aggregate({
+      _sum: { monthlyLoads: true },
+      where: { widget: { site: { userId } } },
+    })
 
-  const totalLoads = _sum.monthlyLoads ?? 0
-
-  if (totalLoads >= limit) {
-    throw new AppError(429, 'Monthly load limit reached')
+    const totalLoads = _sum.monthlyLoads ?? 0
+    if (totalLoads >= limit) throw new AppError(429, 'Monthly load limit reached')
   }
-  // --- End quota check ---
 
   const commentWidgetId = widget.commentWidget.id
   const pinnedCommentId = widget.commentWidget.pinnedCommentId
@@ -89,11 +87,12 @@ export async function getApprovedComments(
     }),
   ])
 
-  // Increment after successful fetch
-  await prisma.commentWidget.update({
-    where: { id: widget.commentWidget.id },
-    data: { monthlyLoads: { increment: 1 } },
-  })
+  if (!skipQuota) {
+    await prisma.commentWidget.update({
+      where: { id: widget.commentWidget.id },
+      data: { monthlyLoads: { increment: 1 } },
+    })
+  }
 
   let ordered = comments
   if (pinnedCommentId && !cursor) {
