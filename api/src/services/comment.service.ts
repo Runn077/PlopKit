@@ -217,16 +217,21 @@ export async function createComment(
   const widget = await getWidgetByKey(widgetKey)
   if (!widget?.commentWidget) throw new AppError(404, 'Invalid widget key')
 
+  let isLocalhost = false
   try {
     const originHostname = new URL(origin).hostname
-    const siteHostname = new URL(`https://${widget.site.domain}`).hostname
-    if (originHostname !== siteHostname) throw new AppError(403, 'Domain not allowed')
+    isLocalhost = originHostname === 'localhost' || originHostname === '127.0.0.1'
+
+    if (!isLocalhost) {
+      const siteHostname = new URL(`https://${widget.site.domain}`).hostname
+      if (originHostname !== siteHostname) throw new AppError(403, 'Domain not allowed')
+    }
   } catch (e) {
     if (e instanceof AppError) throw e
     throw new AppError(403, 'Domain not allowed')
   }
 
-  if (!widget.site.verified) {
+  if (!widget.site.verified && !isLocalhost) {
     await prisma.site.update({
       where: { id: widget.site.id },
       data: { verified: true },
