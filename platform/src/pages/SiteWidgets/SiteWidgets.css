@@ -5,6 +5,7 @@
   max-width: 900px;
   margin: 0 auto;
   padding: 32px;
+  min-height: 100vh;
 }
 
 .sw-header {
@@ -114,6 +115,7 @@
   gap: 32px;
   align-items: flex-start;
   position: relative;
+  min-height: 100vh;
 }
 
 .settings-sidenav {

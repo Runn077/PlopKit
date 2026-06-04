@@ -6,6 +6,7 @@ import AddSiteModal from './AddSiteModal'
 import './Dashboard.css'
 import type { Site } from '../../types'
 import { apiFetch } from '../../lib/api'
+import Footer from '../../components/Footer'
 
 function Dashboard() {
   const navigate = useNavigate()
@@ -87,6 +88,7 @@ function Dashboard() {
           />
         )}
       </div>
+      <Footer />
     </div>
   )
 }

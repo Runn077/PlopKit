@@ -8,6 +8,7 @@ import SiteSettings from './settings/SiteSettings'
 import './SiteWidgets.css'
 import type { Site, Widget } from '../../types'
 import { apiFetch } from '../../lib/api'
+import Footer from '../../components/Footer'
 
 function SiteWidgets() {
   const { siteId } = useParams()
@@ -165,6 +166,7 @@ function SiteWidgets() {
           />
         </div>
       )}
+      <Footer/>
     </div>
   )
 }

@@ -1,6 +1,9 @@
 /* Site comments — feature-specific styles (shared UI in src/styles/shared.css) */
 
 /* Script tag */
+.sc-container {
+  min-height: 100vh;
+}
 .sc-script-block {
   border: 1px solid var(--pk-color-border);
   border-radius: var(--pk-radius-lg);

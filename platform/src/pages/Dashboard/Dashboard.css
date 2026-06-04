@@ -2,10 +2,9 @@
 
 .dashboard-container {
   max-width: 1200px;
-
   margin: 0 auto;
-
   padding: 48px 24px;
+  min-height: 100vh;
 }
 
 .dashboard-header {
