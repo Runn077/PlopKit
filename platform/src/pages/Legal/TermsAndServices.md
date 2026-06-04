@@ -1,6 +1,6 @@
 # Terms of Service
 
-**Last updated: May 30, 2026**
+**Last updated: June 4, 2026**
 
 These Terms of Service ("Terms") govern your use of PlopKit ("we", "us", "our"), a service operated by an individual based in Canada. By creating an account or using PlopKit in any way, you agree to these Terms.
 
@@ -89,9 +89,16 @@ Nothing in these Terms limits liability for gross negligence or intentional misc
 
 ---
 
-## 9. Paid Plans
+## 9. Paid Plans and Billing
 
-PlopKit is currently free to use. We may introduce paid plans in the future. If and when paid features are introduced, pricing, billing terms, and any refund policies will be clearly communicated at that time. Continued use of the service after paid plans are introduced does not obligate you to subscribe.
+PlopKit offers free and paid subscription plans. Paid plans are billed monthly through Stripe. By subscribing to a paid plan, you agree to pay the applicable fees.
+
+- **Cancellations:** You may cancel your subscription at any time through the billing portal on the Account page. Cancellations take effect at the end of the current billing period. You will retain access to your paid plan features until the period ends.
+- **Refunds:** We do not offer refunds for partial billing periods.
+- **Plan limits:** Each plan includes a monthly widget load limit. If you reach your limit, comments will stop loading until the next monthly reset on the 1st of the month. We will not automatically charge you for overages.
+- **Plan changes:** You may upgrade your plan at any time. Upgrades take effect immediately.
+
+We reserve the right to change our pricing at any time. We will provide reasonable notice of any price changes before they take effect.
 
 ---
 
