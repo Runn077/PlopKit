@@ -17,7 +17,6 @@ async function getCommentAndVerifyOwnership(commentId: string, userId: string) {
 
 export async function getApprovedComments(
   widgetKey: string,
-  pageUrl?: string,
   cursor?: string,
 ) {
   const widget = await getWidgetByKey(widgetKey)
@@ -50,13 +49,6 @@ export async function getApprovedComments(
     parentId: null,
   }
 
-  if (pageUrl) {
-    baseWhere.OR = [
-      { pageUrl },
-      { isOwnerReply: true },
-    ]
-  }
-
   if (cursor) {
     const cursorComment = await prisma.comment.findUnique({ where: { id: cursor } })
     if (cursorComment) baseWhere.createdAt = { lt: cursorComment.createdAt }
@@ -69,25 +61,11 @@ export async function getApprovedComments(
     parentId: null,
   }
 
-  if (pageUrl) {
-    countWhere.OR = [
-      { pageUrl },
-      { isOwnerReply: true },
-    ]
-  }
-
   const replyCountWhere: any = {
     commentWidgetId,
     status: CommentStatus.approved,
     deletedAt: null,
     parentId: { not: null },
-  }
-
-  if (pageUrl) {
-    replyCountWhere.OR = [
-      { pageUrl },
-      { isOwnerReply: true },
-    ]
   }
 
   const [topLevelTotal, replyTotal, comments] = await Promise.all([
