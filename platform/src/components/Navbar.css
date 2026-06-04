@@ -77,7 +77,7 @@
 .navbar-hamburger.is-open {
   transform: translate(2px, 2px);
   box-shadow: 1px 1px 0 black;
-  background: #ffe66d;
+  background: #74c0fc;
 }
 
 .navbar-hamburger span {
@@ -120,7 +120,7 @@
 }
 
 .navbar-dropdown button:hover {
-  background: #74c0fc;;
+  background: #74c0fc;
   color: white;
 }
 
