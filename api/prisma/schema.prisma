@@ -110,6 +110,7 @@ model Widget {
   siteId        String
   site          Site           @relation(fields: [siteId], references: [id], onDelete: Cascade)
   commentWidget CommentWidget?
+  monthlyLoads  Int            @default(0)
   createdAt     DateTime       @default(now())
 }
 
@@ -127,7 +128,6 @@ model CommentWidget {
   autoDeleteBannedWords Boolean   @default(false)
   pinnedCommentId       String?   @unique
   pinnedComment         Comment?  @relation("PinnedComment", fields: [pinnedCommentId], references: [id], onDelete: SetNull)
-  monthlyLoads          Int @default(0)
 }
 
 model Comment {

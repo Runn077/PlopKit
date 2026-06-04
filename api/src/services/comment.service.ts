@@ -2,7 +2,7 @@ import sanitizeHtml from 'sanitize-html'
 import prisma from '../lib/prisma.js'
 import { AppError } from '../errors/appError.js'
 import { getWidgetByKey } from './widget.service.js'
-import { LIMITS, PLAN_LIMITS } from '../constants/index.js'
+import { LIMITS } from '../constants/index.js'
 import { CommentStatus } from '../generated/prisma/enums.js'
 
 async function getCommentAndVerifyOwnership(commentId: string, userId: string) {
@@ -22,20 +22,6 @@ export async function getApprovedComments(
 ) {
   const widget = await getWidgetByKey(widgetKey)
   if (!widget?.commentWidget) throw new AppError(404, 'Widget not found')
-
-  if (!skipQuota) {
-    const userId = widget.site.userId
-    const userPlan = widget.site.user.plan
-    const limit = PLAN_LIMITS[userPlan]
-
-    const { _sum } = await prisma.commentWidget.aggregate({
-      _sum: { monthlyLoads: true },
-      where: { widget: { site: { userId } } },
-    })
-
-    const totalLoads = _sum.monthlyLoads ?? 0
-    if (totalLoads >= limit) throw new AppError(429, 'Monthly load limit reached')
-  }
 
   const commentWidgetId = widget.commentWidget.id
   const pinnedCommentId = widget.commentWidget.pinnedCommentId
@@ -88,10 +74,7 @@ export async function getApprovedComments(
   ])
 
   if (!skipQuota) {
-    await prisma.commentWidget.update({
-      where: { id: widget.commentWidget.id },
-      data: { monthlyLoads: { increment: 1 } },
-    })
+    await trackWidgetLoad(widgetKey)
   }
 
   let ordered = comments
@@ -434,4 +417,8 @@ export async function unpinComment(widgetKey: string, userId: string) {
     where: { id: widget.commentWidget.id },
     data: { pinnedCommentId: null },
   })
+}
+
+function trackWidgetLoad(widgetKey: string) {
+  throw new Error('Function not implemented.')
 }
