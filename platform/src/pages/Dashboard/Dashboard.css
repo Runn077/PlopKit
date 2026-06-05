@@ -1,95 +1,75 @@
-/* Dashboard — feature-specific (shared UI in src/styles/shared.css) */
+/* Dashboard — page layout, site list, empty state */
 
 .dashboard-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 48px 24px;
   min-height: 100vh;
+  font-family: var(--pk-font);
 }
 
 .dashboard-header {
   display: flex;
-
   justify-content: space-between;
-
   align-items: center;
-
   margin-bottom: 40px;
-
   gap: 24px;
 }
 
 .dashboard-heading h1 {
   font-size: 3rem;
-
   font-weight: 800;
-
   margin-bottom: 8px;
 }
 
 .dashboard-heading p {
   color: var(--pk-color-text-secondary);
-
   font-size: 1rem;
 }
 
 .site-grid {
   display: grid;
-
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(320px, 1fr)
-  );
-
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 24px;
 }
 
 .site-card {
   background: white;
-
   border: 3px solid black;
-
   padding: 24px;
-
   display: flex;
-
   flex-direction: column;
-
   justify-content: space-between;
-
   gap: 20px;
-
   transition: 0.15s ease;
 }
 
 .site-card:hover {
   transform: translate(-2px, -2px);
-
-  box-shadow: 8px 8px 0 black;
+  box-shadow: 8px 8px 0 #74c0fc;
 }
 
 .site-name {
   font-size: 1.25rem;
-
   font-weight: 700;
-
   margin-bottom: 8px;
 }
 
 .site-domain {
   color: #666;
-
   font-size: 0.95rem;
-
   word-break: break-word;
 }
 
 .empty-state {
-  border: 3px dashed black;
-
-  padding: 80px 24px;
-
+  font-size: 14px;
+  color: var(--pk-color-text);
   text-align: center;
+  padding: 80px 24px;
+  border: 3px dashed black;
+  background: #ffffff;
+}
 
-  background: #fafafa;
+.empty-state p {
+  margin-bottom: 16px;
 }

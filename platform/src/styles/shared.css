@@ -3,7 +3,6 @@
 /* --- Page shell --- */
 .sc-container,
 .sw-container,
-.dashboard-container,
 .account-container {
   max-width: var(--pk-content-max);
   margin: 0 auto;
@@ -272,8 +271,7 @@
   background: var(--pk-color-on-primary);
 }
 
-/* --- Modal --- */
-.modal-overlay,
+/* --- Modal (SiteWidgets) --- */
 .sw-overlay {
   position: fixed;
   inset: 0;
@@ -284,20 +282,15 @@
   z-index: var(--pk-z-modal);
 }
 
-.modal,
 .sw-modal {
   background: var(--pk-color-bg);
   border-radius: var(--pk-radius-lg);
   padding: 24px;
   width: 100%;
   max-width: 380px;
-}
-
-.sw-modal {
   border: 1px solid var(--pk-color-border);
 }
 
-.modal-title,
 .sw-modal-title {
   font-size: 15px;
   font-weight: 600;
@@ -306,21 +299,18 @@
   font-family: var(--pk-font);
 }
 
-.modal-form,
 .sw-modal-form {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.modal-actions,
 .sw-modal-actions {
   display: flex;
   gap: 8px;
   margin-top: 4px;
 }
 
-.modal-error,
 .sw-modal-error,
 .sw-settings-error {
   font-size: 12px;
@@ -332,7 +322,6 @@
 }
 
 /* --- Form fields --- */
-.modal-input,
 .sw-input,
 .sw-select,
 .sc-filter-input,
@@ -349,14 +338,12 @@
   box-sizing: border-box;
 }
 
-.modal-input::placeholder,
 .sw-input::placeholder,
 .sc-filter-input::placeholder,
 .account-input::placeholder {
   color: #999;
 }
 
-.modal-input:focus,
 .sw-input:focus,
 .sw-select:focus,
 .sc-filter-input:focus,
@@ -407,8 +394,7 @@
 
 /* --- Empty state text --- */
 .sc-empty,
-.sw-empty,
-.empty-state {
+.sw-empty {
   font-size: 14px;
   color: var(--pk-color-text-muted);
   text-align: center;
@@ -418,38 +404,23 @@
   padding: 40px 0;
 }
 
-.sw-empty,
-.empty-state {
+.sw-empty {
   padding: 60px 0;
 }
 
-.sw-empty p,
-.empty-state p {
+.sw-empty p {
   margin-bottom: 16px;
 }
 
-.empty-state {
-  color: var(--pk-color-text);
-}
-
 /* --- Page header row --- */
-.sw-header,
-.dashboard-header {
+.sw-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.sw-header {
   margin-bottom: 32px;
 }
 
-.dashboard-header {
-  margin-bottom: 24px;
-}
-
 .sw-title,
-.dashboard-title,
 .account-title {
   font-size: 18px;
   font-weight: 600;
