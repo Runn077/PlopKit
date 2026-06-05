@@ -199,7 +199,7 @@ function SiteComments() {
 
   async function handleToggleAutoApprove(value: boolean) {
     if (!widget) return
-    const res = await apiFetch(`/widgets/${widget.id}`, {
+    const res = await apiFetch(`/comments/${widget.id}/auto-approve`, {
       method: 'PATCH',
       body: JSON.stringify({ autoApprove: value }),
     })
@@ -224,7 +224,7 @@ function SiteComments() {
 
   async function handleUpdateBannedWords(bannedWords: string[], autoDelete: boolean) {
     if (!widget) return
-    const res = await apiFetch(`/widgets/${widget.id}/banned-words`, {
+    const res = await apiFetch(`/comments/${widget.id}/banned-words`, {
       method: 'PATCH',
       body: JSON.stringify({ bannedWords, autoDeleteBannedWords: autoDelete }),
     })
@@ -328,7 +328,7 @@ function SiteComments() {
             <span className="sc-script-label">Script tag</span>
             <div className="sc-script-header-right">
               <span className="sc-script-loads">
-                loads this month: {(widget.commentWidget?.monthlyLoads ?? 0).toLocaleString()}
+                loads this month: {(widget.monthlyLoads ?? 0).toLocaleString()}
               </span>
               <button className="sc-btn" onClick={() => handleCopy(scriptTag)}>
                 {copied ? 'Copied!' : 'Copy'}

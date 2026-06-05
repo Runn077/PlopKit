@@ -135,4 +135,15 @@ router.patch('/:id/banned-words', requireAuth, validate(updateBannedWordsSchema)
   } catch (err) { next(err) }
 })
 
+router.patch('/:id/auto-approve', requireAuth, async (req, res, next) => {
+  try {
+    const { user } = res.locals.session
+    const { id } = req.params as { id: string }
+    const { autoApprove } = req.body
+    if (typeof autoApprove !== 'boolean') throw new AppError(400, 'autoApprove must be a boolean')
+    const updated = await commentService.updateAutoApprove(id, user.id, autoApprove)
+    res.json(updated)
+  } catch (err) { next(err) }
+})
+
 export default router
