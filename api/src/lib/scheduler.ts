@@ -23,4 +23,11 @@ export function startScheduler() {
     })
     console.log(`[scheduler] Cleaned up ${expired.count} expired pending comments`)
   })
+
+  cron.schedule('0 0 1 * *', async () => {
+    const result = await prisma.widget.updateMany({
+      data: { monthlyLoads: 0 },
+    })
+    console.log(`[scheduler] Reset monthlyLoads for ${result.count} widgets`)
+  })
 }
