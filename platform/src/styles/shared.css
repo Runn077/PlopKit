@@ -80,7 +80,7 @@
 .sc-btn-primary,
 .sw-btn-primary,
 .account-btn-primary {
-  background: var(--pk-color-primary);
+  background: #333;
   color: var(--pk-color-on-primary);
   border-color: var(--pk-color-primary);
 }
