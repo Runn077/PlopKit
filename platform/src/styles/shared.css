@@ -54,7 +54,36 @@
 }
 
 /* --- Buttons --- */
-.btn,
+.btn {
+  border: 3px solid black;
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  font-family: var(--pk-font);
+  cursor: pointer;
+  background: white;
+  color: var(--pk-color-text);
+  box-shadow: 4px 4px 0 black;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.btn:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 black;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 4px 4px 0 black;
+}
+
+.btn-primary {
+  background: #333;
+  color: white;
+}
+
 .sc-btn,
 .sw-btn,
 .account-btn {
@@ -69,14 +98,12 @@
   color: var(--pk-color-text);
 }
 
-.btn:hover,
 .sc-btn:hover,
 .sw-btn:hover,
 .account-btn:hover {
   background: var(--pk-color-bg-hover);
 }
 
-.btn-primary,
 .sc-btn-primary,
 .sw-btn-primary,
 .account-btn-primary {
@@ -85,7 +112,6 @@
   border-color: var(--pk-color-primary);
 }
 
-.btn-primary:hover,
 .sc-btn-primary:hover,
 .sw-btn-primary:hover,
 .account-btn-primary:hover:not(:disabled) {
@@ -114,7 +140,7 @@
 .sc-btn-danger:hover,
 .account-btn-danger:hover:not(:disabled),
 .sw-btn-danger-outline:hover {
-  background: var(--pk-color-primary);
+  background: #ff6b6b;
   color: var(--pk-color-on-primary);
 }
 

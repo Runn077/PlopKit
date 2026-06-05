@@ -136,8 +136,8 @@ function SiteWidgets() {
             </div>
             <div className="sw-header">
               <h2 className="sw-title">Widgets</h2>
-              <button className="sw-btn sw-btn-primary" onClick={() => setShowModal(true)}>
-                + Add widget
+              <button className="btn btn-primary" onClick={() => setShowModal(true)}>
+                + Add Widget
               </button>
             </div>
             <WidgetList
