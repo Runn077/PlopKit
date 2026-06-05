@@ -2,9 +2,9 @@ import prisma from '../lib/prisma.js'
 import { PLAN_LIMITS } from '../constants/index.js'
 
 export async function getUsage(userId: string, plan: string) {
-  const { _sum } = await prisma.commentWidget.aggregate({
+  const { _sum } = await prisma.widget.aggregate({
     _sum: { monthlyLoads: true },
-    where: { widget: { site: { userId } } },
+    where: { site: { userId } },
   })
 
   return {
