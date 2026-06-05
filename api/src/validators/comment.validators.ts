@@ -30,3 +30,8 @@ export const ownerPostSchema = z.object({
   page_url: z.string().min(1, 'Page URL is required'),
   widget_key: z.string().min(1, 'Widget key is required'),
 })
+
+export const updateBannedWordsSchema = z.object({
+  bannedWords: z.array(z.string()).optional(),
+  autoDeleteBannedWords: z.boolean().optional(),
+})

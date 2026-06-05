@@ -1,9 +1,9 @@
 import sanitizeHtml from 'sanitize-html'
 import prisma from '../lib/prisma.js'
 import { AppError } from '../errors/appError.js'
-import { getWidgetByKey } from './widget.service.js'
 import { LIMITS } from '../constants/index.js'
 import { CommentStatus } from '../generated/prisma/enums.js'
+import { getWidgetOwnedByUser, trackWidgetLoad, getWidgetByKey } from './widget.service.js'
 
 async function getCommentAndVerifyOwnership(commentId: string, userId: string) {
   const comment = await prisma.comment.findUnique({ where: { id: commentId } })
@@ -419,6 +419,27 @@ export async function unpinComment(widgetKey: string, userId: string) {
   })
 }
 
-function trackWidgetLoad(widgetKey: string) {
-  throw new Error('Function not implemented.')
+export async function updateAutoApprove(widgetId: string, userId: string, autoApprove: boolean) {
+  const widget = await getWidgetOwnedByUser(widgetId, userId)
+  if (!widget.commentWidget) throw new AppError(404, 'Widget not found')
+  return prisma.commentWidget.update({
+    where: { id: widget.commentWidget.id },
+    data: { autoApprove },
+  })
+}
+
+export async function updateBannedWords(
+  widgetId: string,
+  userId: string,
+  data: { bannedWords?: string[]; autoDeleteBannedWords?: boolean },
+) {
+  const widget = await getWidgetOwnedByUser(widgetId, userId)
+  if (!widget.commentWidget) throw new AppError(404, 'Widget not found')
+  return prisma.commentWidget.update({
+    where: { id: widget.commentWidget.id },
+    data: {
+      ...(data.bannedWords !== undefined && { bannedWords: data.bannedWords }),
+      ...(data.autoDeleteBannedWords !== undefined && { autoDeleteBannedWords: data.autoDeleteBannedWords }),
+    },
+  })
 }

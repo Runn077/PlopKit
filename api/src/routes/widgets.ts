@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { requireAuth } from '../middleware/requireAuth.js'
 import { validate } from '../middleware/validate.js'
-import { createWidgetSchema, updateWidgetSchema, updateBannedWordsSchema } from '../validators/widget.validators.js'
+import { createWidgetSchema, updateWidgetSchema } from '../validators/widget.validators.js'
 import * as widgetService from '../services/widget.service.js'
 
 const router = Router()
@@ -48,15 +48,6 @@ router.delete('/:id', requireAuth, async (req, res, next) => {
     const { id } = req.params as { id: string }
     await widgetService.deleteWidget(id, user.id)
     res.json({ success: true })
-  } catch (err) { next(err) }
-})
-
-router.patch('/:id/banned-words', requireAuth, validate(updateBannedWordsSchema), async (req, res, next) => {
-  try {
-    const { user } = res.locals.session
-    const { id } = req.params as { id: string }
-    const updated = await widgetService.updateBannedWords(id, user.id, req.body)
-    res.json(updated)
   } catch (err) { next(err) }
 })
 
