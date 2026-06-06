@@ -3,6 +3,19 @@ import { apiFetch } from '../../../lib/api'
 import type { Comment, Reply } from '../../../types'
 import '../SiteComments.css'
 
+const BODY_LIMIT = 1000
+const MAX_LINES = 3
+
+function truncateBody(body: string, expanded: boolean) {
+  const lines = body.split('\n')
+  const isLong = body.length > BODY_LIMIT || lines.length > MAX_LINES
+  if (expanded || !isLong) return { displayBody: body, isLong }
+  const displayBody = lines.length > MAX_LINES
+    ? lines.slice(0, MAX_LINES).join('\n') + '...'
+    : body.slice(0, BODY_LIMIT) + '...'
+  return { displayBody, isLong }
+}
+
 interface Props {
   comment: Comment
   pinnedCommentId: string | null
@@ -27,6 +40,8 @@ function PlatformReplyItem({
   const [replyBody, setReplyBody] = useState('')
   const [replyLoading, setReplyLoading] = useState(false)
 
+  const isQuoteDeleted = reply.quoted && (reply.quoted.deletedAt !== null || reply.quoted.status !== 'approved')
+
   const handleOwnerReply = async () => {
     if (!replyBody.trim()) return
     setReplyLoading(true)
@@ -45,16 +60,23 @@ function PlatformReplyItem({
 
   return (
     <div className="sc-reply">
+      {reply.quoted && (
+        <div className="sc-quoted-comment">
+          <p className="sc-quoted-body">
+            {isQuoteDeleted ? 'Deleted message' : reply.quoted.body}
+          </p>
+        </div>
+      )}
       {reply.isOwnerReply && <span className="sc-owner-badge">Site owner</span>}
       <p className="sc-reply-body">{reply.body}</p>
       <div className="sc-reply-meta">
-        <span className="sc-reply-date">{new Date(reply.createdAt).toLocaleDateString()}</span>
-        <div className="sc-comment-actions">
+        <span className="sc-reply-date">{new Date(reply.createdAt).toLocaleString()}</span>
+        <button className="sc-btn-reply-text" onClick={() => setReplyOpen(v => !v)}>
+          {replyOpen ? 'Cancel' : 'Reply'}
+        </button>
+        <div className="sc-comment-mod-actions">
           <button className="sc-btn sc-btn-danger" onClick={() => onDelete(reply.id, parentId)}>
             Delete
-          </button>
-          <button className="sc-btn-reply-text" onClick={() => setReplyOpen(v => !v)}>
-            {replyOpen ? 'Cancel' : 'Reply'}
           </button>
         </div>
       </div>
@@ -75,7 +97,7 @@ function PlatformReplyItem({
                 Cancel
               </button>
               <button
-                className="sc-btn sc-btn-primary"
+                className="sc-btn-post-reply"
                 onClick={handleOwnerReply}
                 disabled={replyLoading || !replyBody.trim()}
               >
@@ -95,9 +117,11 @@ function PlatformCommentItem({ comment, pinnedCommentId, onDelete, onReplyPosted
   const [replyBody, setReplyBody] = useState('')
   const [replyLoading, setReplyLoading] = useState(false)
   const [pinLoading, setPinLoading] = useState(false)
+  const [expanded, setExpanded] = useState(false)
 
   const isPinned = pinnedCommentId === comment.id
   const hasPinnedOther = pinnedCommentId !== null && pinnedCommentId !== comment.id
+  const { displayBody, isLong } = truncateBody(comment.body, expanded)
 
   const handleOwnerReply = async () => {
     if (!replyBody.trim()) return
@@ -130,32 +154,37 @@ function PlatformCommentItem({ comment, pinnedCommentId, onDelete, onReplyPosted
 
   return (
     <div className={`sc-comment ${isPinned ? 'sc-comment-pinned' : ''}`}>
-      <div style={{ display: 'flex', gap: '8px', marginBottom: '6px' }}>
-        {isPinned && <span className="sc-pin-badge">Pinned</span>}
-        {comment.isOwnerReply && <span className="sc-owner-badge">Site owner</span>}
-      </div>
-      <p className="sc-comment-body">{comment.body}</p>
-      <div className="sc-comment-meta">
-        <div className="sc-comment-info">
-          <span className="sc-comment-url">{comment.pageUrl}</span>
-          <span className="sc-comment-date">{new Date(comment.createdAt).toLocaleDateString()}</span>
+      {(isPinned || comment.isOwnerReply) && (
+        <div className="sc-comment-badges">
+          {isPinned && <span className="sc-pin-badge">Pinned</span>}
+          {comment.isOwnerReply && <span className="sc-owner-badge">Site owner</span>}
         </div>
-        <div className="sc-comment-actions">
+      )}
+      <p className="sc-comment-body">{displayBody}</p>
+      {isLong && (
+        <button className="sc-btn-show-more" onClick={() => setExpanded(v => !v)}>
+          {expanded ? 'Show less' : 'Show more'}
+        </button>
+      )}
+      <span className="sc-comment-url">{comment.pageUrl}</span>
+      <div className="sc-comment-meta">
+        <span className="sc-comment-date">{new Date(comment.createdAt).toLocaleString()}</span>
+        <button className="sc-btn-reply-text" onClick={() => setReplyOpen(v => !v)}>
+          {replyOpen ? 'Cancel' : 'Reply'}
+        </button>
+        <div className="sc-comment-mod-actions">
           <button className="sc-btn sc-btn-danger" onClick={() => onDelete(comment.id)}>
             Delete
           </button>
           {isPinned ? (
-            <button className="sc-btn" onClick={handleUnpin} disabled={pinLoading}>
+            <button className="sc-btn sc-btn-pin" onClick={handleUnpin} disabled={pinLoading}>
               Remove pin
             </button>
           ) : !hasPinnedOther ? (
-            <button className="sc-btn" onClick={handlePin} disabled={pinLoading}>
+            <button className="sc-btn sc-btn-pin" onClick={handlePin} disabled={pinLoading}>
               Pin
             </button>
           ) : null}
-          <button className="sc-btn-reply-text" onClick={() => setReplyOpen(v => !v)}>
-            {replyOpen ? 'Cancel' : 'Reply'}
-          </button>
         </div>
       </div>
       {replyOpen && (
@@ -175,7 +204,7 @@ function PlatformCommentItem({ comment, pinnedCommentId, onDelete, onReplyPosted
                 Cancel
               </button>
               <button
-                className="sc-btn sc-btn-primary"
+                className="sc-btn-post-reply"
                 onClick={handleOwnerReply}
                 disabled={replyLoading || !replyBody.trim()}
               >

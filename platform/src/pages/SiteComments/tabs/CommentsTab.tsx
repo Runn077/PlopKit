@@ -5,6 +5,7 @@ import '../SiteComments.css'
 
 interface Props {
   comments: Comment[]
+  total: number
   hasMore: boolean
   loadingMore: boolean
   pinnedCommentId: string | null
@@ -17,7 +18,7 @@ interface Props {
 }
 
 function CommentsTab({
-  comments, hasMore, loadingMore, pinnedCommentId,
+  comments, total, hasMore, loadingMore, pinnedCommentId,
   onDelete, onLoadMore, onReplyPosted, onPin, onUnpin, onOwnerPost,
 }: Props) {
   const [postBody, setPostBody] = useState('')
@@ -32,10 +33,14 @@ function CommentsTab({
   }
 
   return (
-    <div>
+    <div className="sc-comments-tab">
+      <h3 className="sc-comments-heading">
+        {total} {total === 1 ? 'Comment' : 'Comments'}
+      </h3>
+
       <div className="sc-owner-post">
         <textarea
-          className="sc-reply-textarea"
+          className="sc-reply-textarea sc-owner-textarea"
           value={postBody}
           onChange={e => setPostBody(e.target.value)}
           placeholder="Post as site owner..."
@@ -44,7 +49,7 @@ function CommentsTab({
         <div className="sc-reply-input-actions">
           <span className="sc-char-count">{postBody.length}/1000</span>
           <button
-            className="sc-btn sc-btn-primary"
+            className="sc-btn-post"
             onClick={handlePost}
             disabled={posting || !postBody.trim()}
           >

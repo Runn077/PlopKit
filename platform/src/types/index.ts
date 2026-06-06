@@ -19,6 +19,13 @@ export interface Widget {
   createdAt: string
 }
 
+export interface QuotedComment {
+  id: string
+  body: string
+  deletedAt: string | null
+  status: string
+}
+
 export interface Reply {
   id: string
   body: string
@@ -27,6 +34,8 @@ export interface Reply {
   deletedAt?: string | null
   createdAt: string
   parent?: { body: string }
+  quotedId: string | null
+  quoted: QuotedComment | null
   isOwnerReply: boolean
 }
 

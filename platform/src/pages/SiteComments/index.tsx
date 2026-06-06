@@ -23,6 +23,7 @@ function SiteComments() {
   const [pendingComments, setPendingComments] = useState<Comment[]>([])
   const [deletedComments, setDeletedComments] = useState<Comment[]>([])
   const [hasMore, setHasMore] = useState(false)
+  const [commentTotal, setCommentTotal] = useState(0)
   const [cursor, setCursor] = useState<string | undefined>()
   const [loading, setLoading] = useState(true)
   const [loadingMore, setLoadingMore] = useState(false)
@@ -66,6 +67,7 @@ function SiteComments() {
     const data = await res.json()
     setComments(prev => cursor ? [...prev, ...data.comments] : data.comments)
     setHasMore(data.hasMore)
+    if (!cursor) setCommentTotal(data.total ?? data.comments.length)
     if (data.comments.length > 0) setCursor(data.comments[data.comments.length - 1].id)
     setLoading(false)
     setLoadingMore(false)
@@ -94,8 +96,12 @@ function SiteComments() {
         setComments(prev => prev.map(c =>
           c.id === parentId ? { ...c, replies: c.replies.filter(r => r.id !== commentId) } : c
         ))
+        setCommentTotal(prev => Math.max(0, prev - 1))
       } else {
+        const deleted = comments.find(c => c.id === commentId)
+        const removedCount = 1 + (deleted?.replies.length ?? 0)
         setComments(prev => prev.filter(c => c.id !== commentId))
+        setCommentTotal(prev => Math.max(0, prev - removedCount))
       }
     }
   }
@@ -243,12 +249,9 @@ function SiteComments() {
     setComments(prev => prev.map(c =>
       c.id === commentId
         ? { ...c, replies: [...c.replies, reply] }
-        : { ...c, replies: c.replies.map(r => r.id === commentId
-            ? { ...r }
-            : r
-          )
-        }
+        : c
     ))
+    setCommentTotal(prev => prev + 1)
   }
 
   async function handleOwnerPost(body: string) {
@@ -264,6 +267,7 @@ function SiteComments() {
     if (res.ok) {
       const newComment = await res.json()
       setComments(prev => [{ ...newComment, replies: [] }, ...prev])
+      setCommentTotal(prev => prev + 1)
     }
   }
 
@@ -341,6 +345,7 @@ function SiteComments() {
         {activeTab === 'comments' && (
           <CommentsTab
             comments={comments}
+            total={commentTotal}
             hasMore={hasMore}
             loadingMore={loadingMore}
             pinnedCommentId={widget.commentWidget?.pinnedCommentId ?? null}

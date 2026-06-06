@@ -351,3 +351,336 @@
   font-size: 12px;
   color: var(--pk-color-text-muted);
 }
+
+/* Comments tab — widget-svelte layout (scoped) */
+.sc-comments-tab {
+  font-size: 14px;
+  color: #0f0f0f;
+}
+
+.sc-comments-tab .sc-comments-heading {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.sc-comments-tab .sc-owner-post {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.sc-comments-tab .sc-owner-textarea {
+  height: 80px;
+  font-size: 14px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background: transparent;
+  color: #0f0f0f;
+}
+
+.sc-comments-tab .sc-owner-textarea:focus,
+.sc-comments-tab .sc-owner-textarea:not(:placeholder-shown) {
+  border: 2px solid #0f0f0f;
+}
+
+.sc-comments-tab .sc-btn-post {
+  background: #0f0f0f;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--pk-font);
+}
+
+.sc-comments-tab .sc-btn-post:hover {
+  background: #333;
+}
+
+.sc-comments-tab .sc-btn-post:disabled {
+  background: #ccc;
+  cursor: default;
+}
+
+.sc-comments-tab .sc-empty {
+  color: #999;
+  font-size: 14px;
+  padding: 16px 0;
+}
+
+.sc-comments-tab .sc-comment {
+  padding: 12px 0;
+  border-top: 1px solid #f0f0f0;
+  border-bottom: none;
+}
+
+.sc-comments-tab .sc-comment-pinned {
+  border-top: 2px solid #0f0f0f;
+}
+
+.sc-comments-tab .sc-comment-badges {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.sc-comments-tab .sc-comment-body {
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 6px;
+  white-space: pre-wrap;
+  color: #0f0f0f;
+}
+
+.sc-comments-tab .sc-btn-show-more {
+  background: none;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: #0f0f0f;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 6px;
+  font-family: var(--pk-font);
+}
+
+.sc-comments-tab .sc-btn-show-more:hover {
+  color: #555;
+}
+
+.sc-comments-tab .sc-comment-url {
+  display: block;
+  font-size: 11px;
+  color: #999;
+  font-family: var(--pk-font-mono);
+  margin-bottom: 6px;
+}
+
+.sc-comments-tab .sc-comment-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sc-comments-tab .sc-comment-date {
+  font-size: 12px;
+  color: #999;
+}
+
+.sc-comments-tab .sc-comment-mod-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.sc-comments-tab .sc-btn-reply-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: #0f0f0f;
+}
+
+.sc-comments-tab .sc-btn-reply-text:hover {
+  color: #555;
+}
+
+.sc-comments-tab .sc-btn {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid #e0e0e0;
+  background: transparent;
+  color: #0f0f0f;
+}
+
+.sc-comments-tab .sc-btn:hover {
+  background: #f5f5f5;
+}
+
+.sc-comments-tab .sc-btn-pin {
+  border-color: #ccc;
+}
+
+.sc-comments-tab .sc-btn-danger {
+  border-color: #ff6b6b;
+  color: #0f0f0f;
+  background: transparent;
+}
+
+.sc-comments-tab .sc-btn-danger:hover {
+  background: #ff6b6b;
+  color: #fff;
+}
+
+.sc-comments-tab .sc-replies-toggle {
+  font-size: 12px;
+  font-weight: 600;
+  color: #0f0f0f;
+  margin-top: 8px;
+}
+
+.sc-comments-tab .sc-replies-toggle:hover {
+  color: #555;
+}
+
+.sc-comments-tab .sc-replies {
+  margin-top: 8px;
+  margin-left: 16px;
+  padding-left: 12px;
+  border-left: 2px solid #e0e0e0;
+  gap: 0;
+}
+
+.sc-comments-tab .sc-reply {
+  padding: 8px 0;
+  gap: 0;
+}
+
+.sc-comments-tab .sc-reply-body {
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 4px;
+  white-space: pre-wrap;
+  color: #0f0f0f;
+}
+
+.sc-comments-tab .sc-reply-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.sc-comments-tab .sc-reply-meta .sc-comment-mod-actions {
+  margin-left: auto;
+}
+
+.sc-comments-tab .sc-reply-date {
+  font-size: 12px;
+  color: #999;
+}
+
+.sc-comments-tab .sc-owner-badge {
+  display: inline-block;
+  align-self: flex-start;
+  width: fit-content;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  background: #4ecdc4;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-bottom: 0;
+}
+
+.sc-comments-tab .sc-pin-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  background: #999;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.sc-comments-tab .sc-quoted-comment {
+  background: #fff8bb;
+  padding: 6px 10px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+
+.sc-comments-tab .sc-quoted-body {
+  font-size: 12px;
+  color: #353535;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  margin: 0;
+}
+
+.sc-comments-tab .sc-reply-input {
+  margin-top: 10px;
+}
+
+.sc-comments-tab .sc-reply-textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 13px;
+  background: transparent;
+  color: #0f0f0f;
+  height: 60px;
+}
+
+.sc-comments-tab .sc-reply-textarea:focus {
+  border: 2px solid #0f0f0f;
+}
+
+.sc-comments-tab .sc-char-count {
+  font-size: 12px;
+  color: #999;
+}
+
+.sc-comments-tab .sc-btn-cancel-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: #555;
+}
+
+.sc-comments-tab .sc-btn-cancel-text:hover {
+  color: #0f0f0f;
+}
+
+.sc-comments-tab .sc-btn-post-reply {
+  background: #0f0f0f;
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--pk-font);
+}
+
+.sc-comments-tab .sc-btn-post-reply:hover {
+  background: #333;
+}
+
+.sc-comments-tab .sc-btn-post-reply:disabled {
+  background: #ccc;
+  cursor: default;
+}
+
+.sc-comments-tab .sc-load-more {
+  background: none;
+  border: 1px solid #e0e0e0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f0f0f;
+  padding: 8px 16px;
+  border-radius: 20px;
+  margin-top: 12px;
+  width: 100%;
+}
+
+.sc-comments-tab .sc-load-more:hover {
+  background: #f5f5f5;
+}
+
+.sc-comments-tab .sc-load-more:disabled {
+  color: #999;
+  cursor: default;
+  opacity: 1;
+}
