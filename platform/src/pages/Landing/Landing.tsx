@@ -11,9 +11,8 @@ export default function LandingPage() {
         <div className="logo">PlopKit</div>
 
         <div className="nav-links">
-          <button>About</button>
           <button>Pricing</button>
-          <button>Docs</button>
+          <button onClick={() => navigate('/docs')}>Docs</button>
           <button onClick={() => navigate('/login')}>
             Login
           </button>
@@ -36,7 +35,7 @@ export default function LandingPage() {
             Start Free
           </button>
 
-          <button className="secondary-btn">
+          <button className="secondary-btn" onClick={() => navigate('/demo')}>
             View Demo
           </button>
         </div>
