@@ -16,7 +16,7 @@
 }
 
 body {
-  background: var(--main);
+  background: rgb(255, 255, 255);
   font-family: 'Space Grotesk', sans-serif;
   overflow-x: hidden;
 }
@@ -271,6 +271,8 @@ body {
   padding: 24px 20px;
 
   position: relative;
+
+  background: #ffffff;
 }
 
 /* POSITIONS */

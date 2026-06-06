@@ -1,7 +1,12 @@
+import LandingNavbar from "../../components/LandingNavbar"
+
 export default function DemoPage() {
   return(
     <div>
-      Demo Page
+      <LandingNavbar/>
+        <div>
+          Demo Page
+        </div>
     </div>
   )
 }  

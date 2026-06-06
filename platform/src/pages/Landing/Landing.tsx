@@ -1,24 +1,24 @@
 import './Landing.css'
 import Footer from '../../components/Footer'
-import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useNavigate, useLocation} from 'react-router-dom'
+import LandingNavbar from '../../components/LandingNavbar'
 
 export default function LandingPage() {
   const navigate = useNavigate()
+  const location = useLocation()
+
+  useEffect(() => {
+    if (location.state?.scrollTo === 'pricing-section') {
+      document.getElementById('pricing-section')?.scrollIntoView({
+        behavior: 'smooth'
+      })
+    }
+  }, [location])
 
   return (
     <div className="landing-page">
-      <nav className="navbar-landing">
-        <div className="logo">PlopKit</div>
-
-        <div className="nav-links">
-          <button>Pricing</button>
-          <button onClick={() => navigate('/docs')}>Docs</button>
-          <button onClick={() => navigate('/login')}>
-            Login
-          </button>
-        </div>
-      </nav>
-
+      <LandingNavbar />
       <main className="hero">
         <h1>
           Embedded Comments
@@ -111,9 +111,13 @@ export default function LandingPage() {
       </section>
 
       {/* PRICING */}
-      <section className="pricing-section">
+      <section 
+        id="pricing-section" 
+        className="pricing-section"
+      >
         <h2 className="section-title">Pricing</h2>
-        <p className="pricing-subtitle">Pay for what you use. Cancel or upgrade anytime.</p>
+        <p className="pricing-subtitle">Cancel or upgrade anytime.</p>
+        <p className="pricing-subtitle">No overages.</p>
         <div className="pricing-cards">
           {[
             { tier: 'Free', price: '$0', period: 'forever', loads: '10,000', desc: 'Perfect for personal projects and experimentation.', color: 'white', cta: 'Get Started'},
