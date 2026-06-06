@@ -1,32 +1,9 @@
-import { useEffect, useRef } from 'react'
 import './Landing.css'
 import Footer from '../../components/Footer'
 import { useNavigate } from 'react-router-dom'
 
 export default function LandingPage() {
-  const widgetRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
-
-  useEffect(() => {
-    const container = widgetRef.current
-
-    if (!container) return
-
-    const script = document.createElement('script')
-
-    script.src = 'http://localhost:5173/widget.js'
-    script.setAttribute(
-      'data-widget-key',
-      '062add3f97441b86015149ebb8d94682'
-    )
-    script.setAttribute('data-widget', 'comments')
-
-    container.appendChild(script)
-
-    return () => {
-      container.innerHTML = ''
-    }
-  }, [])
 
   return (
     <div className="landing-page">
@@ -51,7 +28,7 @@ export default function LandingPage() {
         </h1>
 
         <p className="hero-subtitle">
-          Add comments to any website with a single script tag.
+          Add anonymous comments to any website with a single script tag.
         </p>
 
         <div className="hero-actions">
@@ -63,19 +40,101 @@ export default function LandingPage() {
             View Demo
           </button>
         </div>
-
-        <div className="widget-preview">
-          <div className="browser-header">
-          </div>
-
-          <div className="browser-content">
-            <div
-              ref={widgetRef}
-              className="widget-embed"
-            />
-          </div>
-        </div>
       </main>
+
+      {/* WORKFLOW */}
+      <section className="workflow-section">
+        <h2 className="section-title">How It Works</h2>
+
+        <div className="workflow-grid">
+
+          <div className="step-card step-1">
+            <span className="step-num">01</span>
+            <h3 className="step-label">Create Account</h3>
+            <p className="step-desc">
+              Sign up free in seconds. No credit card required.
+            </p>
+          </div>
+
+          <div className="step-card step-2">
+            <span className="step-num">02</span>
+            <h3 className="step-label">Add Your Site</h3>
+            <p className="step-desc">
+              Register your domain so we know where widgets will live.
+            </p>
+          </div>
+
+          <div className="step-card step-3">
+            <span className="step-num">03</span>
+            <h3 className="step-label">Add a Widget</h3>
+            <p className="step-desc">
+              Name the widget and configure it from your dashboard.
+            </p>
+          </div>
+
+          <div className="step-card step-4">
+            <span className="step-num">04</span>
+            <h3 className="step-label">Copy & Paste Script</h3>
+            <p className="step-desc">
+              One script tag. Drop it anywhere in your HTML.
+            </p>
+          </div>
+
+          <div className="step-card step-5">
+            <div className="step-5-inner">
+
+              <div className="step-5-left">
+                <span className="step-num">05</span>
+                <h3 className="step-label">Moderate</h3>
+                <p className="step-desc">Manage your community from a single dashboard.</p>
+                <ul className="mod-features">
+                  <li> Pin Comments</li>
+                  <li> Filter Words</li>
+                  <li> Accept / Reject / Delete Comments</li>
+                </ul>
+              </div>
+
+              <div className="step-5-right">
+                <p className="embed-headline">All from a single script tag.</p>
+                <div className="embed-code-block">
+                  <code className="embed-code">
+                    {`<script src="https://plopkit.com/widget.js"`}<br />
+                    {`  data-widget-key="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">`}<br />
+                    {`</script>`}
+                  </code>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* PRICING */}
+      <section className="pricing-section">
+        <h2 className="section-title">Pricing</h2>
+        <p className="pricing-subtitle">Pay for what you use. Cancel or upgrade anytime.</p>
+        <div className="pricing-cards">
+          {[
+            { tier: 'Free', price: '$0', period: 'forever', loads: '10,000', desc: 'Perfect for personal projects and experimentation.', color: 'white', cta: 'Get Started'},
+            { tier: 'Hobby', price: '$5', period: '/month', loads: '150,000', desc: 'For indie developers and small sites that are growing.', color: 'var(--yellow)', cta: 'Start Hobby'},
+            { tier: 'Pro', price: '$12', period: '/month', loads: '500,000', desc: 'For high-traffic sites that need serious capacity.', color: 'var(--mint)', cta: 'Go Pro'},
+          ].map(plan => (
+            <div key={plan.tier} className={`pricing-card 'pricing-card--featured`} style={{ background: plan.color }}>
+              <div className="pricing-tier">{plan.tier}</div>
+              <div className="pricing-price">
+                {plan.price}
+                <span className="pricing-period">{plan.period}</span>
+              </div>
+              <div className="pricing-loads">{plan.loads} widget loads / mo</div>
+              <p className="pricing-desc">{plan.desc}</p>
+              <button className="pricing-cta" onClick={() => navigate('/signup')}>{plan.cta}</button>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <Footer />
     </div>
   )
