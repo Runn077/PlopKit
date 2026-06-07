@@ -15,14 +15,17 @@ function getDeletedExpiry(deletedAt: string) {
 interface Props {
   comments: Comment[]
   orphanedReplies: Reply[]
+  hasMore: boolean
+  loadingMore: boolean
   onRestore: (commentId: string) => Promise<void>
   onPermanentDelete: (commentId: string) => Promise<void>
   onRestoreReply: (replyId: string) => Promise<void>
   onPermanentDeleteReply: (replyId: string) => Promise<void>
   onDeleteAll: () => Promise<void>
+  onLoadMore: () => void
 }
 
-function DeletedTab({ comments, orphanedReplies, onRestore, onPermanentDelete, onRestoreReply, onPermanentDeleteReply, onDeleteAll }: Props) {
+function DeletedTab({ comments, orphanedReplies, hasMore, loadingMore, onRestore, onPermanentDelete, onRestoreReply, onPermanentDeleteReply, onDeleteAll, onLoadMore }: Props) {
   if (comments.length === 0 && orphanedReplies.length === 0) {
     return <p className="sc-empty">No recently deleted comments.</p>
   }
@@ -46,6 +49,13 @@ function DeletedTab({ comments, orphanedReplies, onRestore, onPermanentDelete, o
             expiry={comment.deletedAt ? getDeletedExpiry(comment.deletedAt) : undefined}
           />
         ))}
+        
+        {hasMore && (
+          <button className="sc-load-more" onClick={onLoadMore} disabled={loadingMore}>
+            {loadingMore ? 'Loading...' : 'Load more'}
+          </button>
+        )}
+
         {orphanedReplies.length > 0 && (
           <>
             <p className="sc-section-label">Replies to active comments</p>

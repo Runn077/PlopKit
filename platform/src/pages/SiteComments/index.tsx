@@ -22,6 +22,12 @@ function SiteComments() {
   const [comments, setComments] = useState<Comment[]>([])
   const [pendingComments, setPendingComments] = useState<Comment[]>([])
   const [deletedComments, setDeletedComments] = useState<Comment[]>([])
+  const [pendingHasMore, setPendingHasMore] = useState(false)
+  const [pendingCursor, setPendingCursor] = useState<string | null>(null)
+  const [loadingMorePending, setLoadingMorePending] = useState(false)
+  const [deletedHasMore, setDeletedHasMore] = useState(false)
+  const [deletedCursor, setDeletedCursor] = useState<string | null>(null)
+  const [loadingMoreDeleted, setLoadingMoreDeleted] = useState(false)
   const [hasMore, setHasMore] = useState(false)
   const [commentTotal, setCommentTotal] = useState(0)
   const [cursor, setCursor] = useState<string | undefined>()
@@ -36,8 +42,16 @@ function SiteComments() {
 
   useEffect(() => {
     if (!widget) return
-    if (activeTab === 'pending') fetchPending(widget.widgetKey)
-    if (activeTab === 'deleted') fetchDeleted(widget.widgetKey)
+    if (activeTab === 'pending') {
+      setPendingComments([])
+      setPendingCursor(null)
+      fetchPending(widget.widgetKey)
+    }
+    if (activeTab === 'deleted') {
+      setDeletedComments([])
+      setDeletedCursor(null)
+      fetchDeleted(widget.widgetKey)
+    }
   }, [activeTab, widget])
 
   async function fetchData() {
@@ -73,18 +87,28 @@ function SiteComments() {
     setLoadingMore(false)
   }
 
-  async function fetchPending(widgetKey: string) {
-    const res = await apiFetch(`/comments/pending?widget_key=${widgetKey}`)
+  async function fetchPending(widgetKey: string, cursor?: string) {
+    const params = new URLSearchParams({ widget_key: widgetKey })
+    if (cursor) params.set('cursor', cursor)
+    const res = await apiFetch(`/comments/pending?${params}`)
     const data = await res.json()
-    setPendingComments(data.comments)
-    setOrphanedReplies(data.orphanedReplies)
+    setPendingComments(prev => cursor ? [...prev, ...data.comments] : data.comments)
+    if (!cursor) setOrphanedReplies(data.orphanedReplies)
+    setPendingHasMore(data.hasMore)
+    setPendingCursor(data.nextCursor ?? null)
+    setLoadingMorePending(false)
   }
 
-  async function fetchDeleted(widgetKey: string) {
-    const res = await apiFetch(`/comments/deleted?widget_key=${widgetKey}`)
+  async function fetchDeleted(widgetKey: string, cursor?: string) {
+    const params = new URLSearchParams({ widget_key: widgetKey })
+    if (cursor) params.set('cursor', cursor)
+    const res = await apiFetch(`/comments/deleted?${params}`)
     const data = await res.json()
-    setDeletedComments(data.comments)
-    setOrphanedDeletedReplies(data.orphanedReplies)
+    setDeletedComments(prev => cursor ? [...prev, ...data.comments] : data.comments)
+    if (!cursor) setOrphanedDeletedReplies(data.orphanedReplies)
+    setDeletedHasMore(data.hasMore)
+    setDeletedCursor(data.nextCursor ?? null)
+    setLoadingMoreDeleted(false)
   }
 
   async function handleDelete(commentId: string, parentId?: string) {
@@ -366,22 +390,36 @@ function SiteComments() {
             comments={pendingComments}
             orphanedReplies={orphanedReplies}
             autoApprove={widget.commentWidget?.autoApprove ?? false}
+            hasMore={pendingHasMore}
+            loadingMore={loadingMorePending}
             onApprove={handleApprove}
             onReject={handleReject}
             onApproveReply={handleApproveReply}
             onRejectReply={handleRejectReply}
             onToggleAutoApprove={handleToggleAutoApprove}
+            onLoadMore={() => {
+              if (!widget || !pendingCursor) return
+              setLoadingMorePending(true)
+              fetchPending(widget.widgetKey, pendingCursor)
+            }}
           />
         )}
         {activeTab === 'deleted' && (
           <DeletedTab
             comments={deletedComments}
             orphanedReplies={orphanedDeletedReplies}
+            hasMore={deletedHasMore}
+            loadingMore={loadingMoreDeleted}
             onRestore={handleRestore}
             onPermanentDelete={handlePermanentDelete}
             onRestoreReply={handleRestoreReply}
             onPermanentDeleteReply={handlePermanentDeleteReply}
             onDeleteAll={handleDeleteAll}
+            onLoadMore={() => {
+              if (!widget || !deletedCursor) return
+              setLoadingMoreDeleted(true)
+              fetchDeleted(widget.widgetKey, deletedCursor)
+            }}
           />
         )}
         {activeTab === 'filter' && (

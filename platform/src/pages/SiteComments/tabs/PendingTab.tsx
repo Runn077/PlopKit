@@ -17,14 +17,16 @@ interface Props {
   comments: Comment[]
   orphanedReplies: Reply[]
   autoApprove: boolean
+  hasMore: boolean
+  loadingMore: boolean
   onApprove: (commentId: string) => Promise<void>
   onReject: (commentId: string) => Promise<void>
   onApproveReply: (replyId: string, parentId: string) => Promise<void>
   onRejectReply: (replyId: string, parentId: string) => Promise<void>
   onToggleAutoApprove: (value: boolean) => Promise<void>
+  onLoadMore: () => void
 }
-
-function PendingTab({ comments, orphanedReplies, autoApprove, onApprove, onReject, onApproveReply, onRejectReply, onToggleAutoApprove }: Props) {
+function PendingTab({ comments, orphanedReplies, autoApprove, hasMore, loadingMore, onApprove, onReject, onApproveReply, onRejectReply, onToggleAutoApprove, onLoadMore }: Props) {
   return (
     <div>
       <div className="sc-auto-approve">
@@ -62,6 +64,11 @@ function PendingTab({ comments, orphanedReplies, autoApprove, onApprove, onRejec
                 expiry={getPendingExpiry(comment.createdAt)}
               />
             ))}
+            {hasMore && (
+              <button className="sc-load-more" onClick={onLoadMore} disabled={loadingMore}>
+                {loadingMore ? 'Loading...' : 'Load more'}
+              </button>
+            )}
             {orphanedReplies.length > 0 && (
               <>
                 <p className="sc-section-label">Replies to approved comments</p>
