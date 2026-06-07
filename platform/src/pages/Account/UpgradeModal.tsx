@@ -10,7 +10,7 @@ type Props = {
 }
 
 const PLANS = [
-  { key: 'free' as Plan, name: 'Free', price: '$0', loads: '10,000' },
+  { key: 'free' as Plan, name: 'Free', price: '$0', loads: '5,000' },
   { key: 'hobby' as Plan, name: 'Hobby', price: '$5/mo', loads: '150,000' },
   { key: 'pro' as Plan, name: 'Pro', price: '$12/mo', loads: '500,000' },
 ]
