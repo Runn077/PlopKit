@@ -19,8 +19,8 @@ router.get('/approved', requireAuth, validate(getWidgetCommentsSchema, 'query'),
 router.get('/pending', requireAuth, validate(getWidgetCommentsSchema, 'query'), async (req, res, next) => {
   try {
     const { user } = res.locals.session
-    const { widget_key } = req.query as { widget_key: string }
-    const data = await commentService.getPendingComments(widget_key, user.id)
+    const { widget_key, cursor } = req.query as { widget_key: string; cursor?: string }
+    const data = await commentService.getPendingComments(widget_key, user.id, cursor)
     res.json(data)
   } catch (err) { next(err) }
 })
@@ -28,8 +28,8 @@ router.get('/pending', requireAuth, validate(getWidgetCommentsSchema, 'query'), 
 router.get('/deleted', requireAuth, validate(getWidgetCommentsSchema, 'query'), async (req, res, next) => {
   try {
     const { user } = res.locals.session
-    const { widget_key } = req.query as { widget_key: string }
-    const data = await commentService.getDeletedComments(widget_key, user.id)
+    const { widget_key, cursor } = req.query as { widget_key: string; cursor?: string }
+    const data = await commentService.getDeletedComments(widget_key, user.id, cursor)
     res.json(data)
   } catch (err) { next(err) }
 })

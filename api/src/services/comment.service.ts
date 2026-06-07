@@ -93,7 +93,7 @@ export async function getApprovedComments(
   }
 }
 
-export async function getPendingComments(widgetKey: string, userId: string) {
+export async function getPendingComments(widgetKey: string, userId: string, cursor?: string) {
   const widget = await getWidgetByKey(widgetKey)
   if (!widget?.commentWidget || widget.site.userId !== userId) {
     throw new AppError(404, 'Widget not found')
@@ -101,10 +101,23 @@ export async function getPendingComments(widgetKey: string, userId: string) {
 
   const commentWidgetId = widget.commentWidget.id
 
+  const baseWhere: any = {
+    commentWidgetId,
+    status: CommentStatus.pending,
+    deletedAt: null,
+    parentId: null,
+  }
+
+  if (cursor) {
+    const cursorComment = await prisma.comment.findUnique({ where: { id: cursor } })
+    if (cursorComment) baseWhere.createdAt = { lt: cursorComment.createdAt }
+  }
+
   const [comments, orphanedReplies] = await Promise.all([
     prisma.comment.findMany({
-      where: { commentWidgetId, status: CommentStatus.pending, deletedAt: null, parentId: null },
+      where: baseWhere,
       orderBy: { createdAt: 'desc' },
+      take: LIMITS.PENDING_PAGE_SIZE + 1,
       include: {
         replies: {
           where: { status: CommentStatus.pending, deletedAt: null },
@@ -112,6 +125,7 @@ export async function getPendingComments(widgetKey: string, userId: string) {
         },
       },
     }),
+    
     prisma.comment.findMany({
       where: {
         commentWidgetId,
@@ -125,10 +139,18 @@ export async function getPendingComments(widgetKey: string, userId: string) {
     }),
   ])
 
-  return { comments, orphanedReplies }
+  const hasMore = comments.length > LIMITS.PENDING_PAGE_SIZE
+  const page = hasMore ? comments.slice(0, LIMITS.PENDING_PAGE_SIZE) : comments
+
+  return {
+    comments: page,
+    orphanedReplies,
+    hasMore,
+    nextCursor: hasMore ? (page[page.length - 1]?.id ?? null) : null,
+  }
 }
 
-export async function getDeletedComments(widgetKey: string, userId: string) {
+export async function getDeletedComments(widgetKey: string, userId: string, cursor?: string) {
   const widget = await getWidgetByKey(widgetKey)
   if (!widget?.commentWidget || widget.site.userId !== userId) {
     throw new AppError(404, 'Widget not found')
@@ -136,10 +158,22 @@ export async function getDeletedComments(widgetKey: string, userId: string) {
 
   const commentWidgetId = widget.commentWidget.id
 
+  const baseWhere: any = {
+    commentWidgetId,
+    deletedAt: { not: null },
+    parentId: null,
+  }
+
+  if (cursor) {
+    const cursorComment = await prisma.comment.findUnique({ where: { id: cursor } })
+    if (cursorComment?.deletedAt) baseWhere.deletedAt = { not: null, lt: cursorComment.deletedAt }
+  }
+
   const [comments, orphanedReplies] = await Promise.all([
     prisma.comment.findMany({
-      where: { commentWidgetId, deletedAt: { not: null }, parentId: null },
+      where: baseWhere,
       orderBy: { deletedAt: 'desc' },
+      take: LIMITS.DELETED_PAGE_SIZE + 1,
       include: {
         replies: {
           where: { deletedAt: { not: null } },
@@ -159,7 +193,15 @@ export async function getDeletedComments(widgetKey: string, userId: string) {
     }),
   ])
 
-  return { comments, orphanedReplies }
+  const hasMore = comments.length > LIMITS.DELETED_PAGE_SIZE
+  const page = hasMore ? comments.slice(0, LIMITS.DELETED_PAGE_SIZE) : comments
+
+  return {
+    comments: page,
+    orphanedReplies,
+    hasMore,
+    nextCursor: hasMore ? (page[page.length - 1]?.id ?? null) : null,
+  }
 }
 
 export async function createComment(

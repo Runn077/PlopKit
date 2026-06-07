@@ -9,6 +9,7 @@ export const getCommentsSchema = z.object({
 
 export const getWidgetCommentsSchema = z.object({
   widget_key: z.string().min(1, 'Widget key is required'),
+  cursor: z.string().optional(),
 })
 
 export const createCommentSchema = z.object({
