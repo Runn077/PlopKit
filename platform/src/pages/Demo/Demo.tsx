@@ -22,7 +22,7 @@ export default function DemoPage() {
       <LandingNavbar />
       <div className="demo-container">
         <h1 className="demo-heading">Try it yourself</h1>
-        <p className="demo-subheading">This is a live PlopKit comment widget. Post a comment and see it appear instantly.</p>
+        <p className="demo-subheading">This is a live PlopKit comment widget.</p>
         <div ref={containerRef} />
       </div>
     </div>
