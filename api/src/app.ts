@@ -11,8 +11,10 @@ import sitesRouter from './routes/sites.js'
 import widgetsRouter from './routes/widgets.js'
 import accountRouter from './routes/account.js'
 import billingRouter from './routes/billing.js'
+import helmet from 'helmet'
 
 const app = express()
+app.use(helmet())
 
 app.use((req, res, next) => {
   if (req.path.startsWith('/api/public')) {
