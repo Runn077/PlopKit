@@ -34,6 +34,7 @@ export interface NewComment {
 }
 
 export interface CommentsResponse {
+  pinnedComment: Comment | null
   comments: Comment[]
   hasMore: boolean
   total: number

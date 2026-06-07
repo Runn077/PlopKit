@@ -13,24 +13,26 @@
   let total = $state(0)
   let pinnedCommentId = $state<string | null>(null)
   let limitReached = $state(false)
+  let pinnedComment = $state<Comment | null>(null)
   const toast = new Toast()
 
   async function fetchComments(cursor?: string) {
     loading = true
     const url = `${import.meta.env.VITE_API_URL}/public/comments?widget_key=${widgetKey}&page_url=${encodeURIComponent(pageUrl)}${cursor ? `&cursor=${cursor}` : ''}`
     const res = await fetch(url)
-
     if (res.status === 429) {
       limitReached = true
       loading = false
       return
     }
-
     const data: CommentsResponse = await res.json()
+    if (!cursor) {
+      pinnedComment = data.pinnedComment
+      pinnedCommentId = data.pinnedCommentId
+    }
     comments = cursor ? [...comments, ...data.comments] : data.comments
     hasMore = data.hasMore
     total = data.total ?? (cursor ? total : data.comments.length)
-    if (!cursor) pinnedCommentId = data.pinnedCommentId
     loading = false
   }
 
@@ -91,15 +93,23 @@
       <div class="toast {toast.fading ? 'toast-fade-out' : ''}">{toast.message}</div>
     {/if}
     <div class="comments-list">
-      {#if comments.length === 0 && !loading}
+      {#if comments.length === 0 && !pinnedComment && !loading}
         <p class="empty">No comments yet. Be the first!</p>
+      {/if}
+      {#if pinnedComment}
+        <CommentItem
+          comment={pinnedComment}
+          {widgetKey}
+          {pageUrl}
+          isPinned={true}
+        />
       {/if}
       {#each comments as c (c.id)}
         <CommentItem
           comment={c}
           {widgetKey}
           {pageUrl}
-          isPinned={pinnedCommentId === c.id}
+          isPinned={false}
         />
       {/each}
       {#if hasMore}

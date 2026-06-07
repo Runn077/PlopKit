@@ -37,6 +37,7 @@ function SiteComments() {
   const [orphanedReplies, setOrphanedReplies] = useState<Reply[]>([])
   const [orphanedDeletedReplies, setOrphanedDeletedReplies] = useState<Reply[]>([])
   const [error, setError] = useState('')
+  const [pinnedComment, setPinnedComment] = useState<Comment | null>(null)
 
   useEffect(() => { fetchData() }, [widgetId])
 
@@ -79,6 +80,7 @@ function SiteComments() {
     if (cursor) params.set('cursor', cursor)
     const res = await apiFetch(`/comments/approved?${params}`)
     const data = await res.json()
+    if (!cursor) setPinnedComment(data.pinnedComment ?? null)
     setComments(prev => cursor ? [...prev, ...data.comments] : data.comments)
     setHasMore(data.hasMore)
     if (!cursor) setCommentTotal(data.total ?? data.comments.length)
@@ -298,6 +300,9 @@ function SiteComments() {
   async function handlePin(commentId: string) {
     const res = await apiFetch(`/comments/${commentId}/pin`, { method: 'PATCH' })
     if (res.ok) {
+      const target = comments.find(c => c.id === commentId) ?? null
+      setPinnedComment(target)
+      setComments(prev => prev.filter(c => c.id !== commentId))
       setWidget(prev => prev?.commentWidget
         ? { ...prev, commentWidget: { ...prev.commentWidget, pinnedCommentId: commentId } }
         : prev
@@ -309,6 +314,10 @@ function SiteComments() {
     if (!widget) return
     const res = await apiFetch(`/comments/unpin?widget_key=${widget.widgetKey}`, { method: 'PATCH' })
     if (res.ok) {
+      if (pinnedComment) {
+        setComments(prev => [pinnedComment, ...prev])
+      }
+      setPinnedComment(null)
       setWidget(prev => prev?.commentWidget
         ? { ...prev, commentWidget: { ...prev.commentWidget, pinnedCommentId: null } }
         : prev
@@ -368,6 +377,7 @@ function SiteComments() {
 
         {activeTab === 'comments' && (
           <CommentsTab
+            pinnedComment={pinnedComment}
             comments={comments}
             total={commentTotal}
             hasMore={hasMore}

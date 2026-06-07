@@ -4,6 +4,7 @@ import PlatformCommentItem from '../components/PlatformCommentItem'
 import '../SiteComments.css'
 
 interface Props {
+  pinnedComment: Comment | null
   comments: Comment[]
   total: number
   hasMore: boolean
@@ -18,7 +19,7 @@ interface Props {
 }
 
 function CommentsTab({
-  comments, total, hasMore, loadingMore, pinnedCommentId,
+  comments, total, hasMore, loadingMore, pinnedCommentId, pinnedComment,
   onDelete, onLoadMore, onReplyPosted, onPin, onUnpin, onOwnerPost,
 }: Props) {
   const [postBody, setPostBody] = useState('')
@@ -63,6 +64,17 @@ function CommentsTab({
       ) : (
         <div>
           <div className="sc-comment-list">
+            {pinnedComment && (
+              <PlatformCommentItem
+                key={pinnedComment.id}
+                comment={pinnedComment}
+                pinnedCommentId={pinnedComment.id}
+                onDelete={onDelete}
+                onReplyPosted={onReplyPosted}
+                onPin={onPin}
+                onUnpin={onUnpin}
+              />
+            )}
             {comments.map(comment => (
               <PlatformCommentItem
                 key={comment.id}
