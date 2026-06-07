@@ -120,9 +120,9 @@ export default function LandingPage() {
         <p className="pricing-subtitle">Unlimited websites and widgets on all plans</p>
         <div className="pricing-cards">
           {[
-            { tier: 'Free', price: '$0', period: 'forever', loads: '10,000', desc: 'Perfect for personal projects and experimentation.', color: 'white', cta: 'Get Started'},
-            { tier: 'Hobby', price: '$8', period: '/month', loads: '120,000', desc: 'For indie developers and small sites that are growing.', color: 'var(--yellow)', cta: 'Start Hobby'},
-            { tier: 'Pro', price: '$15', period: '/month', loads: '400,000', desc: 'For high-traffic sites that need serious capacity.', color: 'var(--mint)', cta: 'Go Pro'},
+            { tier: 'Free', price: '$0', period: 'forever', loads: '5,000', desc: 'Perfect for personal projects and experimentation.', color: 'white', cta: 'Get Started'},
+            { tier: 'Hobby', price: '$5', period: '/month', loads: '150,000', desc: 'For indie developers and small sites that are growing.', color: 'var(--yellow)', cta: 'Start Hobby'},
+            { tier: 'Pro', price: '$12', period: '/month', loads: '500,000', desc: 'For high-traffic sites that need serious capacity.', color: 'var(--mint)', cta: 'Go Pro'},
           ].map(plan => (
             <div key={plan.tier} className={`pricing-card 'pricing-card--featured`} style={{ background: plan.color }}>
               <div className="pricing-tier">{plan.tier}</div>

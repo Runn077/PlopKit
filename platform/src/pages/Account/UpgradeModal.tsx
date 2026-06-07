@@ -11,8 +11,8 @@ type Props = {
 
 const PLANS = [
   { key: 'free' as Plan, name: 'Free', price: '$0', loads: '10,000' },
-  { key: 'hobby' as Plan, name: 'Hobby', price: '$8/mo', loads: '120,000' },
-  { key: 'pro' as Plan, name: 'Pro', price: '$15/mo', loads: '400,000' },
+  { key: 'hobby' as Plan, name: 'Hobby', price: '$5/mo', loads: '150,000' },
+  { key: 'pro' as Plan, name: 'Pro', price: '$12/mo', loads: '500,000' },
 ]
 
 const PLAN_RANK: Record<Plan, number> = { free: 0, hobby: 1, pro: 2 }

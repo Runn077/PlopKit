@@ -8,7 +8,7 @@ export const LIMITS = {
 } as const
 
 export const PLAN_LIMITS = {
-  free:  10_000,
-  hobby: 120_000,
-  pro:   400_000,
+  free:  5_000,
+  hobby: 150_000,
+  pro:   500_000,
 } as const
