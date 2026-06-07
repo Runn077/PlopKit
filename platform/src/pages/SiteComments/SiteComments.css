@@ -684,3 +684,9 @@
   cursor: default;
   opacity: 1;
 }
+
+.sc-comment-body--context {
+  opacity: 0.45;
+  font-style: italic;
+  pointer-events: none;
+}

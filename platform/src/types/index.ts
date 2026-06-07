@@ -59,3 +59,7 @@ export interface Site {
   expiresAt?: string | null
   createdAt: string
 }
+
+export type FeedItem =
+  | { kind: 'comment'; data: Comment }
+  | { kind: 'orphan'; data: Reply }
