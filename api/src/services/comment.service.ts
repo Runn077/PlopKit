@@ -211,10 +211,16 @@ export async function createComment(
   parentId: string | undefined,
   quotedId: string | undefined,
   origin: string,
+  authorName?: string,
 ) {
   const cleanBody = sanitizeHtml(rawBody, { allowedTags: [], allowedAttributes: {} })
   if (!cleanBody || cleanBody.trim().length === 0) throw new AppError(400, 'Comment body is required')
   if (cleanBody.length > LIMITS.COMMENT_MAX_LENGTH) throw new AppError(400, `Comment must be under ${LIMITS.COMMENT_MAX_LENGTH} characters`)
+  
+  const cleanAuthorName = authorName
+    ? sanitizeHtml(authorName.trim(), { allowedTags: [], allowedAttributes: {} })
+    : 'Anonymous'
+  const finalAuthorName = cleanAuthorName.length === 0 ? 'Anonymous' : cleanAuthorName
 
   const widget = await getWidgetByKey(widgetKey)
   if (!widget?.commentWidget) throw new AppError(404, 'Invalid widget key')
@@ -278,6 +284,7 @@ export async function createComment(
       widgetKey,
       pageUrl,
       body: processedBody,
+      authorName: finalAuthorName,
       status: widget.commentWidget.autoApprove ? CommentStatus.approved : CommentStatus.pending,
       parentId: parentId ?? null,
       quotedId: quotedId ?? null,
@@ -381,8 +388,7 @@ export async function createOwnerReply(
   const parent = await prisma.comment.findUnique({ where: { id: commentId } })
   if (!parent) throw new AppError(404, 'Comment not found')
   if (parent.deletedAt) throw new AppError(400, 'Cannot reply to a deleted comment')
-
-  // Resolve to top-level comment
+    
   const topLevelId = parent.parentId ?? parent.id
   const topLevel = parent.parentId
     ? await prisma.comment.findUnique({ where: { id: parent.parentId } })
@@ -392,12 +398,15 @@ export async function createOwnerReply(
   const widget = await getWidgetByKey(topLevel.widgetKey)
   if (!widget || widget.site.userId !== userId) throw new AppError(403, 'Forbidden')
 
+  const user = await prisma.user.findUnique({ where: { id: userId }, select: { name: true } })
+
   return prisma.comment.create({
     data: {
       commentWidgetId: topLevel.commentWidgetId,
       widgetKey: topLevel.widgetKey,
       pageUrl: topLevel.pageUrl,
       body: cleanBody,
+      authorName: user?.name ?? 'Site owner',
       status: CommentStatus.approved,
       parentId: topLevelId,
       isOwnerReply: true,
@@ -425,12 +434,15 @@ export async function createOwnerComment(
   if (!widget?.commentWidget) throw new AppError(404, 'Widget not found')
   if (widget.site.userId !== userId) throw new AppError(403, 'Forbidden')
 
+  const user = await prisma.user.findUnique({ where: { id: userId }, select: { name: true } })
+
   return prisma.comment.create({
     data: {
       commentWidgetId: widget.commentWidget.id,
       widgetKey,
       pageUrl,
       body: cleanBody,
+      authorName: user?.name ?? 'Site owner',
       status: CommentStatus.approved,
       isOwnerReply: true,
     },

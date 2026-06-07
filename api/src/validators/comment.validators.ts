@@ -21,6 +21,7 @@ export const createCommentSchema = z.object({
   ),
   parent_id: z.string().optional(),
   quoted_id: z.string().optional(),
+  author_name: z.string().max(50, 'Name must be under 30 characters').optional(),
 })
 
 export const ownerPostSchema = z.object({
