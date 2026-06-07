@@ -73,7 +73,7 @@ function AddWidgetModal({ onClose, onSubmit }: Props) {
           <div className="sw-modal-actions">
             <button type="button" className="sw-btn" onClick={onClose}>Cancel</button>
             <button type="submit" className="sw-btn sw-btn-primary" disabled={loading}>
-              {loading ? 'Adding...' : 'Add widget'}
+              {loading ? 'Adding...' : 'Create'}
             </button>
           </div>
         </form>
