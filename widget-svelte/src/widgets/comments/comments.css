@@ -89,6 +89,7 @@
     line-height: 1.5;
     margin-bottom: 6px;
     white-space: pre-wrap;
+    word-break: break-word;
   }
 
   .comment-body.expanded {
@@ -266,6 +267,8 @@
     font-size: 13px;
     line-height: 1.5;
     margin-bottom: 4px;
+    white-space: pre-wrap;
+    word-break: break-word;
   }
 
   .reply-time {

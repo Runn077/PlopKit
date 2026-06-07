@@ -22,7 +22,7 @@
 
   const STORAGE_KEY = `plopkit_author_${widgetKey}`
 
-  const LIMIT = 1000
+  const LIMIT = 300
   const MAX_LINES = 3
 
   const lines = $derived(comment.body.split('\n'))

@@ -4,7 +4,7 @@ import type { Comment, Reply } from '../../../types'
 import { useSession } from '../../../lib/auth-client'
 import '../SiteComments.css'
 
-const BODY_LIMIT = 1000
+const BODY_LIMIT = 300
 const MAX_LINES = 3
 
 function truncateBody(body: string, expanded: boolean) {
