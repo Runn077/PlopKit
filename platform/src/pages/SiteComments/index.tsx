@@ -114,20 +114,31 @@ function SiteComments() {
   }
 
   async function handleDelete(commentId: string, parentId?: string) {
-    const res = await apiFetch(`/comments/${commentId}`, {
-      method: 'DELETE',
-    })
+    const res = await apiFetch(`/comments/${commentId}`, { method: 'DELETE' })
     if (res.ok) {
       if (parentId) {
         setComments(prev => prev.map(c =>
           c.id === parentId ? { ...c, replies: c.replies.filter(r => r.id !== commentId) } : c
         ))
+        if (pinnedComment?.id === parentId) {
+          setPinnedComment(prev => prev ? { ...prev, replies: prev.replies.filter(r => r.id !== commentId) } : null)
+        }
         setCommentTotal(prev => Math.max(0, prev - 1))
       } else {
-        const deleted = comments.find(c => c.id === commentId)
-        const removedCount = 1 + (deleted?.replies.length ?? 0)
-        setComments(prev => prev.filter(c => c.id !== commentId))
-        setCommentTotal(prev => Math.max(0, prev - removedCount))
+        if (pinnedComment?.id === commentId) {
+          const removedCount = 1 + (pinnedComment.replies.length ?? 0)
+          setPinnedComment(null)
+          setWidget(prev => prev?.commentWidget
+            ? { ...prev, commentWidget: { ...prev.commentWidget, pinnedCommentId: null } }
+            : prev
+          )
+          setCommentTotal(prev => Math.max(0, prev - removedCount))
+        } else {
+          const deleted = comments.find(c => c.id === commentId)
+          const removedCount = 1 + (deleted?.replies.length ?? 0)
+          setComments(prev => prev.filter(c => c.id !== commentId))
+          setCommentTotal(prev => Math.max(0, prev - removedCount))
+        }
       }
     }
   }
