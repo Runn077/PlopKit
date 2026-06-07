@@ -1,11 +1,11 @@
 import LandingNavbar from "../../components/LandingNavbar";
 
-export default function DocsPage() {
+export default function SetupPage() {
   return(
     <div>
       <LandingNavbar/>
         <div>
-          Docs Page
+          Setup Page
         </div>
     </div>
   )

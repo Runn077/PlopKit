@@ -10,7 +10,7 @@ import Landing from './pages/Landing/Landing'
 import PrivacyPolicy from './pages/Legal/PrivacyPolicy'
 import Terms from './pages/Legal/Terms'
 import Demo from './pages/Demo/Demo'
-import Docs from './pages/Docs/Docs'
+import Setup from './pages/Setup/Setup'
 
 function App() {
   return (
@@ -18,7 +18,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Landing />} />
         <Route path='/demo' element={<Demo />} />
-        <Route path='/docs' element={<Docs />} />
+        <Route path='/setup' element={<Setup />} />
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/dashboard' element={

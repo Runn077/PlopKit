@@ -30,12 +30,8 @@ export default function LandingNavbar() {
           Pricing
         </button>
 
-        <button onClick={() => navigate('/demo')}>
-          Demo
-        </button>
-
-        <button onClick={() => navigate('/docs')}>
-          Docs
+        <button onClick={() => navigate('/setup')}>
+          Setup
         </button>
 
         <button onClick={() => navigate('/login')}>
