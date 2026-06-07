@@ -31,6 +31,7 @@ export async function getApprovedComments(
     status: CommentStatus.approved,
     deletedAt: null,
     parentId: null,
+    ...(pinnedCommentId && { id: { not: pinnedCommentId } }),
   }
 
   if (cursor) {
@@ -52,24 +53,30 @@ export async function getApprovedComments(
     parentId: { not: null },
   }
 
-  const [topLevelTotal, replyTotal, comments] = await Promise.all([
+  const replyInclude = {
+    where: { status: CommentStatus.approved, deletedAt: null },
+    orderBy: { createdAt: 'asc' as const },
+    include: {
+      quoted: {
+        select: { id: true, body: true, deletedAt: true, status: true },
+      },
+    },
+  }
+
+  const [topLevelTotal, replyTotal, pinnedComment, comments] = await Promise.all([
     prisma.comment.count({ where: countWhere }),
     prisma.comment.count({ where: replyCountWhere }),
+    pinnedCommentId
+      ? prisma.comment.findUnique({
+          where: { id: pinnedCommentId },
+          include: { replies: replyInclude },
+        })
+      : Promise.resolve(null),
     prisma.comment.findMany({
       where: baseWhere,
       orderBy: { createdAt: 'desc' },
       take: LIMITS.COMMENT_PAGE_SIZE,
-      include: {
-        replies: {
-          where: { status: CommentStatus.approved, deletedAt: null },
-          orderBy: { createdAt: 'asc' },
-          include: {
-            quoted: {
-              select: { id: true, body: true, deletedAt: true, status: true },
-            },
-          },
-        },
-      },
+      include: { replies: replyInclude },
     }),
   ])
 
@@ -77,16 +84,9 @@ export async function getApprovedComments(
     await trackWidgetLoad(widgetKey)
   }
 
-  let ordered = comments
-  if (pinnedCommentId && !cursor) {
-    const pinned = comments.find(c => c.id === pinnedCommentId)
-    if (pinned) {
-      ordered = [pinned, ...comments.filter(c => c.id !== pinnedCommentId)]
-    }
-  }
-
   return {
-    comments: ordered,
+    pinnedComment: pinnedComment ?? null,
+    comments,
     hasMore: comments.length === LIMITS.COMMENT_PAGE_SIZE,
     total: topLevelTotal + replyTotal,
     pinnedCommentId,
@@ -125,7 +125,7 @@ export async function getPendingComments(widgetKey: string, userId: string, curs
         },
       },
     }),
-    
+
     prisma.comment.findMany({
       where: {
         commentWidgetId,
