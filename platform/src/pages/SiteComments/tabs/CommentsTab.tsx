@@ -45,10 +45,10 @@ function CommentsTab({
           value={postBody}
           onChange={e => setPostBody(e.target.value)}
           placeholder="Post as site owner..."
-          maxLength={1000}
+          maxLength={2500}
         />
         <div className="sc-reply-input-actions">
-          <span className="sc-char-count">{postBody.length}/1000</span>
+          <span className="sc-char-count">{postBody.length}/2500</span>
           <button
             className="sc-btn-post"
             onClick={handlePost}

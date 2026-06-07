@@ -115,11 +115,11 @@
       />
       <textarea
         bind:value={body}
-        maxlength={1000}
+        maxlength={2500}
         placeholder="Add a comment..."
       ></textarea>
       <div class="input-actions">
-        <span class="char-count">{body.length}/1000</span>
+        <span class="char-count">{body.length}/2500</span>
         <button class="btn-post" onclick={postComment} disabled={!body.trim()}>
           Post
         </button>
