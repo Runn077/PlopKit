@@ -75,6 +75,8 @@ export async function deleteWidget(widgetId: string, userId: string) {
 }
 
 export async function trackWidgetLoad(widgetKey: string) {
+  if (widgetKey === process.env.DEMO_WIDGET_KEY) return
+
   const widget = await getWidgetByKey(widgetKey)
   if (!widget) throw new AppError(404, 'Widget not found')
 

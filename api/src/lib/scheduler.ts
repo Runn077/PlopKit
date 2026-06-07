@@ -30,4 +30,15 @@ export function startScheduler() {
     })
     console.log(`[scheduler] Reset monthlyLoads for ${result.count} widgets`)
   })
+
+  // Reset demo widget load count daily
+  cron.schedule('0 0 * * *', async () => {
+    const demoKey = process.env.DEMO_WIDGET_KEY
+    if (!demoKey) return
+    await prisma.widget.updateMany({
+      where: { widgetKey: demoKey },
+      data: { monthlyLoads: 0 },
+    })
+    console.log('[scheduler] Reset demo widget monthly loads')
+  })
 }
