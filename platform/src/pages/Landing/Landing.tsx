@@ -51,7 +51,7 @@ export default function LandingPage() {
             <span className="step-num">01</span>
             <h3 className="step-label">Create Account</h3>
             <p className="step-desc">
-              Sign up free in seconds. No credit card required.
+              Sign up for free in seconds. No credit card required.
             </p>
           </div>
 
@@ -116,8 +116,8 @@ export default function LandingPage() {
         className="pricing-section"
       >
         <h2 className="section-title">Pricing</h2>
-        <p className="pricing-subtitle">Cancel or upgrade anytime.</p>
-        <p className="pricing-subtitle">No overages.</p>
+        <p className="pricing-subtitle">Cancel or upgrade anytime. No overages.</p>
+        <p className="pricing-subtitle">Unlimited websites and widgets on all plans</p>
         <div className="pricing-cards">
           {[
             { tier: 'Free', price: '$0', period: 'forever', loads: '10,000', desc: 'Perfect for personal projects and experimentation.', color: 'white', cta: 'Get Started'},
