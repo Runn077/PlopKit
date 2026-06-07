@@ -6,15 +6,37 @@
   import styles from './comments.css?inline'
 
   let { widgetKey, pageUrl, shadowRoot }: BaseWidgetProps = $props()
+
   let comments = $state<Comment[]>([])
   let hasMore = $state(false)
   let loading = $state(false)
   let body = $state('')
+  let authorName = $state('')
   let total = $state(0)
   let pinnedCommentId = $state<string | null>(null)
   let limitReached = $state(false)
   let pinnedComment = $state<Comment | null>(null)
+
+  const STORAGE_KEY = `plopkit_author_${widgetKey}`
   const toast = new Toast()
+
+  function loadSavedName() {
+    try {
+      return localStorage.getItem(STORAGE_KEY) ?? ''
+    } catch {
+      return ''
+    }
+  }
+
+  function saveName(name: string) {
+    try {
+      if (name.trim()) {
+        localStorage.setItem(STORAGE_KEY, name.trim())
+      } else {
+        localStorage.removeItem(STORAGE_KEY)
+      }
+    } catch {}
+  }
 
   async function fetchComments(cursor?: string) {
     loading = true
@@ -43,16 +65,23 @@
 
   async function postComment() {
     if (!body.trim()) return
+    const nameToSend = authorName.trim() || ''
     const res = await fetch(`${import.meta.env.VITE_API_URL}/public/comments`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ widget_key: widgetKey, page_url: pageUrl, body }),
+      body: JSON.stringify({
+        widget_key: widgetKey,
+        page_url: pageUrl,
+        body,
+        author_name: nameToSend || undefined,
+      }),
     })
     const data: NewComment = await res.json()
     if (!res.ok) {
       toast.show((data as any).error || 'Failed to post comment')
       return
     }
+    saveName(nameToSend)
     body = ''
     if (data.status === 'approved') {
       comments = [{ ...data, replies: [] }, ...comments]
@@ -67,6 +96,7 @@
     const styleEl = document.createElement('style')
     styleEl.textContent = styles
     shadowRoot.insertBefore(styleEl, shadowRoot.firstChild)
+    authorName = loadSavedName()
     fetchComments()
   })
 </script>
@@ -77,6 +107,12 @@
   {:else}
     <h3>{total} {total === 1 ? 'Comment' : 'Comments'}</h3>
     <div class="input-area">
+      <input
+        class="author-input"
+        bind:value={authorName}
+        maxlength={50}
+        placeholder="Name (optional)"
+      />
       <textarea
         bind:value={body}
         maxlength={1000}

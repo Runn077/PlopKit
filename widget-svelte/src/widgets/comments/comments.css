@@ -160,7 +160,7 @@
     resize: none;
     font-size: 13px;
     font-family: inherit;
-    color: #0f0f0f;
+    color: #000000;
     background: transparent;
     height: 60px;
   }
@@ -369,4 +369,35 @@
 
   .comment-pinned {
     border-top: 2px solid #0f0f0f;
+  }
+
+  .author-input {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 0.875rem;
+    font-family: inherit;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    background: #fff;
+    box-sizing: border-box;
+  }
+
+  .author-input:focus {
+    outline: none;
+    border: 2px solid black;
+  }
+
+  .comment-author {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .reply-author {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-bottom: 4px;
   }

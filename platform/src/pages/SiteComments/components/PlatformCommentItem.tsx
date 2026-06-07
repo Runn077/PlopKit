@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { apiFetch } from '../../../lib/api'
 import type { Comment, Reply } from '../../../types'
+import { useSession } from '../../../lib/auth-client'
 import '../SiteComments.css'
 
 const BODY_LIMIT = 1000
@@ -39,6 +40,7 @@ function PlatformReplyItem({
   const [replyOpen, setReplyOpen] = useState(false)
   const [replyBody, setReplyBody] = useState('')
   const [replyLoading, setReplyLoading] = useState(false)
+  const { data: session } = useSession()
 
   const isQuoteDeleted = reply.quoted && (reply.quoted.deletedAt !== null || reply.quoted.status !== 'approved')
 
@@ -68,6 +70,7 @@ function PlatformReplyItem({
         </div>
       )}
       {reply.isOwnerReply && <span className="sc-owner-badge">Site owner</span>}
+      <span className="sc-reply-author">{reply.isOwnerReply ? session?.user.name : reply.authorName}</span>
       <p className="sc-reply-body">{reply.body}</p>
       <div className="sc-reply-meta">
         <span className="sc-reply-date">{new Date(reply.createdAt).toLocaleString()}</span>
@@ -118,6 +121,7 @@ function PlatformCommentItem({ comment, pinnedCommentId, onDelete, onReplyPosted
   const [replyLoading, setReplyLoading] = useState(false)
   const [pinLoading, setPinLoading] = useState(false)
   const [expanded, setExpanded] = useState(false)
+  const { data: session } = useSession()
 
   const isPinned = pinnedCommentId === comment.id
   const hasPinnedOther = pinnedCommentId !== null && pinnedCommentId !== comment.id
@@ -160,6 +164,7 @@ function PlatformCommentItem({ comment, pinnedCommentId, onDelete, onReplyPosted
           {comment.isOwnerReply && <span className="sc-owner-badge">Site owner</span>}
         </div>
       )}
+      <span className="sc-comment-author">{comment.isOwnerReply ? session?.user.name : comment.authorName}</span>
       <p className="sc-comment-body">{displayBody}</p>
       {isLong && (
         <button className="sc-btn-show-more" onClick={() => setExpanded(v => !v)}>

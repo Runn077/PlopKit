@@ -14,15 +14,37 @@
 
   let replyOpen = $state(false)
   let replyBody = $state('')
+  let replyAuthorName = $state('')
   const toast = new Toast()
+
+  const STORAGE_KEY = `plopkit_author_${widgetKey}`
 
   const isQuoteDeleted = $derived(
     reply.quoted && (reply.quoted.deletedAt !== null || reply.quoted.status !== 'approved')
   )
 
+  function loadSavedName() {
+    try { return localStorage.getItem(STORAGE_KEY) ?? '' } catch { return '' }
+  }
+
+  function saveName(name: string) {
+    try {
+      if (name.trim()) {
+        localStorage.setItem(STORAGE_KEY, name.trim())
+      } else {
+        localStorage.removeItem(STORAGE_KEY)
+      }
+    } catch {}
+  }
+
+  function openReply() {
+    replyAuthorName = loadSavedName()
+    replyOpen = true
+  }
+
   async function postReply() {
     if (!replyBody.trim()) return
-
+    const nameToSend = replyAuthorName.trim() || ''
     const res = await fetch(`${import.meta.env.VITE_API_URL}/public/comments`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -32,23 +54,22 @@
         body: replyBody,
         parent_id: parentId,
         quoted_id: reply.id,
+        author_name: nameToSend || undefined,
       }),
     })
-
     const data = await res.json()
-
     if (!res.ok) {
       toast.show(data.error || 'Failed to post reply')
       return
     }
-
+    saveName(nameToSend)
     replyBody = ''
     replyOpen = false
-
     if (data.status === 'approved') {
       onReplyPosted({
         id: data.id,
         body: data.body,
+        authorName: data.authorName,
         createdAt: data.createdAt,
         quotedId: data.quotedId,
         quoted: data.quoted,
@@ -72,10 +93,11 @@
       </p>
     </div>
   {/if}
+  <span class="reply-author">{reply.authorName}</span>
   <p class="reply-body">{reply.body}</p>
   <div class="reply-meta">
     <span class="reply-time">{new Date(reply.createdAt).toLocaleString()}</span>
-    <button class="btn-reply" onclick={() => replyOpen = !replyOpen}>
+    <button class="btn-reply" onclick={() => replyOpen ? (replyOpen = false) : openReply()}>
       {replyOpen ? 'Cancel' : 'Reply'}
     </button>
   </div>
@@ -84,6 +106,12 @@
       <div class="quoted-preview">
         <p class="quoted-preview-body">{reply.body}</p>
       </div>
+      <input
+        class="author-input"
+        bind:value={replyAuthorName}
+        maxlength={50}
+        placeholder="Name (optional)"
+      />
       <textarea
         bind:value={replyBody}
         maxlength={1000}

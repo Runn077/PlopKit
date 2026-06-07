@@ -690,3 +690,17 @@
   font-style: italic;
   pointer-events: none;
 }
+
+.sc-comment-author {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.sc-reply-author {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
