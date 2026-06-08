@@ -1,5 +1,6 @@
 import type { Comment, Reply, FeedItem } from '../../../types'
 import CommentRow from '../components/CommentRow'
+import OrphanReplyItem from '../components/OrphanReplyItem'
 import '../SiteComments.css'
 
 const SOFT_DELETE_EXPIRY_DAYS = 7
@@ -47,7 +48,7 @@ function DeletedTab({
   }
 
   return (
-    <div>
+    <div className="sc-comments-tab">
       <div className="sc-tab-header">
         <button className="sc-btn sc-btn-danger" onClick={onDeleteAll}>Delete all</button>
       </div>
@@ -60,10 +61,10 @@ function DeletedTab({
                 key={comment.id}
                 comment={comment}
                 actions={
-                  <div style={{ display: 'flex', gap: 8 }}>
+                  <>
                     <button className="sc-btn" onClick={() => onRestore(comment.id)}>Restore</button>
                     <button className="sc-btn sc-btn-danger" onClick={() => onPermanentDelete(comment.id)}>Delete</button>
-                  </div>
+                  </>
                 }
                 expiry={comment.deletedAt ? getDeletedExpiry(comment.deletedAt) : undefined}
               />
@@ -72,28 +73,17 @@ function DeletedTab({
 
           const reply = item.data as Reply
           return (
-            <div key={reply.id} className="sc-comment">
-              {reply.parent && (
-                <p className="sc-comment-body sc-comment-body--context">{reply.parent.body}</p>
-              )}
-              <div className="sc-replies">
-                <div className="sc-reply">
-                  <p className="sc-reply-body">{reply.body}</p>
-                  <div className="sc-reply-meta">
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                      <span className="sc-reply-date">{new Date(reply.createdAt).toLocaleDateString()}</span>
-                      {reply.deletedAt && (
-                        <span className="sc-expiry">{getDeletedExpiry(reply.deletedAt)}</span>
-                      )}
-                    </div>
-                    <div className="sc-comment-actions">
-                      <button className="sc-btn" onClick={() => onRestoreReply(reply.id)}>Restore</button>
-                      <button className="sc-btn sc-btn-danger" onClick={() => onPermanentDeleteReply(reply.id)}>Delete</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <OrphanReplyItem
+              key={reply.id}
+              reply={reply}
+              expiry={reply.deletedAt ? getDeletedExpiry(reply.deletedAt) : undefined}
+              actions={
+                <>
+                  <button className="sc-btn" onClick={() => onRestoreReply(reply.id)}>Restore</button>
+                  <button className="sc-btn sc-btn-danger" onClick={() => onPermanentDeleteReply(reply.id)}>Delete</button>
+                </>
+              }
+            />
           )
         })}
 

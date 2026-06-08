@@ -4,19 +4,7 @@ import type { Comment, Reply } from '../../../types'
 import { useSession } from '../../../lib/auth-client'
 import '../SiteComments.css'
 import { timeAgo } from '../../../lib/timeago'
-
-const BODY_LIMIT = 300
-const MAX_LINES = 3
-
-function truncateBody(body: string, expanded: boolean) {
-  const lines = body.split('\n')
-  const isLong = body.length > BODY_LIMIT || lines.length > MAX_LINES
-  if (expanded || !isLong) return { displayBody: body, isLong }
-  const displayBody = lines.length > MAX_LINES
-    ? lines.slice(0, MAX_LINES).join('\n') + '...'
-    : body.slice(0, BODY_LIMIT) + '...'
-  return { displayBody, isLong }
-}
+import { truncateBody } from '../../../lib/truncateBody'
 
 interface Props {
   comment: Comment
@@ -97,7 +85,7 @@ function PlatformReplyItem({
             autoFocus
           />
           <div className="sc-reply-input-actions">
-            <span className="sc-char-count">{replyBody.length}/1000</span>
+            <span className="sc-char-count">{replyBody.length}/2500</span>
             <div style={{ display: 'flex', gap: '8px' }}>
               <button className="sc-btn-cancel-text" onClick={() => { setReplyOpen(false); setReplyBody('') }}>
                 Cancel

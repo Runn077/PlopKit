@@ -1,5 +1,6 @@
 import type { Comment, Reply, FeedItem } from '../../../types'
 import CommentRow from '../components/CommentRow'
+import OrphanReplyItem from '../components/OrphanReplyItem'
 import '../SiteComments.css'
 
 const PENDING_EXPIRY_DAYS = 30
@@ -39,7 +40,7 @@ function PendingTab({
   const isEmpty = feed.length === 0
 
   return (
-    <div>
+    <div className="sc-comments-tab">
       <div className="sc-auto-approve">
         <div className="sc-auto-approve-label">
           <span>Auto-approve comments</span>
@@ -65,16 +66,16 @@ function PendingTab({
                   key={comment.id}
                   comment={comment}
                   actions={
-                    <div style={{ display: 'flex', gap: 8 }}>
+                    <>
                       <button className="sc-btn sc-btn-approve" onClick={() => onApprove(comment.id)}>Approve</button>
                       <button className="sc-btn sc-btn-danger" onClick={() => onReject(comment.id)}>Reject</button>
-                    </div>
+                    </>
                   }
                   replyActions={(reply) => (
-                    <div style={{ display: 'flex', gap: 8 }}>
+                    <>
                       <button className="sc-btn sc-btn-approve" onClick={() => onApproveReply(reply.id, comment.id)}>Approve</button>
                       <button className="sc-btn sc-btn-danger" onClick={() => onRejectReply(reply.id, comment.id)}>Reject</button>
-                    </div>
+                    </>
                   )}
                   expiry={getPendingExpiry(comment.createdAt)}
                 />
@@ -83,26 +84,17 @@ function PendingTab({
 
             const reply = item.data as Reply
             return (
-              <div key={reply.id} className="sc-comment">
-                {reply.parent && (
-                  <p className="sc-comment-body sc-comment-body--context">{reply.parent.body}</p>
-                )}
-                <div className="sc-replies">
-                  <div className="sc-reply">
-                    <p className="sc-reply-body">{reply.body}</p>
-                    <div className="sc-reply-meta">
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                        <span className="sc-reply-date">{new Date(reply.createdAt).toLocaleDateString()}</span>
-                        <span className="sc-expiry">{getPendingExpiry(reply.createdAt)}</span>
-                      </div>
-                      <div className="sc-comment-actions">
-                        <button className="sc-btn sc-btn-approve" onClick={() => onApproveReply(reply.id, reply.parentId)}>Approve</button>
-                        <button className="sc-btn sc-btn-danger" onClick={() => onRejectReply(reply.id, reply.parentId)}>Reject</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <OrphanReplyItem
+                key={reply.id}
+                reply={reply}
+                expiry={getPendingExpiry(reply.createdAt)}
+                actions={
+                  <>
+                    <button className="sc-btn sc-btn-approve" onClick={() => onApproveReply(reply.id, reply.parentId)}>Approve</button>
+                    <button className="sc-btn sc-btn-danger" onClick={() => onRejectReply(reply.id, reply.parentId)}>Reject</button>
+                  </>
+                }
+              />
             )
           })}
 

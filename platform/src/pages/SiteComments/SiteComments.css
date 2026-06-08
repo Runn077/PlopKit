@@ -185,7 +185,6 @@
   justify-content: flex-end;
   padding: 12px 0;
   margin-bottom: 8px;
-  border-bottom: 1px solid var(--pk-color-border-muted);
 }
 
 .sc-auto-approve {
@@ -194,7 +193,6 @@
   justify-content: space-between;
   padding: 12px 0;
   margin-bottom: 16px;
-  border-bottom: 1px solid var(--pk-color-border-muted);
 }
 
 .sc-auto-approve-label {
@@ -521,6 +519,17 @@
 
 .sc-comments-tab .sc-btn-danger:hover {
   background: #ff6b6b;
+  color: #fff;
+}
+
+.sc-comments-tab .sc-btn-approve {
+  border-color: #4ecdc4;
+  color: #0f0f0f;
+  background: transparent;
+}
+
+.sc-comments-tab .sc-btn-approve:hover {
+  background: #4ecdc4;
   color: #fff;
 }
 
