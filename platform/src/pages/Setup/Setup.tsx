@@ -179,7 +179,7 @@ export default function SetupPage() {
         {/* CTA */}
         <section className="setup-cta">
           <h2>Ready to add comments?</h2>
-          <p>Free plan includes 10,000 widget loads per month.</p>
+          <p>Free plan includes 5,000 widget loads per month.</p>
           <button className="primary-btn" onClick={() => navigate('/signup')}>
             Get Started Free
           </button>
