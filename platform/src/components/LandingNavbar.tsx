@@ -26,6 +26,10 @@ export default function LandingNavbar() {
       </div>
 
       <div className="nav-links">
+        <button onClick={() => navigate('/demo')}>
+          Demo
+        </button>
+
         <button onClick={goToPricing}>
           Pricing
         </button>
