@@ -5,6 +5,7 @@ import Navbar from '../../components/Navbar'
 import { apiFetch } from '../../lib/api'
 import './Account.css'
 import UpgradeModal from './UpgradeModal'
+import DeleteAccountModal from './DeleteAccountModal'
 
 type Usage = {
   plan: 'free' | 'hobby' | 'pro'
@@ -22,11 +23,11 @@ function Account() {
   const [nameSuccess, setNameSuccess] = useState('')
   const [deleteLoading, setDeleteLoading] = useState(false)
   const [deleteError, setDeleteError] = useState('')
-  const [confirmDelete, setConfirmDelete] = useState(false)
   const [usage, setUsage] = useState<Usage | null>(null)
   const [usageLoading, setUsageLoading] = useState(true)
   const [usageError, setUsageError] = useState('')
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [searchParams, setSearchParams] = useSearchParams()
   const upgradeStatus = searchParams.get('upgrade')
 
@@ -186,33 +187,24 @@ function Account() {
               <p className="account-danger-text">Delete account</p>
               <p className="account-danger-hint">Permanently delete your account and all your data.</p>
             </div>
-            {!confirmDelete ? (
-              <button
-                className="account-btn account-btn-danger"
-                onClick={() => setConfirmDelete(true)}
-              >
-                Delete account
-              </button>
-            ) : (
-              <div style={{ display: 'flex', gap: 8 }}>
-                <button
-                  className="account-btn"
-                  onClick={() => setConfirmDelete(false)}
-                >
-                  Cancel
-                </button>
-                <button
-                  className="account-btn account-btn-danger"
-                  onClick={handleDeleteAccount}
-                  disabled={deleteLoading}
-                >
-                  {deleteLoading ? 'Deleting...' : 'Confirm delete'}
-                </button>
-              </div>
-            )}
+            <button
+              className="account-btn account-btn-danger"
+              onClick={() => setShowDeleteModal(true)}
+            >
+              Delete account
+            </button>
           </div>
-          {deleteError && <p className="account-error" style={{ marginTop: 12 }}>{deleteError}</p>}
         </div>
+
+        {showDeleteModal && user && (
+          <DeleteAccountModal
+            userEmail={user.email}
+            onConfirm={handleDeleteAccount}
+            onClose={() => setShowDeleteModal(false)}
+            loading={deleteLoading}
+            error={deleteError}
+          />
+        )}
       </div>
     </div>
   )

@@ -1,0 +1,102 @@
+.delete-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.delete-modal {
+  background: white;
+  border: 2px solid black;
+  padding: 32px;
+  width: 100%;
+  max-width: 440px;
+  border-radius: 2px;
+}
+
+.delete-modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 12px;
+}
+
+.delete-modal-body {
+  font-size: 0.9rem;
+  color: var(--color-black);
+  margin: 0 0 24px;
+  line-height: 1.5;
+}
+
+.delete-modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.delete-modal-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.delete-modal-input {
+  border: 2px solid black;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  outline: none;
+  border-radius: 2px;
+}
+
+.delete-modal-input:focus {
+  box-shadow: 2px 2px 0 black;
+}
+
+.delete-modal-error {
+  font-size: 0.85rem;
+  color: red;
+  margin: 0 0 12px;
+}
+
+.delete-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.delete-modal-btn {
+  padding: 8px 16px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: inherit;
+  border: 2px solid black;
+  background: white;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 black;
+  transition: transform 0.1s, box-shadow 0.1s;
+  border-radius: 2px;
+}
+
+.delete-modal-btn:hover:not(:disabled) {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 black;
+}
+
+.delete-modal-btn:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+.delete-modal-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.delete-modal-btn-danger {
+  background: red;
+  color: white;
+}
