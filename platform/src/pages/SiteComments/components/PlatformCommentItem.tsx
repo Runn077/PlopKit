@@ -3,6 +3,7 @@ import { apiFetch } from '../../../lib/api'
 import type { Comment, Reply } from '../../../types'
 import { useSession } from '../../../lib/auth-client'
 import '../SiteComments.css'
+import { timeAgo } from '../../../lib/timeago'
 
 const BODY_LIMIT = 300
 const MAX_LINES = 3
@@ -73,7 +74,9 @@ function PlatformReplyItem({
       <span className="sc-reply-author">{reply.isOwnerReply ? session?.user.name : reply.authorName}</span>
       <p className="sc-reply-body">{reply.body}</p>
       <div className="sc-reply-meta">
-        <span className="sc-reply-date">{new Date(reply.createdAt).toLocaleString()}</span>
+        <span className="sc-comment-date">
+          {timeAgo(reply.createdAt)} · {new Date(reply.createdAt).toLocaleDateString()}
+        </span>
         <button className="sc-btn-reply-text" onClick={() => setReplyOpen(v => !v)}>
           {replyOpen ? 'Cancel' : 'Reply'}
         </button>
@@ -173,7 +176,9 @@ function PlatformCommentItem({ comment, pinnedCommentId, onDelete, onReplyPosted
       )}
       <span className="sc-comment-url">{comment.pageUrl}</span>
       <div className="sc-comment-meta">
-        <span className="sc-comment-date">{new Date(comment.createdAt).toLocaleString()}</span>
+        <span className="sc-comment-date">
+          {timeAgo(comment.createdAt)} · {new Date(comment.createdAt).toLocaleDateString()}
+        </span>
         <button className="sc-btn-reply-text" onClick={() => setReplyOpen(v => !v)}>
           {replyOpen ? 'Cancel' : 'Reply'}
         </button>

@@ -2,6 +2,7 @@
   import ReplyItem from './ReplyItem.svelte'
   import type { Comment, Reply } from '../../types'
   import { Toast } from './toast.svelte'
+  import { timeAgo } from './timeago'
 
   interface Props {
     comment: Comment
@@ -117,7 +118,7 @@
     </button>
   {/if}
   <div class="comment-meta">
-    <span class="comment-time">{new Date(comment.createdAt).toLocaleString()}</span>
+    <span class="comment-time">{timeAgo(comment.createdAt)}</span>
     <div class="comment-actions">
       <button class="btn-reply" onclick={() => replyOpen ? (replyOpen = false) : openReply()}>
         {replyOpen ? 'Cancel' : 'Reply'}

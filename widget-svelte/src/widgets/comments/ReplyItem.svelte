@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Reply } from '../../types'
   import { Toast } from './toast.svelte'
+  import { timeAgo } from './timeago';
 
   interface Props {
     reply: Reply
@@ -96,7 +97,7 @@
   <span class="reply-author">{reply.authorName}</span>
   <p class="reply-body">{reply.body}</p>
   <div class="reply-meta">
-    <span class="reply-time">{new Date(reply.createdAt).toLocaleString()}</span>
+    <span class="comment-time">{timeAgo(reply.createdAt)}</span>
     <button class="btn-reply" onclick={() => replyOpen ? (replyOpen = false) : openReply()}>
       {replyOpen ? 'Cancel' : 'Reply'}
     </button>
@@ -114,11 +115,11 @@
       />
       <textarea
         bind:value={replyBody}
-        maxlength={1000}
+        maxlength={2500}
         placeholder="Add a reply..."
       ></textarea>
       <div class="reply-actions">
-        <span class="char-count">{replyBody.length}/1000</span>
+        <span class="char-count">{replyBody.length}/2500</span>
         <div style="display:flex;gap:8px">
           <button class="btn-cancel" onclick={() => { replyOpen = false; replyBody = '' }}>
             Cancel
