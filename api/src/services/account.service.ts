@@ -1,5 +1,6 @@
 import prisma from '../lib/prisma.js'
 import { PLAN_LIMITS } from '../constants/index.js'
+import { sendAccountDeletedEmail } from '../emails/index.js'
 
 export async function getUsage(userId: string, plan: string) {
   const { _sum } = await prisma.widget.aggregate({
@@ -26,5 +27,18 @@ export async function updateName(userId: string, name: string) {
 }
 
 export async function deleteAccount(userId: string) {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { email: true, name: true },
+  })
+
   await prisma.user.delete({ where: { id: userId } })
+
+  if (user) {
+    try {
+      await sendAccountDeletedEmail(user.email, user.name ?? 'there')
+    } catch (err) {
+      console.error('Failed to send account deleted email:', err)
+    }
+  }
 }

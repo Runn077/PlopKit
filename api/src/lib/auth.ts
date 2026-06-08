@@ -1,6 +1,7 @@
 import { betterAuth } from 'better-auth'
 import { prismaAdapter } from 'better-auth/adapters/prisma'
 import prisma from './prisma.js'
+import { sendWelcomeEmail } from '../emails/index.js'
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -22,6 +23,19 @@ export const auth = betterAuth({
         required: false,
         defaultValue: 'free',
         input: false,
+      },
+    },
+  },
+  databaseHooks: {
+    user: {
+      create: {
+        after: async (user) => {
+          try {
+            await sendWelcomeEmail(user.email, user.name ?? 'there')
+          } catch (err) {
+            console.error('Failed to send welcome email:', err)
+          }
+        },
       },
     },
   },
