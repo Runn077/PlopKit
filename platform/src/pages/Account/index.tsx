@@ -9,6 +9,7 @@ import DeleteAccountModal from './DeleteAccountModal'
 
 type Usage = {
   plan: 'free' | 'hobby' | 'pro'
+  pendingPlan: 'free' | 'hobby' | 'pro' | null
   monthlyLoads: number
   limit: number
 }
@@ -103,6 +104,14 @@ function Account() {
     }
   }
 
+  async function handlePlanChanged() {
+    const res = await apiFetch('/account/usage')
+    if (res.ok) {
+      const data = await res.json()
+      setUsage(data)
+    }
+  }
+
   const usagePercent = usage ? Math.min((usage.monthlyLoads / usage.limit) * 100, 100) : 0
 
   return (
@@ -168,7 +177,9 @@ function Account() {
         {showUpgradeModal && usage && (
           <UpgradeModal
             currentPlan={usage.plan}
+            pendingPlan={usage.pendingPlan}
             onClose={() => setShowUpgradeModal(false)}
+            onPlanChanged={handlePlanChanged}
           />
         )}
 

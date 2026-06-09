@@ -113,3 +113,112 @@
   color: var(--pk-color-danger);
   margin-top: 12px;
 }
+
+.upgrade-pending-notice {
+  font-size: 13px;
+  color: var(--pk-color-text-muted);
+  padding: 12px;
+  border: 1px solid var(--pk-color-border-muted);
+  border-radius: var(--pk-radius);
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.upgrade-card-pending {
+  border-color: var(--pk-color-border-muted);
+  opacity: 0.7;
+}
+
+.upgrade-card-btn-secondary {
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--pk-font);
+  padding: 7px 14px;
+  border-radius: var(--pk-radius);
+  cursor: pointer;
+  border: 1px solid var(--pk-color-border);
+  background: var(--pk-color-bg);
+  color: var(--pk-color-text);
+  margin-top: auto;
+}
+
+.upgrade-card-btn-secondary:hover:not(:disabled) {
+  background: var(--pk-color-bg-hover);
+}
+
+.upgrade-card-btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: calc(var(--pk-z-modal) + 1);
+}
+
+.confirm-modal {
+  background: var(--pk-color-bg);
+  border: 1px solid var(--pk-color-border);
+  border-radius: var(--pk-radius-lg);
+  padding: 20px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.confirm-modal h3 {
+  margin: 0 0 12px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--pk-color-text);
+}
+
+.confirm-modal p {
+  margin: 0 0 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--pk-color-text-muted);
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.confirm-actions button {
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--pk-font);
+  padding: 7px 14px;
+  border-radius: var(--pk-radius);
+  cursor: pointer;
+}
+
+.confirm-actions button:first-child {
+  border: 1px solid var(--pk-color-border);
+  background: var(--pk-color-bg);
+  color: var(--pk-color-text);
+}
+
+.confirm-actions button:first-child:hover {
+  background: var(--pk-color-bg-hover);
+}
+
+.confirm-actions button:last-child {
+  border: 1px solid var(--pk-color-border);
+  background: var(--pk-color-primary);
+  color: var(--pk-color-on-primary);
+}
+
+.confirm-actions button:last-child:hover {
+  background: var(--pk-color-primary-hover);
+}
