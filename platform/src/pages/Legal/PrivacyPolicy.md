@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Last updated: June 4, 2026**
+**Last updated: June 9, 2026**
 
 PlopKit is a side project operated by an individual based in Canada. This Privacy Policy explains what information we collect, how we use it, and your rights regarding that information.
 
@@ -36,12 +36,12 @@ Payment information (such as credit card details) is collected and processed dir
 ### Commenters
 
 When someone posts a comment through a PlopKit widget, we collect:
-
+- The **name** (optional) 
 - The **comment body** (the text of the comment)
 - The **page URL** where the comment was posted
 - The **origin or referrer header** from the request, used to verify the comment came from a legitimate source
 
-We do not collect commenter names, email addresses, or any account information. Comments are posted anonymously unless the publisher is commenting on their own site, in which case their comment is marked with an owner badge.
+We do not collect commenter email addresses, or any account information. Comments are posted anonymously unless the publisher is commenting on their own site, in which case their comment is marked with an owner badge.
 
 ### IP Addresses
 
@@ -59,7 +59,7 @@ If you would like to opt out of Google Analytics, you can use the [Google Analyt
 
 PlopKit uses a **session cookie** to keep publishers signed in. This cookie is set by Better Auth, our authentication library, and is strictly necessary for the platform to function. It does not track you across other websites.
 
-The PlopKit **widget** (the comment section embedded on publisher sites) does **not** set any cookies on visitors.
+The PlopKit widget does not set any cookies, but it does use browser localStorage to remember a commenter's display name across visits. This data is stored locally in the commenter's browser and is never transmitted to our servers unless they post a comment.
 
 We do not use advertising cookies or third-party tracking cookies.
 
@@ -88,7 +88,7 @@ We do not sell or share your personal information with third parties for their o
 - **Google OAuth** — used for publisher sign-in. Subject to [Google's Privacy Policy](https://policies.google.com/privacy).
 - **Google Analytics** — used for platform usage analytics. Subject to [Google's Privacy Policy](https://policies.google.com/privacy).
 - **Stripe** — used to process subscription payments. Your email address is shared with Stripe to create a billing account. Stripe may collect additional information directly from you during checkout. Subject to [Stripe's Privacy Policy](https://stripe.com/privacy).
-- **Resend** *(planned)* — we plan to use Resend to send transactional emails (such as comment notifications) to publishers. This policy will be updated when email sending is enabled.
+- **Resend** — used to send transactional emails to publishers (such as account confirmations and account deletion notices). Subject to Resend's Privacy Policy.
 - **DigitalOcean** — our hosting provider. Your data is stored on a DigitalOcean server located in a DigitalOcean data centre. Subject to [DigitalOcean's Privacy Policy](https://www.digitalocean.com/legal/privacy-policy).
 
 ---
