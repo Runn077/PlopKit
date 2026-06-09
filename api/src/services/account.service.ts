@@ -1,8 +1,15 @@
 import prisma from '../lib/prisma.js'
 import { PLAN_LIMITS } from '../constants/index.js'
 import { sendAccountDeletedEmail } from '../emails/index.js'
+import { AppError } from '../errors/appError.js'
+import stripe from '../lib/stripe.js'
 
 export async function getUsage(userId: string, plan: string) {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { pendingPlan: true },
+  })
+
   const { _sum } = await prisma.widget.aggregate({
     _sum: { monthlyLoads: true },
     where: { site: { userId } },
@@ -10,6 +17,7 @@ export async function getUsage(userId: string, plan: string) {
 
   return {
     plan,
+    pendingPlan: user?.pendingPlan ?? null,
     monthlyLoads: _sum.monthlyLoads ?? 0,
     limit: PLAN_LIMITS[plan as keyof typeof PLAN_LIMITS],
   }
@@ -31,14 +39,23 @@ export async function deleteAccount(userId: string) {
     where: { id: userId },
     select: { email: true, name: true },
   })
+  if (!user) throw new AppError(404, 'User not found')
+
+  const customers = await stripe.customers.list({ email: user.email, limit: 1 })
+  const customer = customers.data[0]
+  if (customer) {
+    const subscriptions = await stripe.subscriptions.list({ customer: customer.id, limit: 1 })
+    const subscription = subscriptions.data[0]
+    if (subscription) {
+      await stripe.subscriptions.cancel(subscription.id)
+    }
+  }
 
   await prisma.user.delete({ where: { id: userId } })
 
-  if (user) {
-    try {
-      await sendAccountDeletedEmail(user.email, user.name ?? 'there')
-    } catch (err) {
-      console.error('Failed to send account deleted email:', err)
-    }
+  try {
+    await sendAccountDeletedEmail(user.email, user.name ?? 'there')
+  } catch (err) {
+    console.error('Failed to send account deleted email:', err)
   }
 }

@@ -39,7 +39,8 @@ model User {
   image         String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-  plan          Plan @default(free)
+  plan          Plan      @default(free)
+  pendingPlan   Plan?
   sessions      Session[]
   accounts      Account[]
   sites         Site[]
@@ -133,7 +134,7 @@ model CommentWidget {
 model Comment {
   id              String        @id @default(cuid())
   commentWidgetId String
-  commentWidget   CommentWidget @relation(fields: [commentWidgetId], references: [id])
+  commentWidget   CommentWidget @relation(fields: [commentWidgetId], references: [id], onDelete: Cascade)
   widgetKey       String        
   pageUrl         String
   body            String
