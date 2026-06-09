@@ -81,7 +81,7 @@ function PlatformReplyItem({
             value={replyBody}
             onChange={e => setReplyBody(e.target.value)}
             placeholder="Reply as site owner..."
-            maxLength={1000}
+            maxLength={2500}
             autoFocus
           />
           <div className="sc-reply-input-actions">
@@ -192,7 +192,7 @@ function PlatformCommentItem({ comment, pinnedCommentId, onDelete, onReplyPosted
             value={replyBody}
             onChange={e => setReplyBody(e.target.value)}
             placeholder="Reply as site owner..."
-            maxLength={1000}
+            maxLength={2500}
             autoFocus
           />
           <div className="sc-reply-input-actions">

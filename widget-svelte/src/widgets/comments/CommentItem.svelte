@@ -135,11 +135,11 @@
       />
       <textarea
         bind:value={replyBody}
-        maxlength={1000}
+        maxlength={2500}
         placeholder="Add a reply..."
       ></textarea>
       <div class="reply-actions">
-        <span class="char-count">{replyBody.length}/1000</span>
+        <span class="char-count">{replyBody.length}/2500</span>
         <div style="display:flex;gap:8px">
           <button class="btn-cancel" onclick={() => { replyOpen = false; replyBody = '' }}>
             Cancel
