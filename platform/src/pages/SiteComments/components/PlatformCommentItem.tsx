@@ -196,7 +196,7 @@ function PlatformCommentItem({ comment, pinnedCommentId, onDelete, onReplyPosted
             autoFocus
           />
           <div className="sc-reply-input-actions">
-            <span className="sc-char-count">{replyBody.length}/1000</span>
+            <span className="sc-char-count">{replyBody.length}/2500</span>
             <div style={{ display: 'flex', gap: '8px' }}>
               <button className="sc-btn-cancel-text" onClick={() => { setReplyOpen(false); setReplyBody('') }}>
                 Cancel
