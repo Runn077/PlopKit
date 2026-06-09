@@ -21,6 +21,9 @@ function Login() {
           </svg>
           Continue with Google
         </button>
+        <p className="auth-legal">
+          By continuing, you agree to our <Link to="/terms">Terms of Service</Link> and <Link to="/privacy">Privacy Policy</Link>.
+        </p>
         <p className="auth-footer">
           Don't have an account? <Link to="/signup">Sign up</Link>
         </p>
