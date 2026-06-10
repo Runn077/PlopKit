@@ -16,16 +16,15 @@
   let pinnedCommentId = $state<string | null>(null)
   let limitReached = $state(false)
   let pinnedComment = $state<Comment | null>(null)
+  let secret = $state<string | null>(null)
+  let ownDisplayId = $state<string | null>(null)
 
-  const STORAGE_KEY = `plopkit_author_${widgetKey}`
+  const STORAGE_KEY = $derived(`plopkit_author_${widgetKey}`)
+  const SECRET_KEY = 'plopkit_commenter_secret'
   const toast = new Toast()
 
   function loadSavedName() {
-    try {
-      return localStorage.getItem(STORAGE_KEY) ?? ''
-    } catch {
-      return ''
-    }
+    try { return localStorage.getItem(STORAGE_KEY) ?? '' } catch { return '' }
   }
 
   function saveName(name: string) {
@@ -36,6 +35,19 @@
         localStorage.removeItem(STORAGE_KEY)
       }
     } catch {}
+  }
+
+  function loadOrCreateSecret(): string {
+    try {
+      const existing = localStorage.getItem(SECRET_KEY)
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+      if (existing && uuidRegex.test(existing)) return existing
+      const newSecret = crypto.randomUUID()
+      localStorage.setItem(SECRET_KEY, newSecret)
+      return newSecret
+    } catch {
+      return crypto.randomUUID()
+    }
   }
 
   async function fetchComments(cursor?: string) {
@@ -74,6 +86,7 @@
         page_url: pageUrl,
         body,
         author_name: nameToSend || undefined,
+        commenter_secret: secret ?? undefined,
       }),
     })
     const data: NewComment = await res.json()
@@ -92,11 +105,22 @@
     }
   }
 
-  onMount(() => {
+
+  async function computeDisplayId(secret: string): Promise<string> {
+    const encoder = new TextEncoder()
+    const data = encoder.encode(secret)
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data)
+    const hashArray = Array.from(new Uint8Array(hashBuffer))
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 8)
+  }
+
+  onMount(async () => {
     const styleEl = document.createElement('style')
     styleEl.textContent = styles
     shadowRoot.insertBefore(styleEl, shadowRoot.firstChild)
     authorName = loadSavedName()
+    secret = loadOrCreateSecret()
+    ownDisplayId = await computeDisplayId(secret)
     fetchComments()
   })
 </script>
@@ -138,6 +162,9 @@
           {widgetKey}
           {pageUrl}
           isPinned={true}
+          commenterSecret={secret}
+          onDeleted={() => { pinnedComment = null; total -= 1 }}
+          ownDisplayId={ownDisplayId}
         />
       {/if}
       {#each comments as c (c.id)}
@@ -146,6 +173,9 @@
           {widgetKey}
           {pageUrl}
           isPinned={false}
+          commenterSecret={secret}
+          onDeleted={(id) => { comments = comments.filter(x => x.id !== id); total -= 1 }}
+          ownDisplayId={ownDisplayId}
         />
       {/each}
       {#if hasMore}

@@ -9,9 +9,12 @@
     widgetKey: string
     pageUrl: string
     isPinned: boolean
+    commenterSecret: string | null
+    onDeleted: (commentId: string) => void
+    ownDisplayId: string | null
   }
 
-  let { comment, widgetKey, pageUrl, isPinned }: Props = $props()
+  let { comment, widgetKey, pageUrl, isPinned, commenterSecret, onDeleted, ownDisplayId }: Props = $props()
 
   let replies = $state<Reply[]>([...comment.replies])
   let expanded = $state(false)
@@ -21,8 +24,7 @@
   let replyAuthorName = $state('')
   const toast = new Toast()
 
-  const STORAGE_KEY = `plopkit_author_${widgetKey}`
-
+  const STORAGE_KEY = $derived(`plopkit_author_${widgetKey}`)
   const LIMIT = 300
   const MAX_LINES = 3
 
@@ -34,6 +36,12 @@
       : lines.length > MAX_LINES
         ? lines.slice(0, MAX_LINES).join('\n') + '...'
         : comment.body.slice(0, LIMIT) + '...'
+  )
+
+  const isOwn = $derived(
+    !!ownDisplayId &&
+    comment.commenterDisplayId === ownDisplayId &&
+    !comment.isOwnerReply
   )
 
   function loadSavedName() {
@@ -60,6 +68,25 @@
     showReplies = true
   }
 
+  function handleReplyDeleted(replyId: string) {
+    replies = replies.filter(r => r.id !== replyId)
+  }
+
+  async function deleteComment() {
+    if (!commenterSecret) return
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/public/comments`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ comment_id: comment.id, commenter_secret: commenterSecret }),
+    })
+    if (!res.ok) {
+      const data = await res.json()
+      toast.show(data.error || 'Failed to delete comment')
+      return
+    }
+    onDeleted(comment.id)
+  }
+
   async function postReply() {
     if (!replyBody.trim()) return
     const nameToSend = replyAuthorName.trim() || ''
@@ -72,6 +99,7 @@
         body: replyBody,
         parent_id: comment.id,
         author_name: nameToSend || undefined,
+        commenter_secret: commenterSecret ?? undefined,
       }),
     })
 
@@ -95,6 +123,7 @@
         quotedId: null,
         quoted: null,
         isOwnerReply: false,
+        commenterDisplayId: data.commenterDisplayId,
       }]
       toast.show('Reply posted!')
     } else {
@@ -111,6 +140,9 @@
     </div>
   {/if}
   <span class="comment-author">{comment.authorName}</span>
+  {#if comment.commenterDisplayId}
+    <span class="commenter-id">#{comment.commenterDisplayId}</span>
+  {/if}
   <p class="comment-body">{displayBody}</p>
   {#if isLong}
     <button class="btn-show-more" onclick={() => expanded = !expanded}>
@@ -120,6 +152,9 @@
   <div class="comment-meta">
     <span class="comment-time">{timeAgo(comment.createdAt)}</span>
     <div class="comment-actions">
+      {#if isOwn}
+        <button class="btn-delete-own" onclick={deleteComment}>Delete</button>
+      {/if}
       <button class="btn-reply" onclick={() => replyOpen ? (replyOpen = false) : openReply()}>
         {replyOpen ? 'Cancel' : 'Reply'}
       </button>
@@ -167,6 +202,9 @@
             {pageUrl}
             parentId={comment.id}
             onReplyPosted={handleReplyPosted}
+            onDeleted={handleReplyDeleted}
+            {commenterSecret}
+            ownDisplayId={ownDisplayId}
           />
         {/each}
       </div>

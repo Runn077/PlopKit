@@ -404,3 +404,25 @@
     font-weight: 700;
     margin-bottom: 4px;
   }
+
+  .commenter-id {
+  display: inline-block;
+  font-size: 11px;
+  color: #999;
+  font-family: monospace;
+  margin-bottom: 4px;
+}
+
+.btn-delete-own {
+  background: none;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ff4444;
+  cursor: pointer;
+  padding: 0;
+}
+
+.btn-delete-own:hover {
+  color: #ff4444;
+}

@@ -13,6 +13,7 @@ export interface Reply {
   quotedId: string | null
   quoted: QuotedComment | null
   isOwnerReply: boolean
+  commenterDisplayId: string | null
 }
 
 export interface Comment {
@@ -22,6 +23,7 @@ export interface Comment {
   createdAt: string
   replies: Reply[]
   isOwnerReply: boolean
+  commenterDisplayId: string | null
 }
 
 export interface NewComment {
@@ -34,6 +36,7 @@ export interface NewComment {
   quotedId: string | null
   quoted: QuotedComment | null
   isOwnerReply: boolean
+  commenterDisplayId: string | null
 }
 
 export interface CommentsResponse {

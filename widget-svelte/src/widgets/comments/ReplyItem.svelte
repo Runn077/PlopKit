@@ -1,27 +1,36 @@
 <script lang="ts">
   import type { Reply } from '../../types'
   import { Toast } from './toast.svelte'
-  import { timeAgo } from './timeago';
+  import { timeAgo } from './timeago'
 
   interface Props {
     reply: Reply
     widgetKey: string
     pageUrl: string
     parentId: string
+    commenterSecret: string | null
     onReplyPosted: (reply: Reply) => void
+    onDeleted: (replyId: string) => void
+    ownDisplayId: string | null
   }
 
-  let { reply, widgetKey, pageUrl, parentId, onReplyPosted }: Props = $props()
+  let { reply, widgetKey, pageUrl, parentId, commenterSecret, onReplyPosted, onDeleted, ownDisplayId }: Props = $props()
 
   let replyOpen = $state(false)
   let replyBody = $state('')
   let replyAuthorName = $state('')
   const toast = new Toast()
 
-  const STORAGE_KEY = `plopkit_author_${widgetKey}`
+  const STORAGE_KEY = $derived(`plopkit_author_${widgetKey}`)
 
   const isQuoteDeleted = $derived(
     reply.quoted && (reply.quoted.deletedAt !== null || reply.quoted.status !== 'approved')
+  )
+
+  const isOwn = $derived(
+    !!ownDisplayId &&
+    reply.commenterDisplayId === ownDisplayId &&
+    !reply.isOwnerReply
   )
 
   function loadSavedName() {
@@ -43,6 +52,21 @@
     replyOpen = true
   }
 
+  async function deleteReply() {
+    if (!commenterSecret) return
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/public/comments`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ comment_id: reply.id, commenter_secret: commenterSecret }),
+    })
+    if (!res.ok) {
+      const data = await res.json()
+      toast.show(data.error || 'Failed to delete reply')
+      return
+    }
+    onDeleted(reply.id)
+  }
+
   async function postReply() {
     if (!replyBody.trim()) return
     const nameToSend = replyAuthorName.trim() || ''
@@ -56,6 +80,7 @@
         parent_id: parentId,
         quoted_id: reply.id,
         author_name: nameToSend || undefined,
+        commenter_secret: commenterSecret ?? undefined,
       }),
     })
     const data = await res.json()
@@ -75,6 +100,7 @@
         quotedId: data.quotedId,
         quoted: data.quoted,
         isOwnerReply: false,
+        commenterDisplayId: data.commenterDisplayId,
       })
       toast.show('Reply posted!')
     } else {
@@ -95,12 +121,20 @@
     </div>
   {/if}
   <span class="reply-author">{reply.authorName}</span>
+  {#if reply.commenterDisplayId}
+    <span class="commenter-id">#{reply.commenterDisplayId}</span>
+  {/if}
   <p class="reply-body">{reply.body}</p>
   <div class="reply-meta">
     <span class="comment-time">{timeAgo(reply.createdAt)}</span>
-    <button class="btn-reply" onclick={() => replyOpen ? (replyOpen = false) : openReply()}>
-      {replyOpen ? 'Cancel' : 'Reply'}
-    </button>
+    <div style="display:flex;gap:8px">
+      {#if isOwn}
+        <button class="btn-delete-own" onclick={deleteReply}>Delete</button>
+      {/if}
+      <button class="btn-reply" onclick={() => replyOpen ? (replyOpen = false) : openReply()}>
+        {replyOpen ? 'Cancel' : 'Reply'}
+      </button>
+    </div>
   </div>
   {#if replyOpen}
     <div class="reply-input-area">
