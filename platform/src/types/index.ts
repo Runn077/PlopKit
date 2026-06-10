@@ -38,6 +38,7 @@ export interface Reply {
   quoted: QuotedComment | null
   isOwnerReply: boolean
   authorName: string
+  commenterDisplayId: string | null
 }
 
 export interface Comment {
@@ -50,6 +51,7 @@ export interface Comment {
   replies: Reply[]
   isOwnerReply: boolean
   authorName: string
+  commenterDisplayId: string | null
 }
 
 export interface Site {

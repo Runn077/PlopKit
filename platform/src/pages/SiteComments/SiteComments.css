@@ -717,3 +717,10 @@
   font-weight: 700;
   margin-bottom: 4px;
 }
+
+.sc-commenter-id {
+  display: inline-block;
+  font-size: 11px;
+  color: #999;
+  font-family: monospace;
+}

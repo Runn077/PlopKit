@@ -25,6 +25,9 @@ function ReplyRow({
     <div className="sc-reply">
       {reply.isOwnerReply && <span className="sc-owner-badge">Site owner</span>}
       <span className="sc-reply-author">{reply.authorName}</span>
+      {reply.commenterDisplayId && !reply.isOwnerReply && (
+        <span className="sc-commenter-id">#{reply.commenterDisplayId}</span>
+      )}
       <p className="sc-reply-body">{displayBody}</p>
       {isLong && (
         <button className="sc-btn-show-more" onClick={() => setExpanded(v => !v)}>
@@ -52,6 +55,9 @@ function CommentRow({ comment, actions, replyActions, expiry }: Props) {
     <div className="sc-comment">
       {comment.isOwnerReply && <span className="sc-owner-badge">Site owner</span>}
       <span className="sc-comment-author">{comment.authorName}</span>
+      {comment.commenterDisplayId && !comment.isOwnerReply && (
+        <span className="sc-commenter-id">#{comment.commenterDisplayId}</span>
+      )}
       <p className="sc-comment-body">{displayBody}</p>
       {isLong && (
         <button className="sc-btn-show-more" onClick={() => setExpanded(v => !v)}>

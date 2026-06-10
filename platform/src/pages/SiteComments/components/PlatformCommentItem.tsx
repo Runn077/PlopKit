@@ -60,6 +60,9 @@ function PlatformReplyItem({
       )}
       {reply.isOwnerReply && <span className="sc-owner-badge">Site owner</span>}
       <span className="sc-reply-author">{reply.isOwnerReply ? session?.user.name : reply.authorName}</span>
+      {reply.commenterDisplayId && !reply.isOwnerReply && (
+        <span className="sc-commenter-id">#{reply.commenterDisplayId}</span>
+      )}
       <p className="sc-reply-body">{reply.body}</p>
       <div className="sc-reply-meta">
         <span className="sc-comment-date">
@@ -156,6 +159,9 @@ function PlatformCommentItem({ comment, pinnedCommentId, onDelete, onReplyPosted
         </div>
       )}
       <span className="sc-comment-author">{comment.isOwnerReply ? session?.user.name : comment.authorName}</span>
+      {comment.commenterDisplayId && !comment.isOwnerReply && (
+        <span className="sc-commenter-id">#{comment.commenterDisplayId}</span>
+      )}
       <p className="sc-comment-body">{displayBody}</p>
       {isLong && (
         <button className="sc-btn-show-more" onClick={() => setExpanded(v => !v)}>
