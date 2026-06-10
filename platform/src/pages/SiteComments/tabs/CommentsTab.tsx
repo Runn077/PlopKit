@@ -59,7 +59,7 @@ function CommentsTab({
         </div>
       </div>
 
-      {comments.length === 0 ? (
+      {comments.length === 0 && !pinnedComment ?(
         <p className="sc-empty">No comments yet.</p>
       ) : (
         <div>
