@@ -4,6 +4,11 @@ import { AppError } from '../errors/appError.js'
 import { LIMITS } from '../constants/index.js'
 import { CommentStatus } from '../generated/prisma/enums.js'
 import { getWidgetOwnedByUser, trackWidgetLoad, getWidgetByKey } from './widget.service.js'
+import { createHash } from 'crypto'
+
+function hashSecret(secret: string): string {
+  return createHash('sha256').update(secret).digest('hex').slice(0, 8)
+}
 
 async function getCommentAndVerifyOwnership(commentId: string, userId: string) {
   const comment = await prisma.comment.findUnique({ where: { id: commentId } })
@@ -229,6 +234,7 @@ export async function createComment(
   quotedId: string | undefined,
   origin: string,
   authorName?: string,
+  commenterSecret?: string,
 ) {
   const cleanBody = sanitizeHtml(rawBody, { allowedTags: [], allowedAttributes: {} })
   if (!cleanBody || cleanBody.trim().length === 0) throw new AppError(400, 'Comment body is required')
@@ -305,6 +311,7 @@ export async function createComment(
       status: widget.commentWidget.autoApprove ? CommentStatus.approved : CommentStatus.pending,
       parentId: parentId ?? null,
       quotedId: quotedId ?? null,
+      commenterDisplayId: commenterSecret ? hashSecret(commenterSecret) : null,
     },
     include: {
       quoted: {
@@ -513,4 +520,15 @@ export async function updateBannedWords(
       ...(data.autoDeleteBannedWords !== undefined && { autoDeleteBannedWords: data.autoDeleteBannedWords }),
     },
   })
+}
+
+export async function deleteOwnComment(commentId: string, commenterSecret: string) {
+  const comment = await prisma.comment.findUnique({ where: { id: commentId } })
+  if (!comment) throw new AppError(404, 'Comment not found')
+  if (!comment.commenterDisplayId) throw new AppError(403, 'This comment cannot be deleted by its author')
+
+  const hash = hashSecret(commenterSecret)
+  if (hash !== comment.commenterDisplayId) throw new AppError(403, 'Invalid commenter secret')
+
+  await prisma.comment.delete({ where: { id: commentId } })
 }

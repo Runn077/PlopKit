@@ -132,23 +132,24 @@ model CommentWidget {
 }
 
 model Comment {
-  id              String        @id @default(cuid())
-  commentWidgetId String
-  commentWidget   CommentWidget @relation(fields: [commentWidgetId], references: [id], onDelete: Cascade)
-  widgetKey       String        
-  pageUrl         String
-  body            String
-  status          CommentStatus @default(pending)
-  deletedAt       DateTime?
-  deletedByParent Boolean       @default(false)
-  createdAt       DateTime      @default(now())
-  parentId        String?
-  parent          Comment?      @relation("Replies", fields: [parentId], references: [id], onDelete: Cascade)
-  replies         Comment[]     @relation("Replies")
-  quotedId        String?
-  quoted          Comment?      @relation("QuotedComment", fields: [quotedId], references: [id], onDelete: SetNull)
-  quotedBy        Comment[]     @relation("QuotedComment")
-  isOwnerReply    Boolean       @default(false)
-  pinnedIn        CommentWidget? @relation("PinnedComment")
-  authorName      String        @default("Anonymous")
+  id                 String        @id @default(cuid())
+  commentWidgetId    String
+  commentWidget      CommentWidget @relation(fields: [commentWidgetId], references: [id], onDelete: Cascade)
+  widgetKey          String        
+  pageUrl            String
+  body               String
+  status             CommentStatus @default(pending)
+  deletedAt          DateTime?
+  deletedByParent    Boolean       @default(false)
+  createdAt          DateTime      @default(now())
+  parentId           String?
+  parent             Comment?      @relation("Replies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies            Comment[]     @relation("Replies")
+  quotedId           String?
+  quoted             Comment?      @relation("QuotedComment", fields: [quotedId], references: [id], onDelete: SetNull)
+  quotedBy           Comment[]     @relation("QuotedComment")
+  isOwnerReply       Boolean       @default(false)
+  pinnedIn           CommentWidget? @relation("PinnedComment")
+  authorName         String        @default("Anonymous")
+  commenterDisplayId String?
 }

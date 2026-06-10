@@ -21,7 +21,13 @@ export const createCommentSchema = z.object({
   ),
   parent_id: z.string().optional(),
   quoted_id: z.string().optional(),
-  author_name: z.string().max(50, 'Name must be under 30 characters').optional(),
+  author_name: z.string().max(30, 'Name must be under 30 characters').optional(),
+  commenter_secret: z.string().uuid('Invalid commenter secret').optional(),
+})
+
+export const deleteOwnCommentSchema = z.object({
+  comment_id: z.string().min(1, 'Comment ID is required'),
+  commenter_secret: z.string().uuid('Invalid commenter secret'),
 })
 
 export const ownerPostSchema = z.object({
