@@ -63,7 +63,7 @@ export async function getApprovedComments(
     },
   }
 
-  const [topLevelTotal, replyTotal, pinnedComment, comments] = await Promise.all([
+  const [topLevelTotal, replyTotal, pinnedComment, comments, owner] = await Promise.all([
     prisma.comment.count({ where: countWhere }),
     prisma.comment.count({ where: replyCountWhere }),
     pinnedCommentId
@@ -78,15 +78,32 @@ export async function getApprovedComments(
       take: LIMITS.COMMENT_PAGE_SIZE,
       include: { replies: replyInclude },
     }),
+    prisma.user.findUnique({
+      where: { id: widget.site.userId },
+      select: { name: true },
+    }),
   ])
 
   if (!skipQuota) {
     await trackWidgetLoad(widgetKey)
   }
 
+  const ownerName = owner?.name ?? 'Site owner'
+
+  function applyOwnerName(c: any) {
+    return {
+      ...c,
+      authorName: c.isOwnerReply ? ownerName : c.authorName,
+      replies: c.replies?.map((r: any) => ({
+        ...r,
+        authorName: r.isOwnerReply ? ownerName : r.authorName,
+      })),
+    }
+  }
+
   return {
-    pinnedComment: pinnedComment ?? null,
-    comments,
+    pinnedComment: pinnedComment ? applyOwnerName(pinnedComment) : null,
+    comments: comments.map(applyOwnerName),
     hasMore: comments.length === LIMITS.COMMENT_PAGE_SIZE,
     total: topLevelTotal + replyTotal,
     pinnedCommentId,
