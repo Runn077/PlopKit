@@ -7,7 +7,11 @@ import { getWidgetOwnedByUser, trackWidgetLoad, getWidgetByKey } from './widget.
 import { createHash } from 'crypto'
 
 function hashSecret(secret: string): string {
-  return createHash('sha256').update(secret).digest('hex').slice(0, 8)
+  return createHash('sha256')
+    .update(secret)
+    .digest('base64')
+    .replace(/[^a-zA-Z0-9]/g, '')
+    .slice(0, 10)
 }
 
 async function getCommentAndVerifyOwnership(commentId: string, userId: string) {

@@ -111,7 +111,8 @@
     const data = encoder.encode(secret)
     const hashBuffer = await crypto.subtle.digest('SHA-256', data)
     const hashArray = Array.from(new Uint8Array(hashBuffer))
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 8)
+    const base64 = btoa(String.fromCharCode(...hashArray))
+    return base64.replace(/[^a-zA-Z0-9]/g, '').slice(0, 10)
   }
 
   onMount(async () => {
