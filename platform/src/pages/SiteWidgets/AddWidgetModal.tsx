@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react'
-import './SiteWidgets.css'
 
 interface Props {
   onClose: () => void
@@ -40,16 +39,16 @@ function AddWidgetModal({ onClose, onSubmit }: Props) {
 
   return (
     <div
-      className="sw-overlay"
+      className="pk-modal-overlay"
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div className="sw-modal">
-        <p className="sw-modal-title">Add a widget</p>
-        <form className="sw-modal-form" onSubmit={handleSubmit}>
-          <div>
-            <p className="sw-label">Widget type</p>
+      <div className="pk-modal">
+        <p className="pk-modal-title">Add a widget</p>
+        <form className="pk-modal-form" onSubmit={handleSubmit}>
+          <div className="pk-modal-field">
+            <label className="pk-modal-label">Widget type</label>
             <select
-              className="sw-select"
+              className="pk-modal-select"
               value={type}
               onChange={e => setType(e.target.value)}
             >
@@ -58,21 +57,21 @@ function AddWidgetModal({ onClose, onSubmit }: Props) {
               ))}
             </select>
           </div>
-          <div>
-            <p className="sw-label">Name</p>
+          <div className="pk-modal-field">
+            <label className="pk-modal-label">Name</label>
             <input
               ref={nameRef}
-              className="sw-input"
+              className="pk-modal-input"
               placeholder="e.g. Blog Comments"
               value={name}
               onChange={e => setName(e.target.value)}
               required
             />
           </div>
-          {error && <p className="sw-modal-error">{error}</p>}
-          <div className="sw-modal-actions">
-            <button type="button" className="sw-btn" onClick={onClose}>Cancel</button>
-            <button type="submit" className="sw-btn sw-btn-primary" disabled={loading}>
+          {error && <p className="pk-modal-error">{error}</p>}
+          <div className="pk-modal-actions">
+            <button type="button" className="btn" onClick={onClose}>Cancel</button>
+            <button type="submit" className="btn btn-primary" disabled={loading}>
               {loading ? 'Adding...' : 'Create'}
             </button>
           </div>

@@ -28,19 +28,20 @@ function DeleteWidgetModal({ onClose, onConfirm }: { onClose: () => void, onConf
 
   return (
     <div
-      className="sw-overlay"
+      className="pk-modal-overlay"
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div className="sw-modal">
-        <p className="sw-modal-title">Delete widget</p>
-        <p style={{ fontSize: 13, color: '#555', marginBottom: 16, lineHeight: 1.5 }}>
+      <div className="pk-modal">
+        <p className="pk-modal-title">Delete widget</p>
+        <p className="pk-modal-body">
           This will permanently delete the widget and all its comments.
         </p>
-        {error && <p className="sw-modal-error">{error}</p>}
-        <div className="sw-modal-actions">
-          <button className="sw-btn" onClick={onClose}>Cancel</button>
+        {error && <p className="pk-modal-error">{error}</p>}
+        <div className="pk-modal-actions">
+          <button type="button" className="btn" onClick={onClose}>Cancel</button>
           <button
-            className="sw-btn sw-btn-danger-fill"
+            type="button"
+            className="btn btn-danger"
             onClick={handleConfirm}
             disabled={loading}
           >
@@ -103,7 +104,7 @@ function WidgetRow({ widget, onOpen, onDelete, onRename }: {
                 if (e.key === 'Escape') handleCancel()
               }}
             />
-            {error && <p className="sw-modal-error">{error}</p>}
+            {error && <p className="pk-modal-error">{error}</p>}
             <div style={{ display: 'flex', gap: 8 }}>
               <button className="sw-btn sw-btn-primary" onClick={handleRename} disabled={saving}>
                 {saving ? 'Saving...' : 'Confirm'}

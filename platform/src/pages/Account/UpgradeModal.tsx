@@ -102,35 +102,35 @@ function UpgradeModal({ currentPlan, pendingPlan, onClose, onPlanChanged }: Prop
   }
 
   return (
-    <div className="upgrade-overlay" onClick={onClose}>
-      <div className="upgrade-modal" onClick={e => e.stopPropagation()}>
-        <div className="upgrade-modal-header">
-          <p className="upgrade-modal-title">Manage your plan</p>
-          <button className="upgrade-modal-close" onClick={onClose}>✕</button>
+    <div className="pk-modal-overlay" onClick={onClose}>
+      <div className="pk-modal pk-modal-wide" onClick={e => e.stopPropagation()}>
+        <div className="pk-modal-header">
+          <p className="pk-modal-title">Manage your plan</p>
+          <button type="button" className="pk-modal-close" onClick={onClose}>✕</button>
         </div>
-        
-        {confirmUpgrade && (
-          <div className="confirm-overlay">
-            <div className="confirm-modal">
-              <h3>Upgrade to {confirmUpgrade}?</h3>
 
-              <p>
+        {confirmUpgrade && (
+          <div className="pk-modal-overlay pk-modal-overlay-nested">
+            <div className="pk-modal">
+              <p className="pk-modal-title">Upgrade to {confirmUpgrade}?</p>
+              <p className="pk-modal-body">
                 Your subscription will be upgraded immediately.
               </p>
-
-              <p>
+              <p className="pk-modal-body">
                 Stripe will charge the payment method currently associated
                 with your account for any prorated amount due.
               </p>
-
-              <div className="confirm-actions">
+              <div className="pk-modal-actions">
                 <button
+                  type="button"
+                  className="btn"
                   onClick={() => setConfirmUpgrade(null)}
                 >
                   Cancel
                 </button>
-
                 <button
+                  type="button"
+                  className="btn btn-primary"
                   onClick={() => handleUpgrade(confirmUpgrade)}
                 >
                   Confirm Upgrade

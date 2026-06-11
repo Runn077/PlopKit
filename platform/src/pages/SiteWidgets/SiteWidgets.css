@@ -122,56 +122,6 @@
   cursor: not-allowed;
 }
 
-/* --- Modals --- */
-.sw-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: var(--pk-z-modal);
-}
-
-.sw-modal {
-  background: var(--pk-color-bg);
-  border-radius: var(--pk-radius-lg);
-  padding: 24px;
-  width: 100%;
-  max-width: 380px;
-  border: 1px solid var(--pk-color-border);
-}
-
-.sw-modal-title {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--pk-color-text);
-  margin-bottom: 20px;
-  font-family: var(--pk-font);
-}
-
-.sw-modal-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.sw-modal-actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 4px;
-}
-
-.sw-modal-error,
-.sw-settings-error {
-  font-size: 12px;
-  color: var(--pk-color-danger);
-}
-
-.sw-settings-error {
-  margin-top: 8px;
-}
-
 /* --- Form fields --- */
 .sw-input,
 .sw-select {

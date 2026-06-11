@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react'
-import '../SiteWidgets.css'
 
 interface Props {
   siteName: string
@@ -34,27 +33,28 @@ function DeleteSiteModal({ siteName, onClose, onConfirm }: Props) {
 
   return (
     <div
-      className="sw-overlay"
+      className="pk-modal-overlay"
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div className="sw-modal">
-        <p className="sw-modal-title">Delete site</p>
-        <p style={{ fontSize: 13, color: '#555', marginBottom: 16, lineHeight: 1.5 }}>
+      <div className="pk-modal">
+        <p className="pk-modal-title">Delete site</p>
+        <p className="pk-modal-body">
           This will permanently delete the site and all its widgets and comments. Type <strong>{siteName}</strong> to confirm.
         </p>
-        <div className="sw-modal-form">
+        <div className="pk-modal-form">
           <input
             ref={inputRef}
-            className="sw-input"
+            className="pk-modal-input"
             placeholder={siteName}
             value={value}
             onChange={e => setValue(e.target.value)}
           />
-          {error && <p className="sw-modal-error">{error}</p>}
-          <div className="sw-modal-actions">
-            <button type="button" className="sw-btn" onClick={onClose}>Cancel</button>
+          {error && <p className="pk-modal-error">{error}</p>}
+          <div className="pk-modal-actions">
+            <button type="button" className="btn" onClick={onClose}>Cancel</button>
             <button
-              className="sw-btn sw-btn-danger-fill"
+              type="button"
+              className="btn btn-danger"
               disabled={value !== siteName || loading}
               onClick={handleConfirm}
             >

@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react'
-import './AddSiteModal.css'
 
 interface Props {
   onClose: () => void
@@ -35,27 +34,33 @@ function AddSiteModal({ onClose, onSubmit }: Props) {
   }
 
   return (
-    <div className="modal-overlay" onClick={e => { if (e.target === e.currentTarget) onClose() }}>
-      <div className="modal">
-        <p className="modal-title">Add a website</p>
-        <form className="modal-form" onSubmit={handleSubmit}>
-          <input
-            ref={nameRef}
-            className="modal-input"
-            placeholder="Website name"
-            value={name}
-            onChange={e => setName(e.target.value)}
-            required
-          />
-          <input
-            className="modal-input"
-            placeholder="Domain (e.g. myblog.com)"
-            value={domain}
-            onChange={e => setDomain(e.target.value)}
-            required
-          />
-          {error && <p className="modal-error">{error}</p>}
-          <div className="modal-actions">
+    <div className="pk-modal-overlay" onClick={e => { if (e.target === e.currentTarget) onClose() }}>
+      <div className="pk-modal">
+        <p className="pk-modal-title">Add a website</p>
+        <form className="pk-modal-form" onSubmit={handleSubmit}>
+          <div className="pk-modal-field">
+            <label className="pk-modal-label">Website name</label>
+            <input
+              ref={nameRef}
+              className="pk-modal-input"
+              placeholder="My Blog"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              required
+            />
+          </div>
+          <div className="pk-modal-field">
+            <label className="pk-modal-label">Domain</label>
+            <input
+              className="pk-modal-input"
+              placeholder="myblog.com"
+              value={domain}
+              onChange={e => setDomain(e.target.value)}
+              required
+            />
+          </div>
+          {error && <p className="pk-modal-error">{error}</p>}
+          <div className="pk-modal-actions">
             <button type="button" className="btn" onClick={onClose}>Cancel</button>
             <button type="submit" className="btn btn-primary" disabled={loading}>
               {loading ? 'Adding...' : 'Add website'}
