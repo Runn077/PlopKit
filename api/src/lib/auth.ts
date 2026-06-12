@@ -24,6 +24,16 @@ export const auth = betterAuth({
         defaultValue: 'free',
         input: false,
       },
+      pendingPlan: {
+        type: 'string',
+        required: false,
+        input: false,
+      },
+      usageResetAt: {
+        type: 'date',
+        required: false,
+        input: false,
+      },
     },
   },
   databaseHooks: {
@@ -34,6 +44,18 @@ export const auth = betterAuth({
             await sendWelcomeEmail(user.email, user.name ?? 'there')
           } catch (err) {
             console.error('Failed to send welcome email:', err)
+          }
+
+          const usageResetAt = new Date()
+          usageResetAt.setDate(usageResetAt.getDate() + 30)
+
+          try {
+            await prisma.user.update({
+              where: { id: user.id },
+              data: { usageResetAt },
+            })
+          } catch (err) {
+            console.error('Failed to set initial usageResetAt:', err)
           }
         },
       },

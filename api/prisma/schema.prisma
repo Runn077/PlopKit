@@ -41,6 +41,7 @@ model User {
   updatedAt     DateTime  @updatedAt
   plan          Plan      @default(free)
   pendingPlan   Plan?
+  usageResetAt DateTime   @default(now())
   sessions      Session[]
   accounts      Account[]
   sites         Site[]

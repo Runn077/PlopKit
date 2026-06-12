@@ -24,11 +24,30 @@ export function startScheduler() {
     console.log(`[scheduler] Cleaned up ${expired.count} expired pending comments`)
   })
 
-  cron.schedule('0 0 1 * *', async () => {
-    const result = await prisma.widget.updateMany({
-      data: { monthlyLoads: 0 },
+  // reset user monthly loads
+  cron.schedule('* * * * *', async () => {
+    const dueUsers = await prisma.user.findMany({
+      where: { usageResetAt: { lte: new Date() } },
+      select: { id: true },
     })
-    console.log(`[scheduler] Reset monthlyLoads for ${result.count} widgets`)
+
+    const next = new Date()
+    next.setDate(next.getDate() + 30)
+
+    for (const user of dueUsers) {
+      await prisma.$transaction([
+        prisma.widget.updateMany({
+          where: { site: { userId: user.id } },
+          data: { monthlyLoads: 0 },
+        }),
+        prisma.user.update({
+          where: { id: user.id },
+          data: { usageResetAt: next },
+        }),
+      ])
+    }
+
+    console.log(`[scheduler] Reset usage for ${dueUsers.length} users`)
   })
 
   // Reset demo widget load count daily

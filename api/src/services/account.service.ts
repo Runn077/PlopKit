@@ -7,7 +7,7 @@ import stripe from '../lib/stripe.js'
 export async function getUsage(userId: string, plan: string) {
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    select: { pendingPlan: true },
+    select: { pendingPlan: true, usageResetAt: true },
   })
 
   const { _sum } = await prisma.widget.aggregate({
@@ -20,6 +20,7 @@ export async function getUsage(userId: string, plan: string) {
     pendingPlan: user?.pendingPlan ?? null,
     monthlyLoads: _sum.monthlyLoads ?? 0,
     limit: PLAN_LIMITS[plan as keyof typeof PLAN_LIMITS],
+    usageResetAt: user?.usageResetAt ?? null,
   }
 }
 

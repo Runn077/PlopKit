@@ -66,9 +66,12 @@ export async function upgradeSubscription(userId: string, plan: 'hobby' | 'pro')
     proration_behavior: 'always_invoice',
   })
 
+  const usageResetAt = new Date()
+  usageResetAt.setDate(usageResetAt.getDate() + 30)
+
   await prisma.user.update({
     where: { id: userId },
-    data: { plan: plan as any, pendingPlan: null },
+    data: { plan: plan as any, pendingPlan: null, usageResetAt },
   })
 
   return { success: true }
@@ -169,9 +172,12 @@ export async function handleWebhook(payload: Buffer, signature: string) {
       return
     }
 
+    const usageResetAt = new Date()
+    usageResetAt.setDate(usageResetAt.getDate() + 30)
+
     await prisma.user.update({
       where: { id: userId },
-      data: { plan: plan as any, pendingPlan: null },
+      data: { plan: plan as any, pendingPlan: null, usageResetAt },
     })
   }
 
