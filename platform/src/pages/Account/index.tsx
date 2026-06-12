@@ -12,6 +12,7 @@ type Usage = {
   pendingPlan: 'free' | 'hobby' | 'pro' | null
   monthlyLoads: number
   limit: number
+  usageResetAt: string | null
 }
 
 function Account() {
@@ -164,6 +165,15 @@ function Account() {
               <p className="account-label">
                 {usage.monthlyLoads.toLocaleString()} of {usage.limit.toLocaleString()} loads used this month
               </p>
+              {usage.usageResetAt && (
+                <p className="account-label">
+                  Usage resets on {new Date(usage.usageResetAt).toLocaleDateString('en-US', {
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric',
+                  })}
+                </p>
+              )}
               <button
                 className="account-btn account-btn-primary"
                 onClick={() => setShowUpgradeModal(true)}
@@ -185,7 +195,7 @@ function Account() {
 
         {usage && usage.plan !== 'free' && (
           <button
-            className="account-btn"
+            className="account-manage-btn"
             onClick={handleManageBilling}
           >
             Manage billing
