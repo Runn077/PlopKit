@@ -25,7 +25,7 @@ export function startScheduler() {
   })
 
   // reset user monthly loads
-  cron.schedule('* * * * *', async () => {
+  cron.schedule('0 0 * * *', async () => {
     const dueUsers = await prisma.user.findMany({
       where: { usageResetAt: { lte: new Date() } },
       select: { id: true },
