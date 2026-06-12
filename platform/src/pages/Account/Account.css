@@ -117,8 +117,8 @@
   cursor: pointer;
   border: 1px solid var(--pk-color-border);
   box-shadow: 4px 4px 0 black;
-  background: #4ecdc4;
-  color: black;
+  background: #635BFF;
+  color: rgb(255, 255, 255);
   margin-bottom: 32px;
   transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
@@ -126,6 +126,6 @@
 .account-manage-btn:hover {
   transform: translate(2px, 2px);
   box-shadow: 2px 2px 0 black;
-  background: #51ebe0;
+  background: #948fff;
   color: white;
 }
