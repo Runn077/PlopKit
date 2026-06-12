@@ -34,6 +34,11 @@ export const auth = betterAuth({
         required: false,
         input: false,
       },
+      stripeCustomerId: {
+        type: 'string',
+        required: false,
+        input: false,
+      },
     },
   },
   databaseHooks: {

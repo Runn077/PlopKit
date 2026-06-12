@@ -32,19 +32,20 @@ enum Plan {
 // --- Auth (better-auth) ---
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String    @unique
-  emailVerified Boolean   @default(false)
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  plan          Plan      @default(free)
-  pendingPlan   Plan?
-  usageResetAt DateTime   @default(now())
-  sessions      Session[]
-  accounts      Account[]
-  sites         Site[]
+  id               String    @id @default(cuid())
+  name             String?
+  email            String    @unique
+  emailVerified    Boolean   @default(false)
+  image            String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  plan             Plan      @default(free)
+  pendingPlan      Plan?
+  usageResetAt     DateTime   @default(now())
+  stripeCustomerId String?   @unique
+  sessions         Session[]
+  accounts         Account[]
+  sites            Site[]
 }
 
 model Session {

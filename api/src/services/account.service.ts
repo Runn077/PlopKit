@@ -38,14 +38,12 @@ export async function updateName(userId: string, name: string) {
 export async function deleteAccount(userId: string) {
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    select: { email: true, name: true },
+    select: { email: true, name: true, stripeCustomerId: true },
   })
   if (!user) throw new AppError(404, 'User not found')
 
-  const customers = await stripe.customers.list({ email: user.email, limit: 1 })
-  const customer = customers.data[0]
-  if (customer) {
-    const subscriptions = await stripe.subscriptions.list({ customer: customer.id, limit: 1 })
+  if (user.stripeCustomerId) {
+    const subscriptions = await stripe.subscriptions.list({ customer: user.stripeCustomerId, limit: 1 })
     const subscription = subscriptions.data[0]
     if (subscription) {
       await stripe.subscriptions.cancel(subscription.id)
