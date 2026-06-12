@@ -132,8 +132,9 @@ function UpgradeModal({ currentPlan, pendingPlan, onClose, onPlanChanged }: Prop
                   type="button"
                   className="btn btn-primary"
                   onClick={() => handleUpgrade(confirmUpgrade)}
+                  disabled={loading !== null}
                 >
-                  Confirm Upgrade
+                  {loading === confirmUpgrade ? 'Upgrading...' : 'Confirm Upgrade'}
                 </button>
               </div>
             </div>
