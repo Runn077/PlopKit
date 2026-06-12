@@ -63,10 +63,6 @@ app.post('/api/billing/webhook', express.raw({ type: 'application/json' }), asyn
 
 app.use(express.json())
 
-app.get('/api/debug-ip', (req, res) => {
-  res.json({ ip: req.ip, xForwardedFor: req.headers['x-forwarded-for'] })
-})
-
 app.use('/api/comments', commentsRouter)
 app.use('/api/public/comments', publicCommentsRouter)
 app.use('/api/sites', sitesRouter)
