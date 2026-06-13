@@ -93,7 +93,7 @@ export async function getApprovedComments(
     }),
   ])
 
-  if (!skipQuota) {
+  if (!skipQuota && !cursor) {
     await trackWidgetLoad(widgetKey)
   }
 
