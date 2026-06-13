@@ -35,9 +35,20 @@ export async function createCheckoutSession(userId: string, plan: 'hobby' | 'pro
     success_url: `${process.env.PLATFORM_URL}/account?upgrade=success`,
     cancel_url: `${process.env.PLATFORM_URL}/account?upgrade=cancelled`,
   }
+  sessionParams.allow_promotion_codes = true
 
   if (user.stripeCustomerId) {
-    sessionParams.customer = user.stripeCustomerId
+    try {
+      const customer = await stripe.customers.retrieve(user.stripeCustomerId)
+      if (customer.deleted) {
+        throw new Error('Customer deleted')
+      }
+      sessionParams.customer = user.stripeCustomerId
+    } catch {
+      // Stale/invalid customer ID, create a fresh one
+      const newCustomer = await stripe.customers.create({ email: user.email })
+      sessionParams.customer = newCustomer.id
+    }
   } else {
     sessionParams.customer_email = user.email
   }
@@ -47,7 +58,7 @@ export async function createCheckoutSession(userId: string, plan: 'hobby' | 'pro
   return { url: session.url }
 }
 
-export async function upgradeSubscription(userId: string, plan: 'hobby' | 'pro') {
+export async function upgradeSubscription(userId: string, plan: 'hobby' | 'pro', promoCode?: string) {
   const user = await prisma.user.findUnique({ where: { id: userId } })
   if (!user) throw new AppError(404, 'User not found')
   if (user.plan === 'free') throw new AppError(400, 'No active subscription to upgrade.')
@@ -63,10 +74,32 @@ export async function upgradeSubscription(userId: string, plan: 'hobby' | 'pro')
   const subscriptionItem = subscription.items.data[0]
   if (!subscriptionItem) throw new AppError(400, 'No subscription item found.')
 
-  await stripe.subscriptions.update(subscription.id, {
+  const updateParams: any = {
     items: [{ id: subscriptionItem.id, price: priceId }],
     proration_behavior: 'always_invoice',
-  })
+  }
+
+  if (promoCode) {
+    const promos = await stripe.promotionCodes.list({
+      code: promoCode,
+      active: true,
+      limit: 1,
+    })
+
+    const promo = promos.data[0]
+
+    if (!promo) {
+      throw new AppError(400, 'Invalid promo code')
+    }
+
+    updateParams.discounts = [
+      {
+        promotion_code: promo.id,
+      },
+    ]
+  }
+
+  await stripe.subscriptions.update(subscription.id, updateParams)
 
   const usageResetAt = new Date()
   usageResetAt.setDate(usageResetAt.getDate() + 30)

@@ -12,6 +12,7 @@ const checkoutSchema = z.object({
 
 const upgradeSchema = z.object({
   plan: z.enum(['pro']),
+  promoCode: z.string().optional(),
 })
 
 const downgradeSchema = z.object({
@@ -30,8 +31,8 @@ router.post('/checkout', requireAuth, validate(checkoutSchema), async (req, res,
 router.post('/upgrade', requireAuth, validate(upgradeSchema), async (req, res, next) => {
   try {
     const { user } = res.locals.session
-    const { plan } = req.body
-    const result = await billingService.upgradeSubscription(user.id, plan)
+    const { plan, promoCode } = req.body
+    const result = await billingService.upgradeSubscription(user.id, plan, promoCode)
     res.json(result)
   } catch (err) { next(err) }
 })
