@@ -23,6 +23,7 @@ function UpgradeModal({ currentPlan, pendingPlan, onClose, onPlanChanged }: Prop
   const [loading, setLoading] = useState<string | null>(null)
   const [error, setError] = useState('')
   const [confirmUpgrade, setConfirmUpgrade] = useState<Plan | null>(null)
+  const [promoCode, setPromoCode] = useState('')
 
   async function handleCheckout(plan: Plan) {
     setLoading(plan)
@@ -50,7 +51,7 @@ function UpgradeModal({ currentPlan, pendingPlan, onClose, onPlanChanged }: Prop
     try {
       const res = await apiFetch('/billing/upgrade', {
         method: 'POST',
-        body: JSON.stringify({ plan }),
+        body: JSON.stringify({ plan, promoCode: promoCode.trim() || undefined }),
       })
       if (!res.ok) {
         const data = await res.json()
@@ -120,11 +121,25 @@ function UpgradeModal({ currentPlan, pendingPlan, onClose, onPlanChanged }: Prop
                 Stripe will charge the payment method currently associated
                 with your account for any prorated amount due.
               </p>
+              <div className="pk-modal-field">
+                <label className="pk-modal-label">Promo code (optional)</label>
+                <input
+                  className="pk-modal-input"
+                  type="text"
+                  placeholder="BETA100 for 100% off"
+                  value={promoCode}
+                  onChange={e => setPromoCode(e.target.value)}
+                />
+                {error && <p className="upgrade-error">{error}</p>}
+              </div>
               <div className="pk-modal-actions">
                 <button
                   type="button"
                   className="btn"
-                  onClick={() => setConfirmUpgrade(null)}
+                  onClick={() => {
+                    setConfirmUpgrade(null)
+                    setPromoCode('')
+                  }}
                 >
                   Cancel
                 </button>
@@ -200,8 +215,6 @@ function UpgradeModal({ currentPlan, pendingPlan, onClose, onPlanChanged }: Prop
             )
           })}
         </div>
-
-        {error && <p className="upgrade-error">{error}</p>}
       </div>
     </div>
   )
