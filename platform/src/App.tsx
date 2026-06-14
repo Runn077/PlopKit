@@ -11,6 +11,7 @@ import PrivacyPolicy from './pages/Legal/PrivacyPolicy'
 import Terms from './pages/Legal/Terms'
 import Demo from './pages/Demo/Demo'
 import Setup from './pages/Setup/Setup'
+import Contact from './pages/Contact/Contact'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path='/setup' element={<Setup />} />
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
+        <Route path='/contact' element={<Contact />} />
         <Route path='/dashboard' element={
           <ProtectedRoute><Dashboard /></ProtectedRoute>
         } />

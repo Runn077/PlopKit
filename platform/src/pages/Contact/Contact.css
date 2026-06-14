@@ -1,0 +1,98 @@
+.contact-wrap {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-content {
+  flex: 1;
+  max-width: 640px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+}
+
+.contact-wrap h1 {
+  font-size: 38px;
+  font-weight: 500;
+  margin: 0 0 1rem;
+  line-height: 1.15;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: var(--color-text-secondary, #555);
+  line-height: 1.7;
+  margin: 0 0 2.5rem;
+}
+
+.contact-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 2.5rem;
+}
+
+.contact-card {
+  background: var(--white, #fff);
+  border: 1px solid #000000;
+  padding: 1.25rem;
+  box-shadow: 4px 4px 0 #000000;
+  transition: box-shadow 0.1s, transform 0.1s;
+  text-decoration: none;
+  display: block;
+  color: inherit;
+}
+
+.contact-card:hover {
+  box-shadow: 2px 2px 0 #000000;
+  transform: translate(2px, 2px);
+}
+
+.card-icon {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0 0 4px;
+}
+
+.card-desc {
+  font-size: 13px;
+  color: var(--color-text-secondary, #555);
+  margin: 0 0 12px;
+  line-height: 1.5;
+}
+
+.card-action {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.contact-divider {
+  border: none;
+  border-top: 2px solid #000000;
+  margin: 2.5rem 0;
+}
+
+.response-note {
+  font-size: 14px;
+  color: var(--color-text-secondary, #555);
+}
+
+@media (max-width: 480px) {
+  .contact-content {
+    padding: 2rem 1.25rem;
+  }
+
+  .contact-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-wrap h1 {
+    font-size: 28px;
+  }
+}
