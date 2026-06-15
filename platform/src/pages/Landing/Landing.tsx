@@ -21,13 +21,11 @@ export default function LandingPage() {
       <LandingNavbar />
       <main className="hero">
         <h1>
-          Embedded Comments
-          <br />
-          and Stuff
+           Anonymous Comments
         </h1>
 
         <p className="hero-subtitle">
-          Add anonymous comments to any website with a single script tag.
+          No signup for commenters, just start commenting!
         </p>
 
         <div className="hero-actions">
@@ -40,6 +38,25 @@ export default function LandingPage() {
           </button>
         </div>
       </main>
+
+      {/* BETA DISCLAIMER */}
+      <div className="beta-banner">
+        <span className="beta-tag">BETA</span>
+        <p>PlopKit is in open beta. Things may change, break, or get better overnight. We'd love your feedback as we build. <a href="/contact">Tell us what you think →</a></p>
+      </div>
+
+      {/* COUPON */}
+      <div className="coupon-card">
+        <div className="coupon-left">
+          <p className="coupon-label">Beta Launch Offer</p>
+          <p className="coupon-headline">Use this promo code for 100% off</p>
+          <p className="coupon-sub">Apply at checkout</p>
+        </div>
+        <div className="coupon-right">
+          <p className="coupon-code">BETA100</p>
+          <p className="coupon-code-label">use at checkout</p>
+        </div>
+      </div>
 
       {/* WORKFLOW */}
       <section className="workflow-section">

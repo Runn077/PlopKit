@@ -84,7 +84,8 @@ body {
 /* HERO */
 
 .hero {
-  padding: 60px 24px;
+  padding-top: 60px;
+  padding: 24px;
 
   display: flex;
   flex-direction: column;
@@ -94,7 +95,8 @@ body {
 .hero h1 {
   text-align: center;
 
-  font-size: clamp(4rem, 8vw, 7rem);
+  font-size: clamp(2.4rem, 8vw, 6rem);
+
   line-height: 0.95;
 
   color: var(--red);
@@ -153,6 +155,135 @@ body {
   transform: translate(3px, 3px);
   box-shadow: 3px 3px 0 black;
 }
+
+/* BETA BANNER */
+.beta-banner {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  max-width: 900px;
+  margin: 0 auto 80px;
+  padding: 20px 28px;
+
+  border: 4px solid black;
+  box-shadow: 6px 6px 0 black;
+  background: var(--yellow);
+}
+
+.beta-tag {
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  border: 3px solid black;
+  padding: 4px 10px;
+  white-space: nowrap;
+  background: #ff6b6b;
+}
+
+.beta-banner p {
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.beta-banner a {
+  font-weight: 700;
+  color: black;
+}
+
+.beta-banner a:hover {
+  text-decoration: none;
+  opacity: 0.7;
+}
+
+@media (max-width: 900px) {
+  .beta-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin: 0 24px 60px;
+  }
+}
+
+/* COUPON */
+.coupon-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+
+  max-width: 900px;
+  margin: 0 auto 80px;
+  padding: 24px 28px;
+
+  border: 4px solid black;
+  box-shadow: 6px 6px 0 black;
+  background: var(--mint);
+}
+
+.coupon-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.coupon-label {
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.coupon-headline {
+  font-size: 1.2rem;
+  font-weight: 900;
+}
+
+.coupon-sub {
+  font-size: 0.875rem;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.coupon-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+
+  border: 4px dashed black;
+  padding: 16px 28px;
+}
+
+.coupon-code {
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.coupon-code-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.7;
+}
+
+@media (max-width: 900px) {
+  .coupon-card {
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0 24px 60px;
+  }
+
+  .coupon-right {
+    width: 100%;
+    align-items: center;
+  }
+}
+
 
 /* CTA */
 
