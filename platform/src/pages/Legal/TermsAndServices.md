@@ -29,7 +29,7 @@ As a publisher, you are responsible for how you deploy and configure the PlopKit
 - Moderating the comment sections on your site appropriately
 - Ensuring the widget is not embedded on sites that violate these Terms
 
-PlopKit has no control over where publishers embed the widget or what content appears in comment sections on third-party sites. Publishers bear full responsibility for their deployment of the widget and the content their users submit through it.
+- PlopKit has no control over where publishers embed the widget or what content appears in comment sections on third-party sites. Publishers bear full responsibility for their deployment of the widget and the content their users submit through it.
 
 ---
 
@@ -45,7 +45,7 @@ You may not use PlopKit to:
 - Use PlopKit in a way that could damage, disable, or impair the service
 - Violate the rights of any third party, including intellectual property rights
 
-We reserve the right to determine what constitutes a violation of these Terms at our sole discretion.
+- We reserve the right to determine what constitutes a violation of these Terms at our sole discretion.
 
 ---
 
@@ -95,10 +95,10 @@ PlopKit offers free and paid subscription plans. Paid plans are billed monthly t
 
 - **Cancellations:** You may cancel your subscription at any time through the billing portal on the Account page. Cancellations take effect at the end of the current billing period. You will retain access to your paid plan features until the period ends.
 - **Refunds:** We do not offer refunds for partial billing periods.
-- **Plan limits:** Each plan includes a monthly widget load limit. If you reach your limit, comments will stop loading until the next monthly reset on the 1st of the month. We will not automatically charge you for overages.
+- **Plan limits:** Each plan includes a monthly widget load limit. If you reach your limit, comments will stop loading until the next monthly reset. We will not automatically charge you for overages.
 - **Plan changes:** You may upgrade your plan at any time. Upgrades take effect immediately.
 
-We reserve the right to change our pricing at any time. We will provide reasonable notice of any price changes before they take effect.
+- We reserve the right to change our pricing at any time. We will provide reasonable notice of any price changes before they take effect.
 
 ---
 
