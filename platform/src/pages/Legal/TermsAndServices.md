@@ -1,6 +1,6 @@
 # Terms of Service
 
-**Last updated: June 4, 2026**
+**Last updated: June 15, 2026**
 
 These Terms of Service ("Terms") govern your use of PlopKit ("we", "us", "our"), a service operated by an individual based in Canada. By creating an account or using PlopKit in any way, you agree to these Terms.
 
