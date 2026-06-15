@@ -7,8 +7,16 @@ export function NewsLetter() {
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
 
+  function isValidEmail(email: string) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  }
+
   async function handleSubmit() {
     if (!email.trim()) return
+    if (!isValidEmail(email)) {
+      setError('Please enter a valid email address.')
+      return
+    }
     setLoading(true)
     setError('')
     try {
@@ -29,7 +37,7 @@ export function NewsLetter() {
       setLoading(false)
     }
   }
-
+  
   return (
     <section className="newsletter-section">
       <div className="newsletter-card">
