@@ -186,4 +186,7 @@
       {/if}
     </div>
   {/if}
+  <div class="powered-by">
+    <a href="https://plopkit.com" target="_blank" rel="noopener noreferrer">Powered by PlopKit</a>
+  </div>
 </div>

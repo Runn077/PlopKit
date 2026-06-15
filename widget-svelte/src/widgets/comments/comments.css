@@ -426,3 +426,18 @@
 .btn-delete-own:hover {
   color: #ff4444;
 }
+
+.powered-by {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.powered-by a {
+  font-size: 11px;
+  color: #999;
+  text-decoration: none;
+}
+
+.powered-by a:hover {
+  color: #555;
+}
