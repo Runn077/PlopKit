@@ -11,6 +11,7 @@ import sitesRouter from './routes/sites.js'
 import widgetsRouter from './routes/widgets.js'
 import accountRouter from './routes/account.js'
 import billingRouter from './routes/billing.js'
+import newsletterRouter from './routes/newsletter.js'
 import helmet from 'helmet'
 
 const app = express()
@@ -64,7 +65,9 @@ app.post('/api/billing/webhook', express.raw({ type: 'application/json' }), asyn
 app.use(express.json())
 
 app.use('/api/comments', commentsRouter)
+
 app.use('/api/public/comments', publicCommentsRouter)
+app.use('/api/public/newsletter', newsletterRouter)
 app.use('/api/sites', sitesRouter)
 app.use('/api/widgets', widgetsRouter)
 app.use('/api/account', accountRouter)
