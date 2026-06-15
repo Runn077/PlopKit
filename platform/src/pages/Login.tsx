@@ -24,6 +24,9 @@ function Login() {
         <p className="auth-legal">
           By continuing, you agree to our <Link to="/terms">Terms of Service</Link> and <Link to="/privacy">Privacy Policy</Link>.
         </p>
+        <p className="auth-beta">
+          PlopKit is in open beta, things may change. Thanks for being early!
+        </p>
         <p className="auth-footer">
           Don't have an account? <Link to="/signup">Sign up</Link>
         </p>
