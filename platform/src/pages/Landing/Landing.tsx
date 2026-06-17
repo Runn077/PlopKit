@@ -24,7 +24,7 @@ export default function LandingPage() {
         <h1>
            Anonymous Comments
         </h1>
-
+        <img className="logo" src="/logo.svg" alt="PlopKit" />
         <p className="hero-subtitle">
           No signup for commenters, just start commenting!
         </p>
