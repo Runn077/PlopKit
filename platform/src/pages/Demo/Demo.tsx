@@ -1,6 +1,7 @@
 import LandingNavbar from "../../components/LandingNavbar"
 import { useEffect, useRef } from "react"
 import './Demo.css'
+import Footer from "../../components/Footer"
 
 export default function DemoPage() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -25,6 +26,7 @@ export default function DemoPage() {
         <p className="demo-subheading">This is a live PlopKit comment widget.</p>
         <div ref={containerRef} />
       </div>
+      <Footer/>
     </div>
   )
 }
