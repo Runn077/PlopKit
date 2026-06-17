@@ -50,11 +50,11 @@ export default function LandingPage() {
       <div className="coupon-card">
         <div className="coupon-left">
           <p className="coupon-label">Beta Launch Offer</p>
-          <p className="coupon-headline">Use this promo code for 100% off</p>
+          <p className="coupon-headline">Use this promo code for 75% off</p>
           <p className="coupon-sub">Apply at checkout</p>
         </div>
         <div className="coupon-right">
-          <p className="coupon-code">BETA100</p>
+          <p className="coupon-code">BETA</p>
           <p className="coupon-code-label">use at checkout</p>
         </div>
       </div>
