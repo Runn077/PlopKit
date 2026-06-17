@@ -13,5 +13,21 @@ export default defineConfig({
       fileName: () => 'widget.js',
       formats: ['iife'],
     },
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        passes: 3,
+        drop_console: true,
+        pure_getters: true,
+        unsafe: true,
+        unsafe_comps: true,
+      },
+      mangle: {
+        properties: false,
+      },
+      format: {
+        comments: false,
+      },
+    },
   },
 })
