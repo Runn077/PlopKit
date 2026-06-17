@@ -9,8 +9,7 @@ export default function Contact() {
       <div className="contact-content">
         <h1>Get in touch</h1>
         <p className="subtitle">
-          Found a bug? Have a feature idea? Just want to say hi? We're a small
-          team and we actually read everything.
+          Found a bug? Have a feature idea? Just want to say hi? Contact us.
         </p>
         <div className="contact-cards">
           <a
