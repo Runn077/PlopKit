@@ -242,12 +242,57 @@ export async function handleWebhook(payload: Buffer, signature: string) {
     ])
   }
 
+  if (event.type === 'invoice.paid') {
+    const invoice = event.data.object
+    if (invoice.billing_reason !== 'subscription_cycle') return
+
+    const subscriptionId = invoice.parent?.subscription_details?.subscription as string
+    if (!subscriptionId) return
+
+    const user = await prisma.user.findUnique({
+      where: { stripeCustomerId: invoice.customer as string },
+    })
+    if (!user) return
+
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId)
+    const item = subscription.items.data[0]
+    if (!item) {
+      throw new AppError(500, 'No subscription item found.')
+    }
+
+    const usageResetAt = new Date(item.current_period_end * 1000)
+
+    if (user.pendingPlan) {
+      await prisma.$transaction([
+        prisma.widget.updateMany({
+          where: { site: { userId: user.id } },
+          data: { monthlyLoads: 0 },
+        }),
+        prisma.user.update({
+          where: { id: user.id },
+          data: { plan: user.pendingPlan, pendingPlan: null, usageResetAt },
+        }),
+      ])
+      return
+    }
+
+    await prisma.$transaction([
+      prisma.widget.updateMany({
+        where: { site: { userId: user.id } },
+        data: { monthlyLoads: 0 },
+      }),
+      prisma.user.update({
+        where: { id: user.id },
+        data: { usageResetAt },
+      }),
+    ])
+  }
+
   if (event.type === 'customer.subscription.updated') {
     const subscription = event.data.object
     const user = await prisma.user.findUnique({
       where: { stripeCustomerId: subscription.customer as string },
     })
-
     if (!user) return
 
     const item = subscription.items.data[0]
@@ -257,16 +302,6 @@ export async function handleWebhook(payload: Buffer, signature: string) {
 
     const usageResetAt = new Date(item.current_period_end * 1000)
 
-    if (user.pendingPlan) {
-      const previousAttributes = (event.data as any).previous_attributes
-      if (previousAttributes?.current_period_start) {
-        await prisma.user.update({
-          where: { id: user.id },
-          data: { plan: user.pendingPlan, pendingPlan: null, usageResetAt },
-        })
-        return
-      }
-    }
     await prisma.user.update({
       where: { id: user.id },
       data: { usageResetAt },
