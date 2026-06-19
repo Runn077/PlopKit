@@ -99,17 +99,27 @@ export async function upgradeSubscription(userId: string, plan: 'hobby' | 'pro',
     ]
   }
 
-  await stripe.subscriptions.update(subscription.id, updateParams)
+  const updatedSubscription = await stripe.subscriptions.update(subscription.id, updateParams)
+  
+  const item = updatedSubscription.items.data[0]
+  if (!item) {
+    throw new AppError(500, 'No subscription item found.')
+  }
 
-  const usageResetAt = new Date()
-  usageResetAt.setDate(usageResetAt.getDate() + 30)
+  const usageResetAt = new Date(item.current_period_end * 1000)
 
-  await prisma.user.update({
-    where: { id: userId },
-    data: { plan: plan as any, pendingPlan: null, usageResetAt },
-  })
+  await prisma.$transaction([
+    prisma.widget.updateMany({
+      where: { site: {userId} },
+      data: { monthlyLoads: 0 }
+    }),
+    prisma.user.update({
+      where: { id: userId },
+      data: { plan: plan as any, pendingPlan: null, usageResetAt },
+    })
+  ])
 
-  return { success: true }
+  return {success: true}
 }
 
 export async function downgradeSubscription(userId: string, plan: 'hobby') {
@@ -206,18 +216,30 @@ export async function handleWebhook(payload: Buffer, signature: string) {
       return
     }
 
-    const usageResetAt = new Date()
-    usageResetAt.setDate(usageResetAt.getDate() + 30)
+    const subscription = await stripe.subscriptions.retrieve(session.subscription as string)
 
-    await prisma.user.update({
-      where: { id: userId },
-      data: {
-        plan: plan as any,
-        pendingPlan: null,
-        usageResetAt,
-        stripeCustomerId: session.customer as string,
-      },
-    })
+    const item = subscription.items.data[0]
+    if (!item) {
+      throw new AppError(500, 'No subscription item found.')
+    }
+
+    const usageResetAt = new Date(item.current_period_end * 1000)
+
+    await prisma.$transaction([
+      prisma.widget.updateMany({
+        where: { site: { userId }},
+        data: { monthlyLoads: 0 },
+      }),
+      prisma.user.update({
+        where: { id: userId },
+        data: {
+          plan: plan as any,
+          pendingPlan: null,
+          usageResetAt,
+          stripeCustomerId: session.customer as string,
+        }
+      })
+    ])
   }
 
   if (event.type === 'customer.subscription.updated') {
@@ -226,15 +248,29 @@ export async function handleWebhook(payload: Buffer, signature: string) {
       where: { stripeCustomerId: subscription.customer as string },
     })
 
-    if (user?.pendingPlan) {
+    if (!user) return
+
+    const item = subscription.items.data[0]
+    if (!item) {
+      throw new AppError(500, 'No subscription item found.')
+    }
+
+    const usageResetAt = new Date(item.current_period_end * 1000)
+
+    if (user.pendingPlan) {
       const previousAttributes = (event.data as any).previous_attributes
       if (previousAttributes?.current_period_start) {
         await prisma.user.update({
           where: { id: user.id },
-          data: { plan: user.pendingPlan, pendingPlan: null },
+          data: { plan: user.pendingPlan, pendingPlan: null, usageResetAt },
         })
+        return
       }
     }
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { usageResetAt },
+    })
   }
 
   if (event.type === 'customer.subscription.deleted') {
