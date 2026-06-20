@@ -597,6 +597,7 @@ body {
   .step-4,
   .step-5 {
     grid-column: 1;
+    grid-row: auto;
   }
 
   .step-1::after,
