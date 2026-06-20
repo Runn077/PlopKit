@@ -5,12 +5,8 @@ interface Props {
   onSubmit: (type: string, name: string) => Promise<void>
 }
 
-const WIDGET_TYPES = [
-  { value: 'comments', label: 'Comments' },
-]
-
 function AddWidgetModal({ onClose, onSubmit }: Props) {
-  const [type, setType] = useState('comments')
+  const type = 'comments'
   const [name, setName] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -43,26 +39,15 @@ function AddWidgetModal({ onClose, onSubmit }: Props) {
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
       <div className="pk-modal">
-        <p className="pk-modal-title">Add a widget</p>
+        <p className="pk-modal-title">Add a comment widget</p>
         <form className="pk-modal-form" onSubmit={handleSubmit}>
-          <div className="pk-modal-field">
-            <label className="pk-modal-label">Widget type</label>
-            <select
-              className="pk-modal-select"
-              value={type}
-              onChange={e => setType(e.target.value)}
-            >
-              {WIDGET_TYPES.map(w => (
-                <option key={w.value} value={w.value}>{w.label}</option>
-              ))}
-            </select>
-          </div>
+          <input type="hidden" value={type} />
           <div className="pk-modal-field">
             <label className="pk-modal-label">Name</label>
             <input
               ref={nameRef}
               className="pk-modal-input"
-              placeholder="e.g. Blog Comments"
+              placeholder="e.g. page name"
               value={name}
               onChange={e => setName(e.target.value)}
               required
