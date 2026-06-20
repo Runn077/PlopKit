@@ -3,6 +3,7 @@ import { requireAuth } from '../middleware/requireAuth.js'
 import { validate } from '../middleware/validate.js'
 import { z } from 'zod'
 import * as accountService from '../services/account.service.js'
+import { getWidgetLoadStats } from '../services/widget.service.js'
 
 const router = Router()
 
@@ -16,10 +17,23 @@ router.get('/me', requireAuth, async (req, res, next) => {
   } catch (err) { next(err) }
 })
 
-router.get('/usage', requireAuth, async (req, res, next) => {
+router.get('/load-stats', requireAuth, async (req, res, next) => {
   try {
     const { user } = res.locals.session
-    const usage = await accountService.getUsage(user.id, user.plan)
+    const stats = await getWidgetLoadStats(user.id)
+    res.json(stats)
+  } catch (err) { next(err) }
+})
+
+router.get('/usage', requireAuth, async (req, res, next) => {
+  try {
+    if (!process.env.ENABLE_CLOUD) {
+      res.status(404).json({ error: 'Usage tracking is not available in self-hosted mode' })
+      return
+    }
+    const { getUsage } = await import('../services/usage.service.js')
+    const { user } = res.locals.session
+    const usage = await getUsage(user.id, user.plan)
     res.json(usage)
   } catch (err) { next(err) }
 })

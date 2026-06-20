@@ -2,7 +2,6 @@ import { randomBytes } from 'crypto'
 import prisma from '../lib/prisma.js'
 import { AppError } from '../errors/appError.js'
 import { WidgetType } from '../generated/prisma/enums.js'
-import { PLAN_LIMITS } from '../constants/index.js'
 
 export async function getWidgetOwnedByUser(widgetId: string, userId: string) {
   const widget = await prisma.widget.findUnique({
@@ -76,24 +75,19 @@ export async function deleteWidget(widgetId: string, userId: string) {
 
 export async function trackWidgetLoad(widgetKey: string) {
   if (widgetKey === process.env.DEMO_WIDGET_KEY) return
-
   const widget = await getWidgetByKey(widgetKey)
   if (!widget) throw new AppError(404, 'Widget not found')
-
-  const userId = widget.site.userId
-  const userPlan = widget.site.user.plan
-  const limit = PLAN_LIMITS[userPlan]
-
-  const { _sum } = await prisma.widget.aggregate({
-    _sum: { monthlyLoads: true },
-    where: { site: { userId } },
-  })
-
-  const totalLoads = _sum.monthlyLoads ?? 0
-  if (totalLoads >= limit) throw new AppError(429, 'Monthly load limit reached')
 
   await prisma.widget.update({
     where: { id: widget.id },
     data: { monthlyLoads: { increment: 1 } },
   })
+}
+
+export async function getWidgetLoadStats(userId: string) {
+  const { _sum } = await prisma.widget.aggregate({
+    _sum: { monthlyLoads: true },
+    where: { site: { userId } },
+  })
+  return { monthlyLoads: _sum.monthlyLoads ?? 0 }
 }
