@@ -1,0 +1,42 @@
+/* NAVBAR */
+
+.navbar-landing {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 96px;
+  padding: 0 32px;
+  background: var(--red);
+  border-bottom: 4px solid black;
+  box-shadow: 0 6px 0 black;
+}
+
+.navbar-landing .logo {
+  font-size: 3rem;
+  font-weight: 900;
+  color: white;
+  -webkit-text-stroke: 0.5px black;
+  text-shadow: 4px 4px 0 black;
+  cursor: pointer;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links button {
+  padding: 12px 20px;
+  border: 3px solid black;
+  background: white;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 black;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.nav-links button:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 black;
+}

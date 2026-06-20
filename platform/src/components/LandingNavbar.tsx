@@ -1,4 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom'
+import './LandingNavbar.css'
 
 export default function LandingNavbar() {
   const navigate = useNavigate()
