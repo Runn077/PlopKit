@@ -3,7 +3,6 @@ import { AppError } from './appError.js'
 
 export function errorHandler(
   err: unknown,
-  req: Request,
   res: Response,
   next: NextFunction,
 ) {
