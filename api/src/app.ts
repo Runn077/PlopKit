@@ -9,7 +9,7 @@ import publicCommentsRouter from './routes/comments/publicComments.js'
 import sitesRouter from './routes/sites.js'
 import widgetsRouter from './routes/widgets.js'
 import accountRouter from './routes/account.js'
-import newsletterRouter from './routes/newsletter.js'
+import newsletterRouter from './cloud/routes/newsletter.js'
 import helmet from 'helmet'
 
 const app = express()
@@ -53,7 +53,7 @@ app.get('/api/health', (_, res) => {
 app.all('/api/auth/*splat', toNodeHandler(auth))
 
 if (process.env.ENABLE_CLOUD === 'true') {
-  const { handleWebhook } = await import('./services/billing.service.js')
+  const { handleWebhook } = await import('./cloud/services/billing.service.js')
   app.post('/api/billing/webhook', express.raw({ type: 'application/json' }), async (req, res, next) => {
     try {
       const signature = req.headers['stripe-signature'] as string
@@ -76,7 +76,7 @@ app.use('/api/widgets', widgetsRouter)
 app.use('/api/account', accountRouter)
 
 if (process.env.ENABLE_CLOUD === 'true') {
-  const { default: billingRouter } = await import('./routes/billing.js')
+  const { default: billingRouter } = await import('./cloud/routes/billing.js')
   app.use('/api/billing', billingRouter)
 }
 

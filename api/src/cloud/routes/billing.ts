@@ -1,7 +1,7 @@
 import { Router } from 'express'
-import { requireAuth } from '../middleware/requireAuth.js'
+import { requireAuth } from '../../middleware/requireAuth.js'
 import { z } from 'zod'
-import { validate } from '../middleware/validate.js'
+import { validate } from '../../middleware/validate.js'
 import * as billingService from '../services/billing.service.js'
 
 const router = Router()

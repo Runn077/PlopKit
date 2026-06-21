@@ -1,8 +1,8 @@
 import { Router } from 'express'
 import { z } from 'zod'
 import rateLimit from 'express-rate-limit'
-import { validate } from '../middleware/validate.js'
-import resend from '../lib/resend.js'
+import { validate } from '../../middleware/validate.js'
+import resend from '../../lib/resend.js'
 
 const router = Router()
 

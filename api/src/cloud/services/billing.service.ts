@@ -1,6 +1,6 @@
-import prisma from '../lib/prisma.js'
+import prisma from '../../lib/prisma.js'
 import stripe from '../lib/stripe.js'
-import { AppError } from '../errors/appError.js'
+import { AppError } from '../../errors/appError.js'
 
 const PRICE_IDS: Record<string, string> = {
   hobby: process.env.STRIPE_HOBBY_PRICE_ID!,

@@ -88,7 +88,7 @@ export async function trackWidgetLoad(widgetKey: string) {
   if (!widget) throw new AppError(404, 'Widget not found')
 
   if (process.env.ENABLE_CLOUD === 'true') {
-    const { PLAN_LIMITS } = await import('../constants/cloud.js')
+    const { PLAN_LIMITS } = await import('../cloud/constants.js')
     const { monthlyLoads } = await getWidgetLoadStats(widget.site.userId)
     const user = await prisma.user.findUnique({ where: { id: widget.site.userId }, select: { plan: true } })
     if (user && monthlyLoads >= PLAN_LIMITS[user.plan]) {

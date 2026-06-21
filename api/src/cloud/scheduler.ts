@@ -1,9 +1,9 @@
 import cron from 'node-cron'
-import prisma from './prisma.js'
+import prisma from '../lib/prisma.js'
 
 export function startCloudScheduler() {
   // reset user monthly loads
-  cron.schedule('* * * * *', async () => {
+  cron.schedule('0 0 * * *', async () => {
     const dueUsers = await prisma.user.findMany({
       where: { usageResetAt: { lte: new Date() } },
       select: { id: true },
@@ -26,7 +26,7 @@ export function startCloudScheduler() {
   })
 
   // Reset demo widget load count daily
-  cron.schedule('* * * * *', async () => {
+  cron.schedule('0 0 * * *', async () => {
     const demoKey = process.env.DEMO_WIDGET_KEY
     if (!demoKey) return
     await prisma.widget.updateMany({

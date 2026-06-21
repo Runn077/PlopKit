@@ -31,7 +31,7 @@ router.get('/usage', requireAuth, async (req, res, next) => {
       res.status(404).json({ error: 'Usage tracking is not available in self-hosted mode' })
       return
     }
-    const { getUsage } = await import('../services/usage.service.js')
+    const { getUsage } = await import('../cloud/services/usage.service.js')
     const { user } = res.locals.session
     const usage = await getUsage(user.id, user.plan)
     res.json(usage)

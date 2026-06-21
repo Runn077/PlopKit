@@ -21,7 +21,7 @@ export async function deleteAccount(userId: string) {
   if (!user) throw new AppError(404, 'User not found')
 
   if (process.env.ENABLE_CLOUD === 'true' && user.stripeCustomerId) {
-    const { default: stripe } = await import('../lib/stripe.js')
+    const { default: stripe } = await import('../cloud/lib/stripe.js')
     const subscriptions = await stripe.subscriptions.list({ customer: user.stripeCustomerId, limit: 1 })
     const subscription = subscriptions.data[0]
     if (subscription) {

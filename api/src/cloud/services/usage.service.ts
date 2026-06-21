@@ -1,6 +1,6 @@
-import prisma from '../lib/prisma.js'
-import { getWidgetLoadStats } from './widget.service.js'
-import { PLAN_LIMITS } from '../constants/cloud.js'
+import prisma from '../../lib/prisma.js'
+import { getWidgetLoadStats } from '../../services/widget.service.js'
+import { PLAN_LIMITS } from '../constants.js'
 
 export async function getUsage(userId: string, plan: string) {
   const user = await prisma.user.findUnique({
