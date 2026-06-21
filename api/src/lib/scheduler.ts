@@ -5,7 +5,7 @@ import { CommentStatus } from '../generated/prisma/enums.js'
 
 export function startCoreScheduler() {
   // Permanently delete soft-deleted comments older than 7 days
-  cron.schedule('* * * * *', async () => {
+  cron.schedule('0 0 * * *', async () => {
     const cutoff = new Date()
     cutoff.setDate(cutoff.getDate() - LIMITS.SOFT_DELETE_EXPIRY_DAYS)
     const deleted = await prisma.comment.deleteMany({
@@ -15,7 +15,7 @@ export function startCoreScheduler() {
   })
 
   // Permanently delete pending comments older than 30 days
-  cron.schedule('* * * * *', async () => {
+  cron.schedule('0 0 * * *', async () => {
     const cutoff = new Date()
     cutoff.setDate(cutoff.getDate() - LIMITS.PENDING_EXPIRY_DAYS)
     const expired = await prisma.comment.deleteMany({

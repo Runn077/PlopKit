@@ -4,13 +4,11 @@ import rateLimit from 'express-rate-limit'
 import { toNodeHandler } from 'better-auth/node'
 import { auth } from './lib/auth.js'
 import { errorHandler } from './errors/errorHandler.js'
-import { handleWebhook } from './services/billing.service.js'
 import commentsRouter from './routes/comments/comments.js'
 import publicCommentsRouter from './routes/comments/publicComments.js'
 import sitesRouter from './routes/sites.js'
 import widgetsRouter from './routes/widgets.js'
 import accountRouter from './routes/account.js'
-import billingRouter from './routes/billing.js'
 import newsletterRouter from './routes/newsletter.js'
 import helmet from 'helmet'
 
@@ -54,13 +52,18 @@ app.get('/api/health', (_, res) => {
 
 app.all('/api/auth/*splat', toNodeHandler(auth))
 
-app.post('/api/billing/webhook', express.raw({ type: 'application/json' }), async (req, res, next) => {
-  try {
-    const signature = req.headers['stripe-signature'] as string
-    await handleWebhook(req.body, signature)
-    res.json({ received: true })
-  } catch (err) { next(err) }
-})
+if (process.env.ENABLE_CLOUD) {
+  const { handleWebhook } = await import('./services/billing.service.js')
+  app.post('/api/billing/webhook', express.raw({ type: 'application/json' }), async (req, res, next) => {
+    try {
+      const signature = req.headers['stripe-signature'] as string
+      await handleWebhook(req.body, signature)
+      res.json({ received: true })
+    } catch (err) { 
+      next(err) 
+    }
+  })
+}
 
 app.use(express.json())
 
@@ -71,7 +74,12 @@ app.use('/api/public/newsletter', newsletterRouter)
 app.use('/api/sites', sitesRouter)
 app.use('/api/widgets', widgetsRouter)
 app.use('/api/account', accountRouter)
-app.use('/api/billing', billingRouter)
+
+if (process.env.ENABLE_CLOUD) {
+  const { default: billingRouter } = await import('./routes/billing.js')
+  app.use('/api/billing', billingRouter)
+}
+
 app.use(errorHandler)
 
 export default app
