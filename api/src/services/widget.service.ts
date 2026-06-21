@@ -73,16 +73,6 @@ export async function deleteWidget(widgetId: string, userId: string) {
   await prisma.widget.delete({ where: { id: widgetId } })
 }
 
-export async function trackWidgetLoad(widgetKey: string) {
-  if (widgetKey === process.env.DEMO_WIDGET_KEY) return
-  const widget = await getWidgetByKey(widgetKey)
-  if (!widget) throw new AppError(404, 'Widget not found')
-
-  await prisma.widget.update({
-    where: { id: widget.id },
-    data: { monthlyLoads: { increment: 1 } },
-  })
-}
 
 export async function getWidgetLoadStats(userId: string) {
   const { _sum } = await prisma.widget.aggregate({
@@ -90,4 +80,24 @@ export async function getWidgetLoadStats(userId: string) {
     where: { site: { userId } },
   })
   return { monthlyLoads: _sum.monthlyLoads ?? 0 }
+}
+
+export async function trackWidgetLoad(widgetKey: string) {
+  if (widgetKey === process.env.DEMO_WIDGET_KEY) return
+  const widget = await getWidgetByKey(widgetKey)
+  if (!widget) throw new AppError(404, 'Widget not found')
+
+  if (process.env.ENABLE_CLOUD === 'true') {
+    const { PLAN_LIMITS } = await import('../constants/cloud.js')
+    const { monthlyLoads } = await getWidgetLoadStats(widget.site.userId)
+    const user = await prisma.user.findUnique({ where: { id: widget.site.userId }, select: { plan: true } })
+    if (user && monthlyLoads >= PLAN_LIMITS[user.plan]) {
+      throw new AppError(429, 'Monthly load limit reached')
+    }
+  }
+
+  await prisma.widget.update({
+    where: { id: widget.id },
+    data: { monthlyLoads: { increment: 1 } },
+  })
 }

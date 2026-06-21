@@ -3,7 +3,7 @@ import { startCoreScheduler } from './lib/scheduler.js'
 
 startCoreScheduler()
 
-if (process.env.ENABLE_CLOUD) {
+if (process.env.ENABLE_CLOUD === 'true') {
   const { startCloudScheduler } = await import('./lib/cloudScheduler.js')
   startCloudScheduler()
 }

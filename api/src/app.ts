@@ -52,7 +52,7 @@ app.get('/api/health', (_, res) => {
 
 app.all('/api/auth/*splat', toNodeHandler(auth))
 
-if (process.env.ENABLE_CLOUD) {
+if (process.env.ENABLE_CLOUD === 'true') {
   const { handleWebhook } = await import('./services/billing.service.js')
   app.post('/api/billing/webhook', express.raw({ type: 'application/json' }), async (req, res, next) => {
     try {
@@ -75,7 +75,7 @@ app.use('/api/sites', sitesRouter)
 app.use('/api/widgets', widgetsRouter)
 app.use('/api/account', accountRouter)
 
-if (process.env.ENABLE_CLOUD) {
+if (process.env.ENABLE_CLOUD === 'true') {
   const { default: billingRouter } = await import('./routes/billing.js')
   app.use('/api/billing', billingRouter)
 }

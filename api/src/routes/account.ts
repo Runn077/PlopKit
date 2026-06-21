@@ -27,7 +27,7 @@ router.get('/load-stats', requireAuth, async (req, res, next) => {
 
 router.get('/usage', requireAuth, async (req, res, next) => {
   try {
-    if (!process.env.ENABLE_CLOUD) {
+    if (process.env.ENABLE_CLOUD !== 'true') {
       res.status(404).json({ error: 'Usage tracking is not available in self-hosted mode' })
       return
     }
