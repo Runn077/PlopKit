@@ -15,6 +15,10 @@ type Usage = {
   usageResetAt: string | null
 }
 
+type LoadStats = {
+  monthlyLoads: number
+}
+
 function Account() {
   const { data: session } = useSession()
   const navigate = useNavigate()
@@ -26,8 +30,9 @@ function Account() {
   const [deleteLoading, setDeleteLoading] = useState(false)
   const [deleteError, setDeleteError] = useState('')
   const [usage, setUsage] = useState<Usage | null>(null)
+  const [loadStats, setLoadStats] = useState<LoadStats | null>(null)
+  const [selfHosted, setSelfHosted] = useState(false)
   const [usageLoading, setUsageLoading] = useState(true)
-  const [usageError, setUsageError] = useState('')
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [searchParams, setSearchParams] = useSearchParams()
@@ -37,11 +42,23 @@ function Account() {
     async function fetchUsage() {
       try {
         const res = await apiFetch('/account/usage')
+        if (res.status === 404) {
+          // Self-hosted instance
+          setSelfHosted(true)
+          
+          const statsRes = await apiFetch('/account/load-stats')
+          if (statsRes.ok) {
+            const stats = await statsRes.json()
+            setLoadStats(stats)
+          }
+          return
+        }
         if (!res.ok) throw new Error('Failed to load usage')
         const data = await res.json()
         setUsage(data)
       } catch (err: any) {
-        setUsageError(err.message)
+        // Only set error for non-self-hosted failures
+        if (!selfHosted) console.error(err)
       } finally {
         setUsageLoading(false)
       }
@@ -113,7 +130,11 @@ function Account() {
     }
   }
 
-  const usagePercent = usage ? Math.min((usage.monthlyLoads / usage.limit) * 100, 100) : 0
+  const usagePercent = usage
+    ? Math.min((usage.monthlyLoads / usage.limit) * 100, 100)
+    : 0
+
+  const displayLoads = usage?.monthlyLoads ?? loadStats?.monthlyLoads ?? null
 
   return (
     <div>
@@ -150,10 +171,22 @@ function Account() {
         </div>
 
         <div className="account-section">
-          <p className="account-section-title">Plan & usage</p>
+          <p className="account-section-title">
+            {selfHosted ? 'Usage' : 'Plan & usage'}
+          </p>
           {usageLoading && <p className="account-label">Loading...</p>}
-          {usageError && <p className="account-error">{usageError}</p>}
-          {usage && (
+
+          {/* Self-hosted: just show load count, no plan/billing UI */}
+          {selfHosted && !usageLoading && (
+            <p className="account-label">
+              {displayLoads !== null
+                ? `${displayLoads.toLocaleString()} widget loads this month`
+                : 'Load stats unavailable'}
+            </p>
+          )}
+
+          {/* Cloud: full plan/usage/upgrade UI */}
+          {usage && !selfHosted && (
             <>
               <div className="account-plan-badge">{usage.plan}</div>
               <div className="account-usage-bar-track">
@@ -184,7 +217,7 @@ function Account() {
           )}
         </div>
 
-        {showUpgradeModal && usage && (
+        {showUpgradeModal && usage && !selfHosted && (
           <UpgradeModal
             currentPlan={usage.plan}
             pendingPlan={usage.pendingPlan}
@@ -193,7 +226,7 @@ function Account() {
           />
         )}
 
-        {usage && usage.plan !== 'free' && (
+        {usage && usage.plan !== 'free' && !selfHosted && (
           <button
             className="account-manage-btn"
             onClick={handleManageBilling}
@@ -206,7 +239,9 @@ function Account() {
           <div className="account-danger-row">
             <div>
               <p className="account-danger-text">Delete account</p>
-              <p className="account-danger-hint">Permanently delete your account and all your data.</p>
+              <p className="account-danger-hint">
+                Permanently delete your account and all your data.
+              </p>
             </div>
             <button
               className="account-btn account-btn-danger"
