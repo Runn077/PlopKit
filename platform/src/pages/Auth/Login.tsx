@@ -1,8 +1,8 @@
-import { signIn } from '../lib/auth-client'
+import { signIn } from '../../lib/auth-client'
 import { Link } from 'react-router-dom'
 import './auth.css'
 
-function Signup() {
+function Login() {
   async function handleGoogle() {
     await signIn.social({ provider: 'google', callbackURL: `${import.meta.env.VITE_APP_URL}/dashboard` })
   }
@@ -11,7 +11,7 @@ function Signup() {
     <div className="auth-page">
       <div className="auth-card">
         <Link to="/" className="auth-wordmark">PlopKit</Link>
-        <h1 className="auth-title">Create an account</h1>
+        <h1 className="auth-title">Sign in</h1>
         <button className="auth-btn-google" onClick={handleGoogle} type="button">
           <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
@@ -22,17 +22,17 @@ function Signup() {
           Continue with Google
         </button>
         <p className="auth-legal">
-          By signing up, you agree to our <Link to="/terms">Terms of Service</Link> and <Link to="/privacy">Privacy Policy</Link>.
+          By continuing, you agree to our <Link to="/terms">Terms of Service</Link> and <Link to="/privacy">Privacy Policy</Link>.
         </p>
         <p className="auth-beta">
           PlopKit is in open beta, things may change. Thanks for being early!
         </p>
         <p className="auth-footer">
-          Already have an account? <Link to="/login">Sign in</Link>
+          Don't have an account? <Link to="/signup">Sign up</Link>
         </p>
       </div>
     </div>
   )
 }
 
-export default Signup
+export default Login
