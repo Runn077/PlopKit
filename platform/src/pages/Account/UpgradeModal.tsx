@@ -126,7 +126,6 @@ function UpgradeModal({ currentPlan, pendingPlan, onClose, onPlanChanged }: Prop
                 <input
                   className="pk-modal-input"
                   type="text"
-                  placeholder="BETA"
                   value={promoCode}
                   onChange={e => setPromoCode(e.target.value)}
                 />
