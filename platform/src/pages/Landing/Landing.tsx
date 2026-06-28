@@ -40,25 +40,6 @@ export default function LandingPage() {
         </div>
       </main>
 
-      {/* BETA DISCLAIMER */}
-      <div className="beta-banner">
-        <span className="beta-tag">BETA</span>
-        <p>PlopKit is in open beta. Things may change, break, or get better overnight. We'd love your feedback as we build. <a href="/contact">Tell us what you think →</a></p>
-      </div>
-
-      {/* COUPON */}
-      <div className="coupon-card">
-        <div className="coupon-left">
-          <p className="coupon-label">Beta Launch Offer</p>
-          <p className="coupon-headline">Use this promo code for 75% off</p>
-          <p className="coupon-sub">Apply at checkout</p>
-        </div>
-        <div className="coupon-right">
-          <p className="coupon-code">BETA</p>
-          <p className="coupon-code-label">use at checkout</p>
-        </div>
-      </div>
-
       {/* WORKFLOW */}
       <section className="workflow-section">
         <h2 className="section-title">How It Works</h2>
@@ -155,7 +136,6 @@ export default function LandingPage() {
           ))}
         </div>
       </section>
-      <NewsLetter/>
       <Footer />
     </div>
   )
