@@ -3,7 +3,6 @@ import Footer from '../../components/Footer'
 import { useEffect } from 'react'
 import { useNavigate, useLocation} from 'react-router-dom'
 import LandingNavbar from '../../components/LandingNavbar'
-import { NewsLetter } from '../../components/Newsletter'
 
 export default function LandingPage() {
   const navigate = useNavigate()
