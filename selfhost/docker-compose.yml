@@ -1,0 +1,51 @@
+services:
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ../api
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+      BETTER_AUTH_URL: ${BETTER_AUTH_URL}
+      PLATFORM_URL: ${PLATFORM_URL}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      EMAIL_FROM: ${EMAIL_FROM}
+      ENABLE_CLOUD: "false"
+    ports:
+      - "3000:3000"
+    command: >
+      sh -c "npx prisma migrate deploy && node dist/index.js"
+
+  platform:
+    build:
+      context: ../platform
+      args:
+        VITE_API_URL: ${VITE_API_URL}
+        VITE_APP_URL: ${VITE_APP_URL}
+        VITE_AUTH_URL: ${VITE_AUTH_URL}
+    restart: always
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres_data:
