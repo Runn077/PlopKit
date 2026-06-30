@@ -20,7 +20,7 @@ hosted service, and none of that code runs in self-hosted mode.
  
 # Running locally
 
-## 1. Clone the repo
+## Clone the repo
  
 ```bash
 git clone https://github.com/runn077/plopkit
