@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Last updated: June 10, 2026**
+**Last updated: July 1, 2026**
 
 PlopKit is a project operated by an individual based in Canada. This Privacy Policy explains what information we collect, how we use it, and your rights regarding that information.
 
@@ -23,7 +23,8 @@ This policy applies to two groups of people:
 
 When you create a PlopKit account, we collect:
 
-- Your **name** and **email address** via Google OAuth (and potentially other OAuth providers in the future, such as GitHub)
+- Your **email address**, collected either via Google OAuth or when you sign in using a magic link sent to your email
+- Your **name and profile image**, if you sign in via Google OAuth (not collected for magic link sign-in)
 - Your **profile image** if provided by your OAuth provider
 - Your **session data** (a session token stored in a cookie to keep you signed in)
 - The **sites and widgets** you create within PlopKit (site names, domains, widget configuration)
@@ -89,7 +90,7 @@ We do not sell or share your personal information with third parties for their o
 - **Google OAuth** — used for publisher sign-in. Subject to [Google's Privacy Policy](https://policies.google.com/privacy).
 - **Google Analytics** — used for platform usage analytics. Subject to [Google's Privacy Policy](https://policies.google.com/privacy).
 - **Stripe** — used to process subscription payments. Your email address is shared with Stripe to create a billing account. Stripe may collect additional information directly from you during checkout. Subject to [Stripe's Privacy Policy](https://stripe.com/privacy).
-- **Resend** — used to send transactional emails to publishers (such as account confirmations and account deletion notices). Subject to Resend's Privacy Policy.
+- **Our email provider** — used to send transactional emails to publishers, including magic link sign-in emails, welcome emails, and account deletion notices. Self-hosted instances may use any SMTP provider of the operator's choosing.
 - **DigitalOcean** — our hosting provider. Your data is stored on a DigitalOcean server located in a DigitalOcean data centre. Subject to [DigitalOcean's Privacy Policy](https://www.digitalocean.com/legal/privacy-policy).
 
 ---

@@ -1,6 +1,6 @@
 # Terms of Service
 
-**Last updated: June 15, 2026**
+**Last updated: July 1, 2026**
 
 These Terms of Service ("Terms") govern your use of PlopKit ("we", "us", "our"), a service operated by an individual based in Canada. By creating an account or using PlopKit in any way, you agree to these Terms.
 
@@ -16,7 +16,7 @@ You must be at least 13 years old to create a PlopKit account. By signing up, yo
 
 You are responsible for your account and everything that happens under it. You must provide accurate information when signing up. You may not share your account with others or transfer it to anyone else.
 
-We use Google OAuth (and may support other OAuth providers in the future) for authentication. We do not store your password.
+We support signing in via Google OAuth or via a magic link sent to your email address. In both cases, we do not store your password.
 
 ---
 
