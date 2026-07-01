@@ -1,8 +1,7 @@
-import resend from '../lib/resend.js'
+import { sendEmail } from '../lib/mailer.js'
 
 export async function sendWelcomeEmail(email: string, name: string) {
-  await resend.emails.send({
-    from: process.env.EMAIL_FROM!,
+  await sendEmail({
     to: email,
     subject: 'Welcome to PlopKit',
     html: `

@@ -23,7 +23,7 @@
     "express-rate-limit": "^8.5.2",
     "helmet": "^8.2.0",
     "node-cron": "^4.2.1",
-    "resend": "^6.12.4",
+    "nodemailer": "^9.0.3",
     "sanitize-html": "^2.17.4",
     "stripe": "^22.2.0",
     "zod": "^4.4.3"
@@ -34,6 +34,7 @@
     "@types/helmet": "^0.0.48",
     "@types/node": "^25.9.1",
     "@types/node-cron": "^3.0.11",
+    "@types/nodemailer": "^8.0.1",
     "@types/sanitize-html": "^2.16.1",
     "nodemon": "^3.1.14",
     "prisma": "^7.8.0",
