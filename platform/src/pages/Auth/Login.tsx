@@ -1,5 +1,6 @@
-import { useState } from 'react'
-import { signIn } from '../../lib/auth-client'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { signIn, useSession } from '../../lib/auth-client'
 import { Link } from 'react-router-dom'
 import './auth.css'
 
@@ -7,6 +8,14 @@ function Login() {
   const [email, setEmail] = useState('')
   const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
+  const { data: session, isPending } = useSession()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!isPending && session) {
+      navigate('/dashboard', { replace: true })
+    }
+  }, [session, isPending, navigate])
 
   async function handleGoogle() {
     await signIn.social({ provider: 'google', callbackURL: `${import.meta.env.VITE_APP_URL}/dashboard` })
@@ -51,7 +60,7 @@ function Login() {
             {loading ? 'Sending...' : 'Continue with email'}
           </button>
         </form>
-        
+
         <div className="auth-divider">or</div>
 
         <button className="auth-btn-google" onClick={handleGoogle} type="button">
