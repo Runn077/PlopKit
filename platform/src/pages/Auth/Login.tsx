@@ -1,10 +1,35 @@
+import { useState } from 'react'
 import { signIn } from '../../lib/auth-client'
 import { Link } from 'react-router-dom'
 import './auth.css'
 
 function Login() {
+  const [email, setEmail] = useState('')
+  const [sent, setSent] = useState(false)
+  const [loading, setLoading] = useState(false)
+
   async function handleGoogle() {
     await signIn.social({ provider: 'google', callbackURL: `${import.meta.env.VITE_APP_URL}/dashboard` })
+  }
+
+  async function handleMagicLink(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true)
+    await signIn.magicLink({ email, callbackURL: `${import.meta.env.VITE_APP_URL}/dashboard` })
+    setLoading(false)
+    setSent(true)
+  }
+
+  if (sent) {
+    return (
+      <div className="auth-page">
+        <div className="auth-card">
+          <Link to="/" className="auth-wordmark">PlopKit</Link>
+          <h1 className="auth-title">Check your email</h1>
+          <p className="auth-legal">We sent a sign-in link to {email}.</p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -12,6 +37,23 @@ function Login() {
       <div className="auth-card">
         <Link to="/" className="auth-wordmark">PlopKit</Link>
         <h1 className="auth-title">Sign in</h1>
+
+        <form onSubmit={handleMagicLink} className="auth-email-form">
+          <input
+            type="email"
+            required
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="auth-input"
+          />
+          <button className="auth-btn-email" type="submit" disabled={loading}>
+            {loading ? 'Sending...' : 'Continue with email'}
+          </button>
+        </form>
+        
+        <div className="auth-divider">or</div>
+
         <button className="auth-btn-google" onClick={handleGoogle} type="button">
           <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
@@ -21,6 +63,7 @@ function Login() {
           </svg>
           Continue with Google
         </button>
+
         <p className="auth-legal">
           By continuing, you agree to our <Link to="/terms">Terms of Service</Link> and <Link to="/privacy">Privacy Policy</Link>.
         </p>

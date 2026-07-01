@@ -1,5 +1,5 @@
 import { createAuthClient } from 'better-auth/react'
-import { inferAdditionalFields } from 'better-auth/client/plugins'
+import { inferAdditionalFields, magicLinkClient } from 'better-auth/client/plugins'
 
 export const authClient = createAuthClient({
   baseURL: import.meta.env.VITE_AUTH_URL,
@@ -12,8 +12,8 @@ export const authClient = createAuthClient({
           defaultValue: 'free',
         }
       }
-    })
+    }),
+    magicLinkClient(),
   ]
 })
-
 export const { signIn, signUp, signOut, useSession } = authClient

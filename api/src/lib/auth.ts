@@ -1,7 +1,8 @@
 import { betterAuth } from 'better-auth'
 import { prismaAdapter } from 'better-auth/adapters/prisma'
+import { magicLink } from 'better-auth/plugins'
 import prisma from './prisma.js'
-import { sendWelcomeEmail } from '../emails/index.js'
+import { sendWelcomeEmail, sendMagicLinkEmail } from '../emails/index.js'
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -14,6 +15,13 @@ export const auth = betterAuth({
       prompt: 'select_account',
     },
   },
+  plugins: [
+    magicLink({
+      sendMagicLink: async ({ email, url }) => {
+        await sendMagicLinkEmail(email, url)
+      },
+    }),
+  ],
   secret: process.env.BETTER_AUTH_SECRET,
   baseURL: process.env.BETTER_AUTH_URL,
   trustedOrigins: [process.env.PLATFORM_URL!],
