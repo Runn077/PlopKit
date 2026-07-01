@@ -340,6 +340,59 @@ body {
   color: black;
 }
 
+/* SELFHOST */
+.selfhost-section {
+  padding: 40px 20px 100px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.selfhost-card {
+  background: var(--red);
+  border: 4px solid black;
+  box-shadow: 8px 8px 0 black;
+  padding: 48px 40px;
+  text-align: center;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.selfhost-card:hover {
+  transform: translate(3px, 3px);
+  box-shadow: 5px 5px 0 black;
+}
+
+.selfhost-desc {
+  font-size: 1.1rem;
+  font-weight: 500;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 16px auto 28px;
+}
+
+.selfhost-cta {
+  display: inline-block;
+  background: white;
+  border: 3px solid black;
+  box-shadow: 6px 6px 0 black;
+  padding: 16px 28px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-decoration: none;
+  color: black;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.selfhost-cta:hover {
+  transform: translate(3px, 3px);
+  box-shadow: 3px 3px 0 black;
+}
+
+@media (max-width: 480px) {
+  .selfhost-card {
+    padding: 28px 20px;
+  }
+}
+
 /* PRICING */
 
 .pricing-section {

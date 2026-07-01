@@ -114,6 +114,27 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* SELF HOST */}
+      <section className="selfhost-section">
+        <div className="selfhost-card">
+          <div className="selfhost-text">
+            <h2 className="section-title">Self-Host It Yourself</h2>
+            <p className="selfhost-desc">
+              Fully open source. Run PlopKit on your own server with
+              Docker. No vendor lock-in, no usage limits, full control of your data.
+            </p>
+            <a
+              className="selfhost-cta"
+              href="https://github.com/Runn077/PlopKit"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View on GitHub →
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* PRICING */}
       <section 
         id="pricing-section" 
