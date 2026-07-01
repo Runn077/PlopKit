@@ -9,7 +9,7 @@ single script and manage everything from a clean web dashboard.
 - 🐳 Easy Docker deployment
 - 🔓 Fully open source and self-hostable
 
-Visit plopkit.com to see what it looks like.
+Visit [plopkit.com](https://plopkit.com) to see what it looks like.
 
 # Self hosting PlopKit
  
