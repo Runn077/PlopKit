@@ -14,9 +14,9 @@ Visit [plopkit.com](https://plopkit.com) to see what it looks like.
 # Self hosting PlopKit
  
 PlopKit is fully self-hostable. Self-hosted instances have no feature
-restrictions compared to the hosted version at plopkit.com. Billing,
-usage limits, and the newsletter are the only things specific to the
-hosted service, and none of that code runs in self-hosted mode.
+restrictions compared to the hosted version at plopkit.com. Billing and
+usage limits are the only things specific to the hosted service, and 
+none of that code runs in self-hosted mode.
  
 # Running locally
 
