@@ -1,0 +1,134 @@
+/* --- Settings --- */
+.sw-settings-section-title {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--pk-color-text-muted);
+  margin-bottom: 16px;
+}
+
+.sw-settings-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sw-danger-zone {
+  border: 3px solid #ff6b6b;
+  border-radius: var(--pk-radius-lg);
+  padding: 16px;
+}
+
+.sw-danger-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.settings-layout {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  position: relative;
+  min-height: 100vh;
+}
+
+.settings-sidenav {
+  display: flex;
+  flex-direction: column;
+  min-width: 160px;
+  border-right: 1px solid var(--pk-color-border-muted);
+  padding-right: 24px;
+  gap: 2px;
+  position: absolute;
+  right: calc(50% + 380px);
+}
+
+.settings-sidenav-item {
+  background: none;
+  border: none;
+  font-family: var(--pk-font);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--pk-color-text-muted);
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: var(--pk-radius);
+  text-align: left;
+  transition: all 0.12s;
+}
+
+.settings-sidenav-item:hover {
+  color: var(--pk-color-text);
+  background: var(--pk-color-bg-hover);
+}
+
+.settings-sidenav-item-active {
+  color: var(--pk-color-text);
+  background: var(--pk-color-bg-hover);
+}
+
+.settings-content {
+  flex: 1;
+  min-width: 0;
+  max-width: var(--pk-content-max);
+  margin: 0 auto;
+}
+
+.sw-manage-widget-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.sw-manage-widget-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--pk-color-border-muted);
+  gap: 16px;
+}
+
+.sw-manage-widget-row:last-child {
+  border-bottom: none;
+}
+
+.sw-manage-widget-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--pk-color-text);
+}
+
+.sw-manage-widget-type {
+  font-size: 12px;
+  color: var(--pk-color-text-muted);
+  margin-top: 2px;
+}
+
+@media (max-width: 640px) {
+  .settings-layout {
+    flex-direction: column;
+    gap: 16px;
+    min-height: auto;
+  }
+
+  .settings-sidenav {
+    position: static;
+    right: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    min-width: 0;
+    width: 100%;
+    border-right: none;
+    padding-right: 0;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--pk-color-border-muted);
+    gap: 8px;
+  }
+
+  .settings-content {
+    max-width: 100%;
+  }
+}

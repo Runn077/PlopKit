@@ -40,3 +40,27 @@
   transform: translate(2px, 2px);
   box-shadow: 2px 2px 0 black;
 }
+
+@media (max-width: 768px) {
+  .navbar-landing {
+    height: auto;
+    padding: 12px 16px;
+    flex-wrap: wrap;
+    row-gap: 10px;
+  }
+  .navbar-landing .logo {
+    font-size: 1.8rem;
+    text-shadow: 2px 2px 0 black;
+  }
+  .nav-links {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .nav-links button {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+}
