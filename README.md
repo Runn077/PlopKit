@@ -5,12 +5,17 @@ Create comment widgets in seconds, embed them anywhere with a
 single script and manage everything from a clean web dashboard.
 
 - 💬 Modern embedded comment widgets
-- 🛡️ Built-in moderation tools
+- 🛡️ Built-in moderation tools such as:
+   - Accepting or rejecting incoming comments
+   - Auto accept comments
+   - Ban certain words
+   - And many more in the future
 - 🐳 Easy Docker deployment
 - 🔓 Fully open source and self-hostable
 
-Visit [plopkit.com](https://plopkit.com) to see what it looks like.
+Visit [plopkit.com](https://plopkit.com)!.
 
+![PlopKit dashboard screenshot](docs/images/admin-dashboard.png)
 # Self hosting PlopKit
  
 PlopKit is fully self-hostable. Self-hosted instances have no feature
@@ -25,38 +30,9 @@ none of that code runs in self-hosted mode.
 ```bash
 git clone https://github.com/runn077/plopkit
 ```
-## Easiest way to self host
-go to the selfhost directory and read the instruction there.
-
-## Self hosting with dockerized db
-
-1. Copy the example env files and fill in your values
-```bash
-   cp .env.example .env
-   cp api/.env.example api/.env
-   cp platform/.env.example platform/.env
-   cp widget-svelte/.env.example widget-svelte/.env
-```
-
-2. Start Postgres
-```bash
-   docker compose up -d
-```
-
-3. Run migrations and start the API
-```bash
-   cd api && npm install && npx prisma migrate deploy && npm run build && npm start
-```
-
-4. Build the widget
-```bash
-   cd widget-svelte && npm install && npm run build
-```
-
-5. Start the platform
-```bash
-   cd platform && npm install && npm run dev
-```
+## Setup
+[docker compose](selfhost/README.md) 
+[dockerized db only](CONTRIBUTING.md)
 
 ## Find any issues?
  
