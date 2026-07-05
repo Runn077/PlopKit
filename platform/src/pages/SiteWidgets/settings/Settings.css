@@ -14,6 +14,65 @@
   gap: 14px;
 }
 
+.sw-save-btn {
+  margin-top: 16px;
+}
+
+.sw-verification-section {
+  margin-bottom: 40px;
+}
+
+.sw-verification-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.sw-verification-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.sw-verification-label {
+  font-size: 14px;
+  color: #000;
+  font-weight: 500;
+}
+
+.sw-verification-hint {
+  font-size: 13px;
+  color: #888;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+.sw-export-section {
+  margin-bottom: 40px;
+}
+
+.sw-export-description {
+  font-size: 13px;
+  color: var(--pk-color-text-muted);
+  margin-top: 8px;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.sw-export-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sw-export-size {
+  font-size: 12px;
+  color: #888;
+}
+
 .sw-danger-zone {
   border: 3px solid #ff6b6b;
   border-radius: var(--pk-radius-lg);

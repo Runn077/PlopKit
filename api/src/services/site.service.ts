@@ -58,3 +58,40 @@ export async function deleteSite(id: string, userId: string) {
   if (!site || site.userId !== userId) throw new AppError(404, 'Site not found')
   await prisma.site.delete({ where: { id } })
 }
+
+export async function exportSite(id: string, userId: string) {
+  const site = await getSiteById(id, userId)
+
+  const widgets = await prisma.widget.findMany({
+    where: { siteId: site.id },
+    select: { id: true, name: true, widgetKey: true, type: true, createdAt: true },
+  })
+
+  const widgetKeys = widgets.map((w) => w.widgetKey)
+
+  const comments = await prisma.comment.findMany({
+    where: { widgetKey: { in: widgetKeys }, deletedAt: null },
+    orderBy: { createdAt: 'asc' },
+    select: {
+      id: true,
+      widgetKey: true,
+      parentId: true,
+      quotedId: true,
+      pageUrl: true,
+      body: true,
+      status: true,
+      isOwnerReply: true,
+      authorName: true,
+      commenterDisplayId: true,
+      createdAt: true,
+    },
+  })
+
+  return {
+    schemaVersion: 1,
+    exportedAt: new Date().toISOString(),
+    site: { id: site.id, name: site.name, domain: site.domain },
+    widgets,
+    comments,
+  }
+}

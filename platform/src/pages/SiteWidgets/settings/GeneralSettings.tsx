@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import '../SiteWidgets.css'
 import DeleteSiteModal from './DeleteSiteModal'
 import type { Site } from '../../../types'
+import { apiFetch } from '../../../lib/api'
 
 interface Props {
   site: Site
@@ -16,8 +17,29 @@ function GeneralSettings({ site, onSave, onDelete }: Props) {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
-
   const hasChanges = name !== site.name || domain !== site.domain
+  const [exporting, setExporting] = useState(false)
+  const [exportError, setExportError] = useState('')
+  const [exportSize, setExportSize] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function fetchExportSize() {
+      try {
+        const res = await apiFetch(`/sites/${site.id}/export`, { method: 'HEAD' })
+        const bytes = res.headers.get('Content-Length')
+        if (bytes) setExportSize(formatBytes(Number(bytes)))
+      } catch (err) {
+        console.error('Export size fetch failed:', err)
+      }
+    }
+    fetchExportSize()
+  }, [site.id])
+
+  function formatBytes(bytes: number) {
+    if (bytes < 1024) return `${bytes} B`
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+  }
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault()
@@ -32,6 +54,29 @@ function GeneralSettings({ site, onSave, onDelete }: Props) {
       setError(err.message)
     } finally {
       setSaving(false)
+    }
+  }
+
+  async function handleExport() {
+    setExporting(true)
+    setExportError('')
+    try {
+      const res = await apiFetch(`/sites/${site.id}/export`)
+      if (!res.ok) throw new Error('Export failed')
+
+      const blob = await res.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `plopkit-export-${site.domain}.json`
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      URL.revokeObjectURL(url)
+    } catch (err: any) {
+      setExportError(err.message)
+    } finally {
+      setExporting(false)
     }
   }
 
@@ -64,34 +109,47 @@ function GeneralSettings({ site, onSave, onDelete }: Props) {
         {error && <p className="sw-settings-error">{error}</p>}
         <button
           type="submit"
-          className="sw-btn sw-btn-primary"
+          className="sw-btn sw-btn-primary sw-save-btn"
           disabled={!hasChanges || saving}
-          style={{ marginTop: 16 }}
         >
           {saving ? 'Saving...' : success ? 'Saved!' : 'Save changes'}
         </button>
       </form>
 
-      <div style={{ marginBottom: 40 }}>
+      <div className="sw-verification-section">
         <p className="sw-settings-section-title">Domain verification</p>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 8 }}>
-          <span style={{
-            display: 'inline-block',
-            width: 8,
-            height: 8,
-            borderRadius: '50%',
-            background: site.verified ? '#22c55e' : '#f59e0b',
-            flexShrink: 0,
-          }} />
-          <span style={{ fontSize: 14, color: '#000', fontWeight: 500 }}>
+        <div className="sw-verification-status">
+          <span
+            className="sw-verification-dot"
+            style={{ background: site.verified ? '#22c55e' : '#f59e0b' }}
+          />
+          <span className="sw-verification-label">
             {site.verified ? 'Verified' : 'Unverified'}
           </span>
         </div>
         {!site.verified && (
-          <p style={{ fontSize: 13, color: '#888', marginTop: 8, lineHeight: 1.5 }}>
+          <p className="sw-verification-hint">
             Embed a widget on your site to verify your domain. Once a page with your widget loads, your domain will be automatically verified and locked to your account.
           </p>
         )}
+      </div>
+
+      <div className="sw-export-section">
+        <p className="sw-settings-section-title">Data export</p>
+        <p className="sw-export-description">
+          Download all comments and widgets for this site as a JSON file.
+        </p>
+        {exportError && <p className="sw-settings-error">{exportError}</p>}
+        <div className="sw-export-actions">
+          <button
+            className="sw-btn sw-btn-primary"
+            onClick={handleExport}
+            disabled={exporting}
+          >
+            {exporting ? 'Exporting...' : 'Download export'}
+          </button>
+          {exportSize && <span className="sw-export-size">{exportSize}</span>}
+        </div>
       </div>
 
       <div className="sw-danger-zone">
