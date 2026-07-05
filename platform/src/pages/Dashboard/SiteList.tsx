@@ -5,9 +5,10 @@ interface Props {
   sites: Site[]
   onManage: (id: string) => void
   onAdd: () => void
+  onImport: () => void
 }
 
-function SiteList({ sites, onManage, onAdd }: Props) {
+function SiteList({ sites, onManage, onAdd, onImport }: Props) {
   if (sites.length === 0) {
     return (
       <div className="empty-state">
@@ -17,13 +18,20 @@ function SiteList({ sites, onManage, onAdd }: Props) {
           Add your first site and start collecting
           comments.
         </p>
-
-        <button
-          className="btn btn-primary"
-          onClick={onAdd}
-        >
-          + Add Website
-        </button>
+        <div className="empty-dashboard-header-actions">
+          <button
+            className="btn btn-primary"
+            onClick={onAdd}
+          >
+            + Add Website
+          </button>
+          <button 
+            className="btn" 
+            onClick={onImport}
+          >
+            Import site
+          </button>
+        </div>
       </div>
     )
   }

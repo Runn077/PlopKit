@@ -7,6 +7,7 @@ import './Dashboard.css'
 import type { Site } from '../../types'
 import { apiFetch } from '../../lib/api'
 import Footer from '../../components/Footer'
+import ImportSiteModal from './ImportSiteModal'
 
 function Dashboard() {
   const navigate = useNavigate()
@@ -14,6 +15,7 @@ function Dashboard() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [showModal, setShowModal] = useState(false)
+  const [showImportModal, setShowImportModal] = useState(false)
 
   useEffect(() => { fetchSites() }, [])
 
@@ -44,6 +46,19 @@ function Dashboard() {
     setSites(prev => [site, ...prev])
   }
 
+  async function handleImportSite(name: string, domain: string, data: any) {
+    const res = await apiFetch('/sites/import', {
+      method: 'POST',
+      body: JSON.stringify({ name, domain, data }),
+    })
+    if (!res.ok) {
+      const errData = await res.json()
+      throw new Error(errData.error ?? 'Import failed')
+    }
+    const site = await res.json()
+    setSites(prev => [site, ...prev])
+  }
+
   if (loading) return <div className="page-loading">Loading...</div>
 
   if (error) return (
@@ -67,12 +82,14 @@ function Dashboard() {
           </div>
 
           {sites.length > 0 && (
-            <button
-              className="btn btn-primary"
-              onClick={() => setShowModal(true)}
-            >
+          <div className="dashboard-header-actions">
+            <button className="btn btn-primary" onClick={() => setShowModal(true)}>
               + Add Website
             </button>
+            <button className="btn" onClick={() => setShowImportModal(true)}>
+              Import site
+            </button>
+          </div>
           )}
         </div>
 
@@ -80,11 +97,19 @@ function Dashboard() {
           sites={sites}
           onManage={id => navigate(`/dashboard/sites/${id}`)}
           onAdd={() => setShowModal(true)}
+          onImport={() => setShowImportModal(true)}
         />
         {showModal && (
           <AddSiteModal
             onClose={() => setShowModal(false)}
             onSubmit={handleAddSite}
+          />
+        )}
+
+        {showImportModal && (
+          <ImportSiteModal
+            onClose={() => setShowImportModal(false)}
+            onSubmit={handleImportSite}
           />
         )}
       </div>
