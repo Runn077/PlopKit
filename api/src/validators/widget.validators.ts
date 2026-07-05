@@ -3,7 +3,7 @@ import { WidgetType } from '../generated/prisma/enums.js'
 
 export const createWidgetSchema = z.object({
   siteId: z.string().min(1, 'Site ID is required'),
-  type: z.nativeEnum(WidgetType),
+  type: z.enum(WidgetType),
   name: z.string().min(1, 'Name is required'),
 })
 
