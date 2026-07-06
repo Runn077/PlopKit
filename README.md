@@ -32,8 +32,11 @@ git clone https://github.com/runn077/plopkit
 ```
 ## Setup
 [docker compose](selfhost/README.md) 
+
 [dockerized db only](CONTRIBUTING.md)
 
-## Find any issues?
- 
-Feel free to open an issue if you find anything.
+## Questions or ideas?
+Open a [Discussion](https://github.com/runn077/plopkit/discussions) it's the best place to ask questions, share ideas, or get help.
+
+## Found a bug?
+Feel free to open an [issue](https://github.com/runn077/plopkit/issues) if you find anything.
