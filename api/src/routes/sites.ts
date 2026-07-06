@@ -53,12 +53,17 @@ router.delete('/:id', requireAuth, async (req, res, next) => {
   } catch (err) { next(err) }
 })
 
-router.get('/:id/export', requireAuth, async (req, res, next) => {
+const exportLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 20,
+  message: { error: 'Too many export requests, please try again later.' },
+})
+
+router.get('/:id/export', requireAuth, exportLimiter, async (req, res, next) => {
   try {
     const { user } = res.locals.session
     const { id } = req.params as { id: string }
     const data = await siteService.exportSite(id, user.id)
-
     res.setHeader('Content-Type', 'application/json')
     res.setHeader('Content-Disposition', `attachment; filename="plopkit-export-${data.site.domain}.json"`)
     res.send(JSON.stringify(data, null, 2))
