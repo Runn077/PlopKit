@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Last updated: July 1, 2026**
+**Last updated: July 5, 2026**
 
 PlopKit is a project operated by an individual based in Canada. This Privacy Policy explains what information we collect, how we use it, and your rights regarding that information.
 
@@ -9,6 +9,7 @@ By using PlopKit, whether as a site owner (publisher) or as a commenter on a sit
 ---
 
 ## 1. Who This Policy Covers
+This policy applies only to the hosted version of PlopKit at plopkit.com. If you run a self-hosted instance, this policy does not apply — you (the operator) are responsible for your own privacy practices and any applicable legal obligations regarding data collected through your instance.
 
 This policy applies to two groups of people:
 
@@ -51,9 +52,7 @@ We use IP addresses for **rate limiting** to prevent comment spam. IP addresses 
 
 ### Analytics
 
-We use **Google Analytics** to understand how publishers use the PlopKit platform. Google Analytics may collect information such as your browser type, pages visited, time spent on pages, and general geographic location. We may add additional analytics tools in the future, and this policy will be updated to reflect that.
-
-If you would like to opt out of Google Analytics, you can use the [Google Analytics Opt-out Browser Add-on](https://tools.google.com/dlpage/gaoptout).
+We do not currently use any analytics tools. If we add analytics in the future, we will update this policy to disclose the specific tool(s) used, what data they collect, and how you can opt out where applicable.
 
 ---
 
@@ -76,7 +75,6 @@ We use the information we collect to:
 - Enforce rate limits to prevent spam and abuse
 - Track monthly widget loads for plan quota enforcement
 - Process subscription payments through Stripe
-- Understand how the platform is used (analytics)
 - Respond to support or privacy inquiries
 
 We do not sell your data. We do not use your data for advertising.
@@ -88,9 +86,8 @@ We do not sell your data. We do not use your data for advertising.
 We do not sell or share your personal information with third parties for their own purposes. We do work with the following third-party services:
 
 - **Google OAuth** — used for publisher sign-in. Subject to [Google's Privacy Policy](https://policies.google.com/privacy).
-- **Google Analytics** — used for platform usage analytics. Subject to [Google's Privacy Policy](https://policies.google.com/privacy).
 - **Stripe** — used to process subscription payments. Your email address is shared with Stripe to create a billing account. Stripe may collect additional information directly from you during checkout. Subject to [Stripe's Privacy Policy](https://stripe.com/privacy).
-- **Our email provider** — used to send transactional emails to publishers, including magic link sign-in emails, welcome emails, and account deletion notices. Self-hosted instances may use any SMTP provider of the operator's choosing.
+- **Our email provider** — used to send transactional emails to publishers, including magic link sign-in emails, welcome emails, and account deletion notices.
 - **DigitalOcean** — our hosting provider. Your data is stored on a DigitalOcean server located in a DigitalOcean data centre. Subject to [DigitalOcean's Privacy Policy](https://www.digitalocean.com/legal/privacy-policy).
 
 ---
