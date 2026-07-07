@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { validate } from '../../middleware/validate.js'
-import { commentBurstLimiter, commentHourlyLimiter } from '../../middleware/commentLimiter.js'
+import { commentBurstLimiter, commentHourlyLimiter } from '../../middleware/rateLimiters.js'
 import { getCommentsSchema, createCommentSchema, deleteOwnCommentSchema } from '../../validators/comment.validators.js'
 import * as commentService from '../../services/comment.service.js'
 

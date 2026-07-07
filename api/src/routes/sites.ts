@@ -4,8 +4,8 @@ import { validate } from '../middleware/validate.js'
 import { createSiteSchema, updateSiteSchema } from '../validators/site.validators.js'
 import { importSiteSchema } from '../validators/import.validators.js'
 import { importSite } from '../services/import.service.js'
+import { importLimiter, exportLimiter } from '../middleware/rateLimiters.js'
 import * as siteService from '../services/site.service.js'
-import rateLimit from 'express-rate-limit'
 
 const router = Router()
 
@@ -53,12 +53,6 @@ router.delete('/:id', requireAuth, async (req, res, next) => {
   } catch (err) { next(err) }
 })
 
-const exportLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000,
-  max: 20,
-  message: { error: 'Too many export requests, please try again later.' },
-})
-
 router.get('/:id/export', requireAuth, exportLimiter, async (req, res, next) => {
   try {
     const { user } = res.locals.session
@@ -68,12 +62,6 @@ router.get('/:id/export', requireAuth, exportLimiter, async (req, res, next) => 
     res.setHeader('Content-Disposition', `attachment; filename="plopkit-export-${data.site.domain}.json"`)
     res.send(JSON.stringify(data, null, 2))
   } catch (err) { next(err) }
-})
-
-const importLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000,
-  max: 5,
-  message: { error: 'Too many import attempts, please try again later.' },
 })
 
 router.post('/import', requireAuth, importLimiter, validate(importSiteSchema), async (req, res, next) => {

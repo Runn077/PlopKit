@@ -1,6 +1,5 @@
 import express from 'express'
 import cors from 'cors'
-import rateLimit from 'express-rate-limit'
 import { toNodeHandler } from 'better-auth/node'
 import { auth } from './lib/auth.js'
 import { errorHandler } from './errors/errorHandler.js'
@@ -10,6 +9,7 @@ import sitesRouter from './routes/sites.js'
 import widgetsRouter from './routes/widgets.js'
 import accountRouter from './routes/account.js'
 import helmet from 'helmet'
+import { globalLimiter } from './middleware/rateLimiters.js'
 
 const app = express()
 app.set('trust proxy', 1)
@@ -31,14 +31,6 @@ app.use((req, res, next) => {
     },
     credentials: true,
   })(req, res, next)
-})
-
-const globalLimiter = rateLimit({
-  windowMs: 60 * 1000,
-  max: 100,
-  message: { error: 'Too many requests, please slow down.' },
-  standardHeaders: true,
-  legacyHeaders: false,
 })
 
 app.use((req, res, next) => {
