@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "vitest run",
+    "test:integration": "dotenv -e .env.test -- vitest run tests/",
+    "test:integration:migrate": "dotenv -e .env.test -- npx prisma migrate deploy",
     "dev": "tsx watch --env-file=.env src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js"
@@ -36,6 +38,7 @@
     "@types/node-cron": "^3.0.11",
     "@types/nodemailer": "^8.0.1",
     "@types/sanitize-html": "^2.16.1",
+    "dotenv-cli": "^11.0.0",
     "nodemon": "^3.1.14",
     "prisma": "^7.8.0",
     "ts-node": "^10.9.2",
