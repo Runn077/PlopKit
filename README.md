@@ -10,6 +10,7 @@ single script and manage everything from a clean web dashboard.
    - Auto accept comments
    - Ban certain words
    - And many more in the future
+- 📦 Import and export website data for easy migration between selfhost and cloud 
 - 🐳 Easy Docker deployment
 - 🔓 Fully open source and self-hostable
 
