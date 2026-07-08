@@ -6,17 +6,25 @@ import { CommentStatus, WidgetType } from '../../src/generated/prisma/enums.js'
 
 async function seedSiteWithWidget() {
   const user = await prisma.user.create({
-    data: { email: `owner_${Date.now()}@example.com`, name: 'Site Owner' },
+    data: { 
+      email: `owner_${Date.now()}_${Math.random()}@example.com`, 
+      name: 'Site Owner' 
+    },
   })
   const site = await prisma.site.create({
-    data: { name: 'Test Site', domain: `example-${Date.now()}.com`, siteKey: 'sk_test', userId: user.id },
+    data: {
+      name: 'Test Site',
+      domain: `example-${Date.now()}-${Math.random()}.com`,
+      siteKey: `sk_${Date.now()}_${Math.random()}`,
+      userId: user.id,
+    },
   })
   const widget = await prisma.widget.create({
     data: {
       siteId: site.id,
       type: WidgetType.comments,
       name: 'Main Widget',
-      widgetKey: `wk_${Date.now()}`,
+      widgetKey: `wk_${Date.now()}_${Math.random()}`,
       commentWidget: { create: { autoApprove: false } },
     },
     include: { commentWidget: true },
