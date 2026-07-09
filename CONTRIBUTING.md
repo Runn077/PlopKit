@@ -48,15 +48,12 @@ Thanks for wanting to contribute! Here's what you need to know.
 
 1. Fork the repo on GitHub.
 2. Clone your fork locally:
-```bash
-   git clone https://github.com/YOUR-USERNAME/plopkit.git
-```
 3. Create a branch for your change:
 ```bash
    git checkout -b fix/short-description
 ```
 4. Make your changes, following the guidelines below.
-5. Commit using conventional commits (`feat:`, `fix:`, `chore:`, etc.), keeping commits small and focused.
+5. Commit using conventional commits (`feat:`, `fix:`, `chore:`, etc.).
 6. Push to your fork and open a pull request against `Runn077/plopkit`'s `main` branch, with a clear description of what changed and why.
 
 For small fixes, feel free to open a PR directly. For larger changes (new features, architecture changes), consider opening an issue first to discuss the approach before investing a lot of time.
@@ -71,6 +68,10 @@ For small fixes, feel free to open a PR directly. For larger changes (new featur
 - Use conventional commits (`feat:`, `fix:`, `chore:`, etc.).
 - Keep commits small and focused.
 - Open a PR against `main` with a clear description of what changed and why.
+
+## Testing
+
+See [TESTING.md](TESTING.md) for how to run tests.
 
 ## Bugs & questions
 
