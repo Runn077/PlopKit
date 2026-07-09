@@ -32,9 +32,8 @@ none of that code runs in self-hosted mode.
 git clone https://github.com/runn077/plopkit
 ```
 ## Setup
-[docker compose](selfhost/README.md) 
-
-[dockerized db only](CONTRIBUTING.md)
+- [docker compose](selfhost/README.md) 
+- [dockerized db only](CONTRIBUTING.md##Setup-with-dockerized-db)
 
 ## Questions or ideas?
 Open a [Discussion](https://github.com/runn077/plopkit/discussions) it's the best place to ask questions, share ideas, or get help.
