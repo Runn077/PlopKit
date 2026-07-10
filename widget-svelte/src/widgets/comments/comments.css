@@ -260,7 +260,8 @@
 }
 
 .reply {
-  padding: 8px 0;
+  padding: 8px;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .reply-body {
@@ -307,16 +308,41 @@
 }
 
 .quoted-comment {
-  background: #fff8bb;
-  padding: 6px 10px;
-  border-radius: 4px;
-  margin-bottom: 6px;
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  border-left: solid #ffe66d;
+  font: inherit;
+  cursor: pointer;
+  margin: 2px 0 2px 0;
+  padding: 4px 10px;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+}
+
+.quoted-comment:disabled {
+  cursor: default;
+}
+
+.quoted-comment:hover:not(:disabled) .quoted-body {
+  text-decoration: underline;
+  color: #9cd4fe;
+}
+
+.quoted-highlight {
+  animation: quoted-flash 1.6s ease;
+}
+
+@keyframes quoted-flash {
+  0%, 100% { background: transparent; }
+  20% { background: #9cd4fe; }
 }
 
 .quoted-body {
-  font-size: 12px;
-  color: #353535;
-  line-height: 1.4;
+  font-size: 11px;
+  color:#999;
   white-space: pre-wrap;
   overflow: hidden;
   display: -webkit-box;
@@ -325,17 +351,16 @@
 }
 
 .quoted-preview {
-  background: #f5f5f5;
-  border-left: 3px solid #0f0f0f;
-  padding: 6px 10px;
-  border-radius: 4px;
-  margin-bottom: 8px;
+  margin: 2px 0 2px, 0;
+  padding: 4px 10px;
+  border-left: solid #999;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
 }
 
 .quoted-preview-body {
-  font-size: 12px;
-  color: #555;
-  line-height: 1.4;
+  font-size: 10.5px;
+  color:#999;
   white-space: pre-wrap;
   overflow: hidden;
   display: -webkit-box;

@@ -107,18 +107,38 @@
       toast.show('Your reply has been submitted and is awaiting approval.')
     }
   }
+
+  function scrollToQuoted(e: MouseEvent) {
+    if (isQuoteDeleted || !reply.quotedId) return
+
+    const root = (e.currentTarget as HTMLElement).getRootNode() as ShadowRoot | Document
+    const target = root.getElementById(`comment-${reply.quotedId}`)
+
+    if (!target) return
+
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    target.classList.add('quoted-highlight')
+    setTimeout(() => target.classList.remove('quoted-highlight'), 1600)
+  }
 </script>
 
-<div class="reply">
+<div class="reply" id={`comment-${reply.id}`}>
   {#if reply.isOwnerReply}
-    <span class="owner-badge">Site owner</span>
+    <span class="owner-badge">Owner</span>
   {/if}
   {#if reply.quoted}
-    <div class="quoted-comment">
+    <button
+      type="button"
+      class="quoted-comment"
+      onclick={scrollToQuoted}
+      disabled={isQuoteDeleted}
+    >
       <p class="quoted-body">
-        {isQuoteDeleted ? 'Deleted message' : reply.quoted.body}
+        {isQuoteDeleted
+          ? 'This message has been deleted.'
+          : (reply.quoted.isOwnerReply ? 'Owner' : '#' + reply.quoted.commenterDisplayId) + ': ' + reply.quoted.body}
       </p>
-    </div>
+    </button>
   {/if}
   <span class="reply-author">{reply.authorName}</span>
   {#if reply.commenterDisplayId}
@@ -139,12 +159,18 @@
   {#if replyOpen}
     <div class="reply-input-area">
       <div class="quoted-preview">
-        <p class="quoted-preview-body">{reply.body}</p>
+        <p class="quoted-preview-body">
+          {
+            (reply.isOwnerReply ? 'Owner' : '#' 
+            + reply.commenterDisplayId) 
+            + ': ' + reply.body
+          }
+        </p>
       </div>
       <input
         class="author-input"
         bind:value={replyAuthorName}
-        maxlength={50}
+        maxlength={30}
         placeholder="Name (optional)"
       />
       <textarea

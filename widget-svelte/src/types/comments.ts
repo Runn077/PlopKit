@@ -1,8 +1,10 @@
 export interface QuotedComment {
-  id: string
+  id?: string
   body: string
   deletedAt: string | null
   status: 'approved' | 'pending'
+  commenterDisplayId: string | null
+  isOwnerReply: boolean
 }
 
 export interface Reply {

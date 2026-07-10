@@ -135,7 +135,7 @@
       <input
         class="author-input"
         bind:value={authorName}
-        maxlength={50}
+        maxlength={30}
         placeholder="Name (optional)"
       />
       <textarea

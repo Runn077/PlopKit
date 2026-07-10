@@ -132,11 +132,11 @@
   }
 </script>
 
-<div class="comment {isPinned ? 'comment-pinned' : ''}">
+<div class="comment {isPinned ? 'comment-pinned' : ''}" id={`comment-${comment.id}`}>
   {#if isPinned || comment.isOwnerReply}
     <div style="display:flex;gap:6px;margin-bottom:6px">
       {#if isPinned}<span class="pinned-badge">Pinned</span>{/if}
-      {#if comment.isOwnerReply}<span class="owner-badge">Site owner</span>{/if}
+      {#if comment.isOwnerReply}<span class="owner-badge">Owner</span>{/if}
     </div>
   {/if}
   <span class="comment-author">{comment.authorName}</span>
@@ -165,7 +165,7 @@
       <input
         class="author-input"
         bind:value={replyAuthorName}
-        maxlength={50}
+        maxlength={30}
         placeholder="Name (optional)"
       />
       <textarea
