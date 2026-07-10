@@ -67,7 +67,7 @@ export async function getApprovedComments(
     orderBy: { createdAt: 'asc' as const },
     include: {
       quoted: {
-        select: { id: true, body: true, deletedAt: true, status: true },
+        select: { id: true, body: true, deletedAt: true, status: true, commenterDisplayId: true, isOwnerReply: true},
       },
     },
   }
@@ -106,7 +106,12 @@ export async function getApprovedComments(
       replies: c.replies?.map((r: any) => ({
         ...r,
         authorName: r.isOwnerReply ? ownerName : r.authorName,
-      })),
+        quoted: r.quoted
+          ? r.quoted
+          : r.quotedWasDeleted
+            ? { id: r.quotedId ?? '', body: '', deletedAt: new Date().toISOString(), status: 'approved' as const, commenterDisplayId: null, isOwnerReply: false }
+            : null,
+      }))
     }
   }
 
@@ -319,7 +324,7 @@ export async function createComment(
     },
     include: {
       quoted: {
-        select: { id: true, body: true, deletedAt: true, status: true },
+        select: { id: true, body: true, deletedAt: true, status: true, commenterDisplayId: true, isOwnerReply: true },
       },
     },
   })
@@ -389,6 +394,12 @@ export async function softDeleteComment(commentId: string, userId: string) {
 
 export async function permanentDeleteComment(commentId: string, userId: string) {
   await getCommentAndVerifyOwnership(commentId, userId)
+
+  await prisma.comment.updateMany({
+    where: { quotedId: commentId },
+    data: { quotedWasDeleted: true },
+  })
+
   await prisma.comment.deleteMany({ where: { parentId: commentId } })
   await prisma.comment.delete({ where: { id: commentId } })
 }
@@ -442,7 +453,7 @@ export async function createOwnerReply(
     },
     include: {
       quoted: {
-        select: { id: true, body: true, deletedAt: true, status: true },
+        select: { id: true, body: true, deletedAt: true, status: true, commenterDisplayId: true, isOwnerReply: true },
       },
     },
   })
@@ -533,6 +544,11 @@ export async function deleteOwnComment(commentId: string, commenterSecret: strin
 
   const hash = hashSecret(commenterSecret)
   if (hash !== comment.commenterDisplayId) throw new AppError(403, 'Invalid commenter secret')
+
+  await prisma.comment.updateMany({
+    where: { quotedId: commentId },
+    data: { quotedWasDeleted: true },
+  })
 
   await prisma.comment.delete({ where: { id: commentId } })
 }

@@ -3,6 +3,7 @@ import request from 'supertest'
 import app from '../../src/app.js'
 import { prisma } from '../setup.js'
 import { CommentStatus, WidgetType } from '../../src/generated/prisma/enums.js'
+import { createHash, randomUUID } from 'crypto'
 
 async function seedSiteWithWidget() {
   const user = await prisma.user.create({
@@ -111,5 +112,119 @@ describe('POST /api/public/comments — rate limiting', () => {
     expect(res1.status).toBe(200)
     expect(res2.status).toBe(200)
     expect(res3.status).toBe(429)
+  })
+})
+
+function hashSecret(secret: string): string {
+  return createHash('sha256')
+    .update(secret)
+    .digest('base64')
+    .replace(/[^a-zA-Z0-9]/g, '')
+    .slice(0, 10)
+}
+
+describe('DELETE /api/public/comments — quoted comment deletion', () => {
+  it('marks quotedWasDeleted and nulls quotedId when the author deletes their own quoted reply', async () => {
+    const { widget } = await seedSiteWithWidget()
+    const secret = randomUUID()
+
+    const parent = await prisma.comment.create({
+      data: {
+        commentWidgetId: widget.commentWidget!.id,
+        widgetKey: widget.widgetKey,
+        pageUrl: '/blog/post-1',
+        body: 'Parent comment',
+        status: CommentStatus.approved,
+        authorName: 'Alice',
+      },
+    })
+    const quotedReply = await prisma.comment.create({
+      data: {
+        commentWidgetId: widget.commentWidget!.id,
+        widgetKey: widget.widgetKey,
+        pageUrl: '/blog/post-1',
+        body: 'Original reply',
+        status: CommentStatus.approved,
+        authorName: 'Bob',
+        parentId: parent.id,
+        commenterDisplayId: hashSecret(secret),
+      },
+    })
+    const quotingReply = await prisma.comment.create({
+      data: {
+        commentWidgetId: widget.commentWidget!.id,
+        widgetKey: widget.widgetKey,
+        pageUrl: '/blog/post-1',
+        body: 'Quoting reply',
+        status: CommentStatus.approved,
+        authorName: 'Carol',
+        parentId: parent.id,
+        quotedId: quotedReply.id,
+      },
+    })
+
+    const res = await request(app)
+      .delete('/api/public/comments')
+      .send({ comment_id: quotedReply.id, commenter_secret: secret })
+
+    expect(res.status).toBe(200)
+
+    const dbQuoted = await prisma.comment.findUnique({ where: { id: quotedReply.id } })
+    expect(dbQuoted).toBeNull()
+
+    const dbQuoting = await prisma.comment.findUnique({ where: { id: quotingReply.id } })
+    expect(dbQuoting?.quotedId).toBeNull()
+    expect(dbQuoting?.quotedWasDeleted).toBe(true)
+  })
+
+  it('returns 403 and leaves everything untouched when the secret is wrong', async () => {
+    const { widget } = await seedSiteWithWidget()
+
+    const parent = await prisma.comment.create({
+      data: {
+        commentWidgetId: widget.commentWidget!.id,
+        widgetKey: widget.widgetKey,
+        pageUrl: '/blog/post-1',
+        body: 'Parent comment',
+        status: CommentStatus.approved,
+        authorName: 'Alice',
+      },
+    })
+    const quotedReply = await prisma.comment.create({
+      data: {
+        commentWidgetId: widget.commentWidget!.id,
+        widgetKey: widget.widgetKey,
+        pageUrl: '/blog/post-1',
+        body: 'Original reply',
+        status: CommentStatus.approved,
+        authorName: 'Bob',
+        parentId: parent.id,
+        commenterDisplayId: hashSecret('real-secret'),
+      },
+    })
+    const quotingReply = await prisma.comment.create({
+      data: {
+        commentWidgetId: widget.commentWidget!.id,
+        widgetKey: widget.widgetKey,
+        pageUrl: '/blog/post-1',
+        body: 'Quoting reply',
+        status: CommentStatus.approved,
+        authorName: 'Carol',
+        parentId: parent.id,
+        quotedId: quotedReply.id,
+      },
+    })
+
+    const res = await request(app)
+      .delete('/api/public/comments')
+      .send({ comment_id: quotedReply.id, commenter_secret: randomUUID() })
+
+    expect(res.status).toBe(403)
+
+    const dbQuoted = await prisma.comment.findUnique({ where: { id: quotedReply.id } })
+    expect(dbQuoted).not.toBeNull()
+
+    const dbQuoting = await prisma.comment.findUnique({ where: { id: quotingReply.id } })
+    expect(dbQuoting?.quotedWasDeleted).toBe(false)
   })
 })

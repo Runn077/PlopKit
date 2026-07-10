@@ -1028,3 +1028,193 @@ describe('deleteOwnComment', () => {
     expect(prisma.comment.delete).toHaveBeenCalledWith({ where: { id: 'c1' } })
   })
 })
+
+describe('deleteOwnComment', () => {
+  it('throws 404 when comment does not exist', async () => {
+    vi.mocked(prisma.comment.findUnique).mockResolvedValue(null)
+
+    await expect(deleteOwnComment('c1', 'secret')).rejects.toThrow(AppError)
+    await expect(deleteOwnComment('c1', 'secret')).rejects.toMatchObject({ statusCode: 404 })
+  })
+
+  it('throws 403 when comment has no commenterDisplayId', async () => {
+    vi.mocked(prisma.comment.findUnique).mockResolvedValue({
+      id: 'c1',
+      commenterDisplayId: null,
+    } as any)
+
+    await expect(deleteOwnComment('c1', 'secret')).rejects.toMatchObject({ statusCode: 403 })
+  })
+
+  it('throws 403 when secret does not match', async () => {
+    vi.mocked(prisma.comment.findUnique).mockResolvedValue({
+      id: 'c1',
+      commenterDisplayId: realHash('correct-secret'),
+    } as any)
+
+    await expect(deleteOwnComment('c1', 'wrong-secret')).rejects.toMatchObject({ statusCode: 403 })
+    expect(prisma.comment.updateMany).not.toHaveBeenCalled()
+    expect(prisma.comment.delete).not.toHaveBeenCalled()
+  })
+
+  it('marks quoting replies with quotedWasDeleted before deleting the comment', async () => {
+    const secret = 'correct-secret'
+    vi.mocked(prisma.comment.findUnique).mockResolvedValue({
+      id: 'c1',
+      commenterDisplayId: realHash(secret),
+    } as any)
+    vi.mocked(prisma.comment.updateMany).mockResolvedValue({ count: 2 } as any)
+    vi.mocked(prisma.comment.delete).mockResolvedValue({} as any)
+
+    await deleteOwnComment('c1', secret)
+
+    expect(prisma.comment.updateMany).toHaveBeenCalledWith({
+      where: { quotedId: 'c1' },
+      data: { quotedWasDeleted: true },
+    })
+    expect(prisma.comment.delete).toHaveBeenCalledWith({ where: { id: 'c1' } })
+
+    const updateManyOrder = vi.mocked(prisma.comment.updateMany).mock.invocationCallOrder[0]!
+    const deleteOrder = vi.mocked(prisma.comment.delete).mock.invocationCallOrder[0]!
+    expect(updateManyOrder).toBeLessThan(deleteOrder)
+  })
+})
+
+describe('permanentDeleteComment', () => {
+  it('marks quoting replies, deletes child replies, then deletes the comment, in order', async () => {
+    vi.mocked(prisma.comment.findUnique).mockResolvedValue({
+      id: 'c1',
+      widgetKey: 'wk1',
+      parentId: null,
+    } as any)
+    vi.mocked(getWidgetByKey).mockResolvedValue({
+      site: { userId: 'user1' },
+    } as any)
+    vi.mocked(prisma.comment.updateMany).mockResolvedValue({ count: 1 } as any)
+    vi.mocked(prisma.comment.deleteMany).mockResolvedValue({ count: 3 } as any)
+    vi.mocked(prisma.comment.delete).mockResolvedValue({} as any)
+
+    await permanentDeleteComment('c1', 'user1')
+
+    expect(prisma.comment.updateMany).toHaveBeenCalledWith({
+      where: { quotedId: 'c1' },
+      data: { quotedWasDeleted: true },
+    })
+    expect(prisma.comment.deleteMany).toHaveBeenCalledWith({ where: { parentId: 'c1' } })
+    expect(prisma.comment.delete).toHaveBeenCalledWith({ where: { id: 'c1' } })
+
+    const orders = [
+      vi.mocked(prisma.comment.updateMany).mock.invocationCallOrder[0]!,
+      vi.mocked(prisma.comment.deleteMany).mock.invocationCallOrder[0]!,
+      vi.mocked(prisma.comment.delete).mock.invocationCallOrder[0]!,
+    ]
+    expect(orders).toEqual([...orders].sort((a, b) => a - b))
+  })
+
+  it('throws 403 when the requesting user does not own the widget', async () => {
+    vi.mocked(prisma.comment.findUnique).mockResolvedValue({
+      id: 'c1',
+      widgetKey: 'wk1',
+      parentId: null,
+    } as any)
+    vi.mocked(getWidgetByKey).mockResolvedValue({
+      site: { userId: 'someone-else' },
+    } as any)
+
+    await expect(permanentDeleteComment('c1', 'user1')).rejects.toMatchObject({ statusCode: 403 })
+    expect(prisma.comment.updateMany).not.toHaveBeenCalled()
+    expect(prisma.comment.delete).not.toHaveBeenCalled()
+  })
+})
+
+describe('getApprovedComments - quoted fallback logic', () => {
+  function baseWidgetMock() {
+    vi.mocked(getWidgetByKey).mockResolvedValue({
+      site: { userId: 'owner1' },
+      commentWidget: { id: 'cw1', pinnedCommentId: null },
+    } as any)
+    vi.mocked(prisma.user.findUnique).mockResolvedValue({ name: 'Owner Name' } as any)
+    vi.mocked(prisma.comment.count).mockResolvedValue(0)
+  }
+
+  it('passes through the real quoted object when the quoted reply still exists', async () => {
+    baseWidgetMock()
+    vi.mocked(prisma.comment.findMany).mockResolvedValue([
+      {
+        id: 'top1',
+        isOwnerReply: false,
+        authorName: 'Alice',
+        replies: [
+          {
+            id: 'r1',
+            isOwnerReply: false,
+            authorName: 'Bob',
+            quotedId: 'r0',
+            quotedWasDeleted: false,
+            quoted: { id: 'r0', body: 'original text', deletedAt: null, status: 'approved', commenterDisplayId: 'abc123', isOwnerReply: false },
+          },
+        ],
+      },
+    ] as any)
+
+    const result = await getApprovedComments('widget-key-1')
+
+    expect(result.comments[0].replies[0].quoted).toEqual({
+      id: 'r0', body: 'original text', deletedAt: null, status: 'approved', commenterDisplayId: 'abc123', isOwnerReply: false,
+    })
+  })
+
+  it('returns a synthesized deleted placeholder when quotedWasDeleted is true and quoted is null', async () => {
+    baseWidgetMock()
+    vi.mocked(prisma.comment.findMany).mockResolvedValue([
+      {
+        id: 'top1',
+        isOwnerReply: false,
+        authorName: 'Alice',
+        replies: [
+          {
+            id: 'r1',
+            isOwnerReply: false,
+            authorName: 'Bob',
+            quotedId: null,
+            quotedWasDeleted: true,
+            quoted: null,
+          },
+        ],
+      },
+    ] as any)
+
+    const result = await getApprovedComments('widget-key-1')
+    const quoted = result.comments[0].replies[0].quoted
+
+    expect(quoted).toBeTruthy()
+    expect(quoted.body).toBe('')
+    expect(quoted.deletedAt).not.toBeNull()
+    expect(quoted.commenterDisplayId).toBeNull()
+  })
+
+  it('returns null quoted when the reply never quoted anything', async () => {
+    baseWidgetMock()
+    vi.mocked(prisma.comment.findMany).mockResolvedValue([
+      {
+        id: 'top1',
+        isOwnerReply: false,
+        authorName: 'Alice',
+        replies: [
+          {
+            id: 'r1',
+            isOwnerReply: false,
+            authorName: 'Bob',
+            quotedId: null,
+            quotedWasDeleted: false,
+            quoted: null,
+          },
+        ],
+      },
+    ] as any)
+
+    const result = await getApprovedComments('widget-key-1')
+
+    expect(result.comments[0].replies[0].quoted).toBeNull()
+  })
+})

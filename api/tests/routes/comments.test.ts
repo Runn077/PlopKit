@@ -319,3 +319,64 @@ describe('DELETE /api/comments/deleteAll', () => {
     expect(remaining[0]!.deletedAt).toBeNull()
   })
 })
+
+describe('DELETE /api/comments/:id/permanent — quoted comment handling', () => {
+  it('marks quotedWasDeleted and nulls quotedId when the owner permanently deletes a quoted reply', async () => {
+    const { user, widget } = await seedSiteWithWidget()
+
+    const parent = await seedComment(widget.commentWidget!.id, widget.widgetKey, {
+      status: CommentStatus.approved,
+    })
+    const quotedReply = await seedComment(widget.commentWidget!.id, widget.widgetKey, {
+      status: CommentStatus.approved,
+      parentId: parent.id,
+    })
+    const quotingReply = await seedComment(widget.commentWidget!.id, widget.widgetKey, {
+      status: CommentStatus.approved,
+      parentId: parent.id,
+      quotedId: quotedReply.id,
+    })
+
+    const res = await request(app)
+      .delete(`/api/comments/${quotedReply.id}/permanent`)
+      .set(authHeader(user.id))
+
+    expect(res.status).toBe(200)
+
+    const dbQuoted = await prisma.comment.findUnique({ where: { id: quotedReply.id } })
+    expect(dbQuoted).toBeNull()
+
+    const dbQuoting = await prisma.comment.findUnique({ where: { id: quotingReply.id } })
+    expect(dbQuoting?.quotedId).toBeNull()
+    expect(dbQuoting?.quotedWasDeleted).toBe(true)
+  })
+})
+
+describe('PATCH /api/comments/:id/reject — quoted comment left intact', () => {
+  it('does not set quotedWasDeleted when the quoted comment is only soft-deleted', async () => {
+    const { user, widget } = await seedSiteWithWidget()
+
+    const parent = await seedComment(widget.commentWidget!.id, widget.widgetKey, {
+      status: CommentStatus.approved,
+    })
+    const quotedReply = await seedComment(widget.commentWidget!.id, widget.widgetKey, {
+      status: CommentStatus.approved,
+      parentId: parent.id,
+    })
+    const quotingReply = await seedComment(widget.commentWidget!.id, widget.widgetKey, {
+      status: CommentStatus.approved,
+      parentId: parent.id,
+      quotedId: quotedReply.id,
+    })
+
+    const res = await request(app)
+      .patch(`/api/comments/${quotedReply.id}/reject`)
+      .set(authHeader(user.id))
+
+    expect(res.status).toBe(200)
+
+    const dbQuoting = await prisma.comment.findUnique({ where: { id: quotingReply.id } })
+    expect(dbQuoting?.quotedId).toBe(quotedReply.id)
+    expect(dbQuoting?.quotedWasDeleted).toBe(false)
+  })
+})

@@ -154,4 +154,5 @@ model Comment {
   pinnedIn           CommentWidget? @relation("PinnedComment")
   authorName         String        @default("Anonymous")
   commenterDisplayId String?
+  quotedWasDeleted   Boolean       @default(false)
 }
