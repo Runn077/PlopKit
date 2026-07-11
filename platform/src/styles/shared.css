@@ -17,7 +17,7 @@
   justify-content: center;
   height: 200px;
   font-size: 14px;
-  color: var(--pk-color-text-muted);
+  color: var(--pk-color-font-muted);
   font-family: var(--pk-font);
 }
 
@@ -186,7 +186,7 @@
 
 .sc-breadcrumb-link,
 .sw-breadcrumb-link {
-  color: var(--pk-color-text-muted);
+  color: var(--pk-color-font-muted);
   cursor: pointer;
 }
 
@@ -224,7 +224,7 @@
   font-size: 13px;
   font-weight: 500;
   font-family: var(--pk-font);
-  color: var(--pk-color-text-muted);
+  color: var(--pk-color-font-muted);
   cursor: pointer;
   margin-bottom: -1px;
   transition: color 0.15s;
@@ -297,6 +297,7 @@
   width: 100%;
   max-width: 480px;
   box-shadow: 8px 8px 0 black;
+  color: var(--pk-color-font);
 }
 
 .pk-modal-wide {
@@ -464,7 +465,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--pk-color-text-muted);
+  color: var(--pk-color-font-muted);
 }
 
 .sw-settings-section-title {
@@ -480,7 +481,7 @@
 .sc-empty,
 .sw-empty {
   font-size: 14px;
-  color: var(--pk-color-text-muted);
+  color: var(--pk-color-font-muted);
   text-align: center;
 }
 

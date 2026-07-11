@@ -20,7 +20,7 @@
   cursor: pointer;
   background: transparent;
   border: none;
-  font-family: var(--pk-font);
+  font-family: var(--pk-brand-font);
   line-height: 1;
 }
 

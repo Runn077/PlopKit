@@ -4,7 +4,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--pk-color-text-muted);
+  color: var(--pk-color-font-muted);
   margin-bottom: 16px;
 }
 
@@ -56,7 +56,7 @@
 
 .sw-export-description {
   font-size: 13px;
-  color: var(--pk-color-text-muted);
+  color: var(--pk-color-font-muted);
   margin-top: 8px;
   margin-bottom: 12px;
   line-height: 1.5;
@@ -111,7 +111,7 @@
   font-family: var(--pk-font);
   font-size: 13px;
   font-weight: 500;
-  color: var(--pk-color-text-muted);
+  color: var(--pk-color-font-muted);
   cursor: pointer;
   padding: 8px 12px;
   border-radius: var(--pk-radius);
@@ -162,7 +162,7 @@
 
 .sw-manage-widget-type {
   font-size: 12px;
-  color: var(--pk-color-text-muted);
+  color: var(--pk-color-font-muted);
   margin-top: 2px;
 }
 

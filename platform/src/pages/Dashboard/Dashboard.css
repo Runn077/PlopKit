@@ -1,11 +1,10 @@
-/* Dashboard — page layout, site list, empty state */
-
 .dashboard-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 48px 24px;
   min-height: 100vh;
-  font-family: var(--pk-font);
+  font-family: var(--pk-heading-font);
+  color: var(--pk-color-font);
 }
 
 .dashboard-header {
@@ -20,6 +19,7 @@
   display: flex;
   justify-content: center;
   gap: 12px;
+  font-family: var(--pk-heading-font)
 }
 
 .dashboard-heading h1 {
@@ -29,7 +29,6 @@
 }
 
 .dashboard-heading p {
-  color: var(--pk-color-text-secondary);
   font-size: 1rem;
 }
 
@@ -62,14 +61,14 @@
 }
 
 .site-domain {
-  color: #666;
+  color: var(--pk-color-font-muted);
   font-size: 0.95rem;
   word-break: break-word;
 }
 
 .empty-state {
   font-size: 14px;
-  color: var(--pk-color-text);
+  color: var(--pk-color-font);
   text-align: center;
   padding: 80px 24px;
   border: 3px dashed black;

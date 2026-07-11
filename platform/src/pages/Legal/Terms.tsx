@@ -1,6 +1,6 @@
 import ReactMarkdown from 'react-markdown'
 import content from './TermsAndServices.md?raw'
-import './Terms.css'
+import './Legal.css'
 import LandingNavbar from '../../components/LandingNavbar'
 import Footer from '../../components/Footer'
 

@@ -1,4 +1,8 @@
-/* Account — feature-specific (shared UI in src/styles/shared.css) */
+.account-container {
+  font-family: var(--pk-heading-font);
+  color: var(--pk-color-font);
+  min-height: 100vh;
+}
 
 .account-section {
   border: 1px solid var(--pk-color-border-muted);
@@ -10,7 +14,7 @@
 .account-section-title {
   font-size: 13px;
   font-weight: 600;
-  color: var(--pk-color-text);
+  color: var(--pk-color-font);
   margin-bottom: 16px;
 }
 
@@ -26,7 +30,6 @@
 
 .account-success {
   font-size: 12px;
-  color: var(--pk-color-text);
   margin-top: 8px;
 }
 
@@ -46,12 +49,13 @@
 
 .account-danger-text {
   font-size: 13px;
-  color: var(--pk-color-text);
+  color: var(--pk-color-font);
+  font-weight: 500;
 }
 
 .account-danger-hint {
   font-size: 12px;
-  color: var(--pk-color-text-muted);
+  color: var(--pk-color-font-muted);
   margin-top: 2px;
 }
 
@@ -67,7 +71,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--pk-color-text-muted);
+  color: var(--pk-color-font-muted);
   margin-bottom: 4px;
 }
 
@@ -79,7 +83,7 @@
   font-weight: 600;
   text-transform: uppercase;
   border: 1px solid var(--pk-color-border);
-  color: var(--pk-color-text);
+  color: var(--pk-color-font);
   width: fit-content;
 }
 
@@ -105,7 +109,7 @@
 
 .account-success {
   font-size: 12px;
-  color: var(--pk-color-text-muted);
+  color: var(--pk-color-font-muted);
 }
 
 

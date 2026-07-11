@@ -21,13 +21,13 @@
 .upgrade-card-name {
   font-size: 0.95rem;
   font-weight: 800;
-  color: var(--pk-color-text);
+  color: var(--pk-color-font);
 }
 
 .upgrade-card-price {
   font-size: 1.5rem;
   font-weight: 900;
-  color: var(--pk-color-text);
+  color: var(--pk-color-font);
 }
 
 .upgrade-card-loads {
@@ -77,7 +77,7 @@
 .upgrade-pending-notice {
   font-size: 0.9rem;
   font-weight: 500;
-  color: var(--pk-color-text);
+  color: var(--pk-color-font);
   padding: 16px;
   border: 3px solid black;
   margin-bottom: 16px;
@@ -99,7 +99,7 @@
   font-family: var(--pk-font);
   cursor: pointer;
   background: white;
-  color: var(--pk-color-text);
+  color: var(--pk-color-font);
   box-shadow: 3px 3px 0 black;
   transition: transform 0.1s ease, box-shadow 0.1s ease;
   margin-top: auto;

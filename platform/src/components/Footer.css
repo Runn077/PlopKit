@@ -3,7 +3,7 @@
   padding: 2rem 1rem;
   margin-top: auto;
   font-size: 0.875rem;
-  color: #888;
+  color: var(--pk-color-font-muted);
 }
 
 .footer-links {

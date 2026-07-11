@@ -14,7 +14,7 @@ function SiteList({ sites, onManage, onAdd, onImport }: Props) {
       <div className="empty-state">
         <h2>No websites yet</h2>
 
-        <p>
+        <p className='empty-state-body-text'>
           Add your first site and start collecting
           comments.
         </p>

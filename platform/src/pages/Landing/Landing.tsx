@@ -102,7 +102,7 @@ export default function LandingPage() {
                 <div className="embed-code-block">
                   <code className="embed-code">
                     {`<script src="https://plopkit.com/widget.js"`}<br />
-                    {`  data-widget-key="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">`}<br />
+                    {`  data-widget-key="your widget key">`}<br />
                     {`</script>`}
                   </code>
                 </div>

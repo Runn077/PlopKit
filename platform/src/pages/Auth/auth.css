@@ -39,7 +39,7 @@
 .auth-footer {
   margin-top: 20px;
   font-size: 13px;
-  color: var(--pk-color-text-muted);
+  color: var(--pk-color-font-muted);
   text-align: center;
 }
 
@@ -80,7 +80,7 @@
   display: flex;
   align-items: center;
   font-size: 12px;
-  color: var(--pk-color-text-muted);
+  color: var(--pk-color-font-muted);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }

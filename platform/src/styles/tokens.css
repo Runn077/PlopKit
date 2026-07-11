@@ -1,14 +1,21 @@
-/* PlopKit design tokens — change colors/fonts here */
+
 :root {
-  --pk-font: sans-serif;
-  --pk-font-mono: monospace;
+  /* Fonts */
+  --pk-brand-font: 'IBM Plex Mono', monospace;
+  --pk-heading-font: 'Space Mono', monospace;
+  --pk-body-font: Arial, sans-serif;
+  --pk-font-mono: 'IBM Plex Mono', monospace;
 
-  --pk-color-text: #000;
-  --pk-color-text-muted: #888;
+  --pk-color-font: #000;
+  --pk-color-font-muted: #555;
   --pk-color-text-subtle: #aaa;
-  --pk-color-text-secondary: #555;
-  --pk-color-text-sep: #ccc;
 
+  /* Colours */
+  --red: #ff6b6b;
+  --yellow: #ffe66d;
+  --mint: #4ecdc4;
+  --blue: #74c0fc;
+  
   --pk-color-bg: #fff;
   --pk-color-bg-hover: #f5f5f5;
   --pk-color-bg-subtle: #fafafa;

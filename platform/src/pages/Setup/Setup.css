@@ -1,6 +1,6 @@
 .setup-page {
   min-height: 100vh;
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: var(--pk-heading-font);
 }
 
 .setup-hero {
