@@ -6,6 +6,7 @@ import { importSiteSchema } from '../validators/import.validators.js'
 import { importSite } from '../services/import.service.js'
 import { importLimiter, exportLimiter } from '../middleware/rateLimiters.js'
 import * as siteService from '../services/site.service.js'
+import { updateBannedWordsSchema } from '../validators/site.validators.js'
 
 const router = Router()
 
@@ -41,6 +42,15 @@ router.patch('/:id', requireAuth, validate(updateSiteSchema), async (req, res, n
     const { id } = req.params as { id: string }
     const site = await siteService.updateSite(id, user.id, req.body)
     res.json(site)
+  } catch (err) { next(err) }
+})
+
+router.patch('/:id/banned-words', requireAuth, validate(updateBannedWordsSchema), async (req, res, next) => {
+  try {
+    const { user } = res.locals.session
+    const { id } = req.params as { id: string }
+    const updated = await siteService.updateBannedWords(id, user.id, req.body)
+    res.json(updated)
   } catch (err) { next(err) }
 })
 

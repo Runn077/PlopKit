@@ -95,3 +95,20 @@ export async function exportSite(id: string, userId: string) {
     comments,
   }
 }
+
+export async function updateBannedWords(
+  id: string,
+  userId: string,
+  data: { bannedWords?: string[]; autoDeleteBannedWords?: boolean },
+) {
+  const site = await prisma.site.findUnique({ where: { id } })
+  if (!site || site.userId !== userId) throw new AppError(404, 'Site not found')
+
+  return prisma.site.update({
+    where: { id },
+    data: {
+      ...(data.bannedWords !== undefined && { bannedWords: data.bannedWords }),
+      ...(data.autoDeleteBannedWords !== undefined && { autoDeleteBannedWords: data.autoDeleteBannedWords }),
+    },
+  })
+}

@@ -23,7 +23,7 @@ function authHeader(userId: string) {
 async function createUser(overrides: Partial<any> = {}) {
   return prisma.user.create({
     data: {
-      email: `user_${Date.now()}_${Math.random()}@example.com`,
+      email: `user_${Date.now()}_email-from-running-plopkit-tests@example.com`,
       ...overrides,
     },
   })

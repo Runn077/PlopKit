@@ -93,16 +93,18 @@ model Verification {
 // --- Sites & widgets ---
 
 model Site {
-  id        String   @id @default(cuid())
-  name      String
-  domain    String   @unique
-  siteKey   String   @unique
-  verified  Boolean  @default(false)
-  widgets   Widget[]
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                    String   @id @default(cuid())
+  name                  String
+  domain                String   @unique
+  siteKey               String   @unique
+  verified              Boolean  @default(false)
+  widgets               Widget[]
+  userId                String
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  bannedWords           String[]  @default([])
+  autoDeleteBannedWords Boolean   @default(false)
 }
 
 model Widget {
@@ -127,8 +129,6 @@ model CommentWidget {
   autoApprove           Boolean   @default(false)
   comments              Comment[]
   createdAt             DateTime  @default(now())
-  bannedWords           String[]  @default([])
-  autoDeleteBannedWords Boolean   @default(false)
   pinnedCommentId       String?   @unique
   pinnedComment         Comment?  @relation("PinnedComment", fields: [pinnedCommentId], references: [id], onDelete: SetNull)
 }

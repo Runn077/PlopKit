@@ -278,8 +278,8 @@ export async function createComment(
     })
   }
 
-  const bannedWords: string[] = widget.commentWidget.bannedWords ?? []
-  const autoDelete = widget.commentWidget.autoDeleteBannedWords
+  const bannedWords: string[] = widget.site.bannedWords ?? []
+  const autoDelete = widget.site.autoDeleteBannedWords
   let processedBody = cleanBody
 
   if (bannedWords.length > 0) {
@@ -518,22 +518,6 @@ export async function updateAutoApprove(widgetId: string, userId: string, autoAp
   return prisma.commentWidget.update({
     where: { id: widget.commentWidget.id },
     data: { autoApprove },
-  })
-}
-
-export async function updateBannedWords(
-  widgetId: string,
-  userId: string,
-  data: { bannedWords?: string[]; autoDeleteBannedWords?: boolean },
-) {
-  const widget = await getWidgetOwnedByUser(widgetId, userId)
-  if (!widget.commentWidget) throw new AppError(404, 'Widget not found')
-  return prisma.commentWidget.update({
-    where: { id: widget.commentWidget.id },
-    data: {
-      ...(data.bannedWords !== undefined && { bannedWords: data.bannedWords }),
-      ...(data.autoDeleteBannedWords !== undefined && { autoDeleteBannedWords: data.autoDeleteBannedWords }),
-    },
   })
 }
 

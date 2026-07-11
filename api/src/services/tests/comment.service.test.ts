@@ -46,7 +46,6 @@ import {
   pinComment,
   unpinComment,
   updateAutoApprove,
-  updateBannedWords,
   deleteOwnComment,
 } from '../comment.service.js'
 
@@ -335,11 +334,16 @@ describe('getDeletedComments', () => {
 
 describe('createComment', () => {
   const widgetBase = {
-    site: { id: 'site_1', domain: 'example.com', verified: true, userId: 'user_1' },
-    commentWidget: {
-      id: 'cw_1',
+    site: {
+      id: 'site_1',
+      domain: 'example.com',
+      verified: true,
+      userId: 'user_1',
       bannedWords: [] as string[],
       autoDeleteBannedWords: false,
+    },
+    commentWidget: {
+      id: 'cw_1',
       autoApprove: false,
     },
   }
@@ -458,7 +462,7 @@ describe('createComment', () => {
   it('rejects a comment containing a banned word when autoDeleteBannedWords is true', async () => {
     vi.mocked(getWidgetByKey).mockResolvedValue({
       ...widgetBase,
-      commentWidget: { ...widgetBase.commentWidget, bannedWords: ['spam'], autoDeleteBannedWords: true },
+      site: { ...widgetBase.site, bannedWords: ['spam'], autoDeleteBannedWords: true },
     } as any)
 
     await expect(
@@ -469,7 +473,7 @@ describe('createComment', () => {
   it('masks a banned word with asterisks when autoDeleteBannedWords is false', async () => {
     vi.mocked(getWidgetByKey).mockResolvedValue({
       ...widgetBase,
-      commentWidget: { ...widgetBase.commentWidget, bannedWords: ['spam'], autoDeleteBannedWords: false },
+      site: { ...widgetBase.site, bannedWords: ['spam'], autoDeleteBannedWords: false },
     } as any)
     vi.mocked(prisma.comment.create).mockResolvedValue({} as any)
 
@@ -934,7 +938,7 @@ describe('unpinComment', () => {
   })
 })
 
-// --- updateAutoApprove / updateBannedWords ---
+// --- updateAutoApprove ---
 
 describe('updateAutoApprove', () => {
   it('throws 404 when the widget has no commentWidget', async () => {
@@ -951,49 +955,6 @@ describe('updateAutoApprove', () => {
     expect(prisma.commentWidget.update).toHaveBeenCalledWith({
       where: { id: 'cw_1' },
       data: { autoApprove: true },
-    })
-  })
-})
-
-describe('updateBannedWords', () => {
-  it('throws 404 when the widget has no commentWidget', async () => {
-    vi.mocked(getWidgetOwnedByUser).mockResolvedValue({ commentWidget: null } as any)
-    await expect(updateBannedWords('widget_1', 'user_1', {})).rejects.toThrow('Widget not found')
-  })
-
-  it('only includes fields that were explicitly provided', async () => {
-    vi.mocked(getWidgetOwnedByUser).mockResolvedValue({ commentWidget: { id: 'cw_1' } } as any)
-    vi.mocked(prisma.commentWidget.update).mockResolvedValue({} as any)
-
-    await updateBannedWords('widget_1', 'user_1', { bannedWords: ['spam'] })
-
-    expect(prisma.commentWidget.update).toHaveBeenCalledWith({
-      where: { id: 'cw_1' },
-      data: { bannedWords: ['spam'] },
-    })
-  })
-
-  it('updates both fields when both are provided', async () => {
-    vi.mocked(getWidgetOwnedByUser).mockResolvedValue({ commentWidget: { id: 'cw_1' } } as any)
-    vi.mocked(prisma.commentWidget.update).mockResolvedValue({} as any)
-
-    await updateBannedWords('widget_1', 'user_1', { bannedWords: ['spam'], autoDeleteBannedWords: true })
-
-    expect(prisma.commentWidget.update).toHaveBeenCalledWith({
-      where: { id: 'cw_1' },
-      data: { bannedWords: ['spam'], autoDeleteBannedWords: true },
-    })
-  })
-
-  it('sends an empty data object when nothing is provided', async () => {
-    vi.mocked(getWidgetOwnedByUser).mockResolvedValue({ commentWidget: { id: 'cw_1' } } as any)
-    vi.mocked(prisma.commentWidget.update).mockResolvedValue({} as any)
-
-    await updateBannedWords('widget_1', 'user_1', {})
-
-    expect(prisma.commentWidget.update).toHaveBeenCalledWith({
-      where: { id: 'cw_1' },
-      data: {},
     })
   })
 })

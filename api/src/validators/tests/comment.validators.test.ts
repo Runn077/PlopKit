@@ -5,7 +5,6 @@ import {
   createCommentSchema,
   deleteOwnCommentSchema,
   ownerPostSchema,
-  updateBannedWordsSchema,
 } from '../comment.validators.js'
 import { LIMITS } from '../../constants/index.js'
 
@@ -165,33 +164,5 @@ describe('ownerPostSchema', () => {
   it('rejects a missing widget_key', () => {
     const { widget_key, ...rest } = base
     expect(ownerPostSchema.safeParse(rest).success).toBe(false)
-  })
-})
-
-describe('updateBannedWordsSchema', () => {
-  it('accepts an empty object since all fields are optional', () => {
-    expect(updateBannedWordsSchema.safeParse({}).success).toBe(true)
-  })
-
-  it('accepts a list of banned words', () => {
-    const result = updateBannedWordsSchema.safeParse({
-      bannedWords: ['spam', 'scam'],
-    })
-    expect(result.success).toBe(true)
-  })
-
-  it('accepts autoDeleteBannedWords alone', () => {
-    const result = updateBannedWordsSchema.safeParse({
-      autoDeleteBannedWords: true,
-    })
-    expect(result.success).toBe(true)
-  })
-
-  it('rejects a non-array bannedWords', () => {
-    expect(updateBannedWordsSchema.safeParse({ bannedWords: 'spam' }).success).toBe(false)
-  })
-
-  it('rejects a non-string entry in bannedWords array', () => {
-    expect(updateBannedWordsSchema.safeParse({ bannedWords: [123] }).success).toBe(false)
   })
 })

@@ -27,6 +27,7 @@ import {
   updateSite,
   deleteSite,
   exportSite,
+  updateBannedWords,
 } from '../site.service.js'
 
 beforeEach(() => {
@@ -282,5 +283,53 @@ describe('exportSite', () => {
     expect(result.widgets).toEqual([{ id: 'w1' }])
     expect(result.comments).toEqual([{ id: 'c1' }])
     expect(typeof result.exportedAt).toBe('string')
+  })
+})
+
+describe('updateBannedWords', () => {
+  it('throws 404 when the site does not exist', async () => {
+    vi.mocked(prisma.site.findUnique).mockResolvedValue(null)
+    await expect(updateBannedWords('site_1', 'user_1', {})).rejects.toThrow(AppError)
+  })
+
+  it('throws 404 when the site belongs to a different user', async () => {
+    vi.mocked(prisma.site.findUnique).mockResolvedValue({ id: 'site_1', userId: 'other_user' } as any)
+    await expect(updateBannedWords('site_1', 'user_1', {})).rejects.toThrow('Site not found')
+  })
+
+  it('only includes fields that were explicitly provided', async () => {
+    vi.mocked(prisma.site.findUnique).mockResolvedValue({ id: 'site_1', userId: 'user_1' } as any)
+    vi.mocked(prisma.site.update).mockResolvedValue({} as any)
+
+    await updateBannedWords('site_1', 'user_1', { bannedWords: ['spam'] })
+
+    expect(prisma.site.update).toHaveBeenCalledWith({
+      where: { id: 'site_1' },
+      data: { bannedWords: ['spam'] },
+    })
+  })
+
+  it('updates both fields when both are provided', async () => {
+    vi.mocked(prisma.site.findUnique).mockResolvedValue({ id: 'site_1', userId: 'user_1' } as any)
+    vi.mocked(prisma.site.update).mockResolvedValue({} as any)
+
+    await updateBannedWords('site_1', 'user_1', { bannedWords: ['spam'], autoDeleteBannedWords: true })
+
+    expect(prisma.site.update).toHaveBeenCalledWith({
+      where: { id: 'site_1' },
+      data: { bannedWords: ['spam'], autoDeleteBannedWords: true },
+    })
+  })
+
+  it('sends an empty data object when nothing is provided', async () => {
+    vi.mocked(prisma.site.findUnique).mockResolvedValue({ id: 'site_1', userId: 'user_1' } as any)
+    vi.mocked(prisma.site.update).mockResolvedValue({} as any)
+
+    await updateBannedWords('site_1', 'user_1', {})
+
+    expect(prisma.site.update).toHaveBeenCalledWith({
+      where: { id: 'site_1' },
+      data: {},
+    })
   })
 })

@@ -15,3 +15,8 @@ export const updateSiteSchema = z.object({
   name: z.string().min(1).optional(),
   domain: domainSchema.optional(),
 })
+
+export const updateBannedWordsSchema = z.object({
+  bannedWords: z.array(z.string()).optional(),
+  autoDeleteBannedWords: z.boolean().optional(),
+})

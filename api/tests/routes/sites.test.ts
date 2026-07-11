@@ -345,3 +345,41 @@ describe('POST /api/sites/import — full export/import round trip', () => {
     expect(res.status).toBe(409)
   })
 })
+
+describe('PATCH /api/sites/:id/banned-words', () => {
+  it('returns 404 when the site belongs to a different user', async () => {
+    const user = await createUser()
+    const otherUser = await createUser()
+    const { site } = await seedSiteWithWidget(otherUser.id)
+
+    const res = await request(app)
+      .patch(`/api/sites/${site.id}/banned-words`)
+      .set(authHeader(user.id))
+      .send({ bannedWords: ['spam'] })
+
+    expect(res.status).toBe(404)
+  })
+
+  it('updates bannedWords and autoDeleteBannedWords on the site', async () => {
+    const user = await createUser()
+    const { site } = await seedSiteWithWidget(user.id)
+
+    const res = await request(app)
+      .patch(`/api/sites/${site.id}/banned-words`)
+      .set(authHeader(user.id))
+      .send({ bannedWords: ['spam', 'scam'], autoDeleteBannedWords: true })
+
+    expect(res.status).toBe(200)
+    expect(res.body.bannedWords).toEqual(['spam', 'scam'])
+    expect(res.body.autoDeleteBannedWords).toBe(true)
+
+    const dbSite = await prisma.site.findUnique({ where: { id: site.id } })
+    expect(dbSite?.bannedWords).toEqual(['spam', 'scam'])
+    expect(dbSite?.autoDeleteBannedWords).toBe(true)
+  })
+
+  it('returns 401 without a session', async () => {
+    const res = await request(app).patch('/api/sites/some_id/banned-words').send({ bannedWords: [] })
+    expect(res.status).toBe(401)
+  })
+})

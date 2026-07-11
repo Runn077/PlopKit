@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { domainSchema, createSiteSchema, updateSiteSchema } from '../site.validators.js'
+import { domainSchema, createSiteSchema, updateSiteSchema, updateBannedWordsSchema } from '../site.validators.js'
 
 describe('domainSchema', () => {
   it('accepts a standard domain', () => {
@@ -107,5 +107,33 @@ describe('updateSiteSchema', () => {
 
   it('rejects an empty string name if provided', () => {
     expect(updateSiteSchema.safeParse({ name: '' }).success).toBe(false)
+  })
+})
+
+describe('updateBannedWordsSchema', () => {
+  it('accepts an empty object since all fields are optional', () => {
+    expect(updateBannedWordsSchema.safeParse({}).success).toBe(true)
+  })
+
+  it('accepts a list of banned words', () => {
+    const result = updateBannedWordsSchema.safeParse({
+      bannedWords: ['spam', 'scam'],
+    })
+    expect(result.success).toBe(true)
+  })
+
+  it('accepts autoDeleteBannedWords alone', () => {
+    const result = updateBannedWordsSchema.safeParse({
+      autoDeleteBannedWords: true,
+    })
+    expect(result.success).toBe(true)
+  })
+
+  it('rejects a non-array bannedWords', () => {
+    expect(updateBannedWordsSchema.safeParse({ bannedWords: 'spam' }).success).toBe(false)
+  })
+
+  it('rejects a non-string entry in bannedWords array', () => {
+    expect(updateBannedWordsSchema.safeParse({ bannedWords: [123] }).success).toBe(false)
   })
 })

@@ -4,7 +4,6 @@ import { validate } from '../../middleware/validate.js'
 import { getWidgetCommentsSchema, ownerPostSchema } from '../../validators/comment.validators.js'
 import * as commentService from '../../services/comment.service.js'
 import { AppError } from '../../errors/appError.js'
-import { updateBannedWordsSchema } from '../../validators/comment.validators.js'
 
 const router = Router()
 
@@ -123,15 +122,6 @@ router.delete('/:id', requireAuth, async (req, res, next) => {
     const { id } = req.params as { id: string }
     await commentService.softDeleteComment(id, user.id)
     res.json({ success: true })
-  } catch (err) { next(err) }
-})
-
-router.patch('/:id/banned-words', requireAuth, validate(updateBannedWordsSchema), async (req, res, next) => {
-  try {
-    const { user } = res.locals.session
-    const { id } = req.params as { id: string }
-    const updated = await commentService.updateBannedWords(id, user.id, req.body)
-    res.json(updated)
   } catch (err) { next(err) }
 })
 

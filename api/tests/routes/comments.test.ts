@@ -244,34 +244,6 @@ describe('PATCH /api/comments/:id/pin and /unpin', () => {
   })
 })
 
-describe('PATCH /api/comments/:id/banned-words', () => {
-  it('updates bannedWords for the owned widget', async () => {
-    const { user, widget } = await seedSiteWithWidget()
-
-    const res = await request(app)
-      .patch(`/api/comments/${widget.id}/banned-words`)
-      .set(authHeader(user.id))
-      .send({ bannedWords: ['spam', 'scam'] })
-
-    expect(res.status).toBe(200)
-
-    const dbCommentWidget = await prisma.commentWidget.findUnique({ where: { id: widget.commentWidget!.id } })
-    expect(dbCommentWidget?.bannedWords).toEqual(['spam', 'scam'])
-  })
-
-  it('returns 404 when a different user attempts to update banned words', async () => {
-    const { widget } = await seedSiteWithWidget()
-    const otherUser = await prisma.user.create({ data: { email: `other_${Date.now()}@example.com` } })
-
-    const res = await request(app)
-      .patch(`/api/comments/${widget.id}/banned-words`)
-      .set(authHeader(otherUser.id))
-      .send({ bannedWords: ['spam'] })
-
-    expect(res.status).toBe(404)
-  })
-})
-
 describe('POST /api/comments/owner-post and /:id/owner-reply', () => {
   it('creates an approved owner comment directly on the widget', async () => {
     const { user, widget } = await seedSiteWithWidget()
