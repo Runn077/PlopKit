@@ -5,13 +5,12 @@ import SubNav from '../../components/SubNav'
 import CommentsTab from './tabs/CommentsTab'
 import PendingTab from './tabs/PendingTab'
 import DeletedTab from './tabs/DeletedTab'
-import WordFilterTab from './tabs/WordFilterTab'
 import './SiteComments.css'
 import type { Comment, Widget, Site, Reply } from '../../types'
 import { apiFetch } from '../../lib/api'
 import Footer from '../../components/Footer'
 
-type Tab = 'comments' | 'pending' | 'deleted' | 'filter'
+type Tab = 'comments' | 'pending' | 'deleted'
 
 function SiteComments() {
   const { siteId, widgetId } = useParams()
@@ -265,23 +264,6 @@ function SiteComments() {
     }
   }
 
-  async function handleUpdateBannedWords(bannedWords: string[], autoDelete: boolean) {
-    if (!widget) return
-    const res = await apiFetch(`/comments/${widget.id}/banned-words`, {
-      method: 'PATCH',
-      body: JSON.stringify({ bannedWords, autoDeleteBannedWords: autoDelete }),
-    })
-    if (!res.ok) {
-      const data = await res.json()
-      throw new Error(data.error ?? 'Something went wrong')
-    }
-    const updated = await res.json()
-    setWidget(prev => prev?.commentWidget
-      ? { ...prev, commentWidget: { ...prev.commentWidget, bannedWords: updated.bannedWords, autoDeleteBannedWords: updated.autoDeleteBannedWords } }
-      : prev
-    )
-  }
-
   function handleReplyPosted(commentId: string, reply: Reply) {
     setComments(prev => prev.map(c =>
       c.id === commentId
@@ -358,7 +340,6 @@ function SiteComments() {
           { id: 'comments', label: 'Comments' },
           { id: 'pending', label: 'Pending' },
           { id: 'deleted', label: 'Recently Deleted' },
-          { id: 'filter', label: 'Filter' },
         ]}
         activeTab={activeTab}
         onTabChange={(tab) => setActiveTab(tab as Tab)}
@@ -441,13 +422,6 @@ function SiteComments() {
               setLoadingMoreDeleted(true)
               fetchDeleted(widget.widgetKey, deletedCursor)
             }}
-          />
-        )}
-        {activeTab === 'filter' && (
-          <WordFilterTab
-            bannedWords={widget.commentWidget?.bannedWords ?? []}
-            autoDelete={widget.commentWidget?.autoDeleteBannedWords ?? false}
-            onSave={handleUpdateBannedWords}
           />
         )}
       </div>

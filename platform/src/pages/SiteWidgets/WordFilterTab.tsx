@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import '../SiteComments.css'
+import './WordFilterTab.css'
 
 interface Props {
   bannedWords: string[]
@@ -55,8 +55,8 @@ function WordFilterTab({ bannedWords: initialWords, autoDelete: initialAutoDelet
     <div>
       <div className="sc-auto-approve">
         <div className="sc-auto-approve-label">
-          <span>Auto-delete flagged comments</span>
-          <span className="sc-auto-approve-hint">Delete comments containing banned words instead of censoring</span>
+          <span>Auto reject flagged comments</span>
+          <span className="sc-auto-approve-hint">Reject comments containing banned words instead of censoring</span>
         </div>
         <button
           className={`sc-toggle ${autoDelete ? 'sc-toggle-on' : ''}`}

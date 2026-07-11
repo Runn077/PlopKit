@@ -2,8 +2,6 @@ export interface CommentWidget {
   id: string
   widgetId: string
   autoApprove: boolean
-  bannedWords: string[]
-  autoDeleteBannedWords: boolean
   pinnedCommentId: string | null
   createdAt: string
 }
@@ -60,6 +58,8 @@ export interface Site {
   domain: string
   siteKey: string
   verified: boolean
+  bannedWords: string[]
+  autoDeleteBannedWords: boolean
   expiresAt?: string | null
   createdAt: string
 }

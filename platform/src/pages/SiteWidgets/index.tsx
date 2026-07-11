@@ -5,6 +5,7 @@ import SubNav from '../../components/SubNav'
 import WidgetList from './WidgetList'
 import AddWidgetModal from './AddWidgetModal'
 import SiteSettings from './settings/SiteSettings'
+import WordFilterTab from './WordFilterTab'
 import './SiteWidgets.css'
 import './settings/Settings.css'
 import type { Site, Widget } from '../../types'
@@ -19,7 +20,7 @@ function SiteWidgets() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [showModal, setShowModal] = useState(false)
-  const [activeTab, setActiveTab] = useState<'widgets' | 'settings'>('widgets')
+  const [activeTab, setActiveTab] = useState<'widgets' | 'settings' | 'filter'>('widgets')
 
   useEffect(() => { fetchData() }, [siteId])
 
@@ -100,6 +101,22 @@ function SiteWidgets() {
     setWidgets(prev => prev.map(w => w.id === widgetId ? { ...w, name: updated.name } : w))
   }
 
+  async function handleUpdateBannedWords(bannedWords: string[], autoDelete: boolean) {
+    const res = await apiFetch(`/sites/${siteId}/banned-words`, {
+      method: 'PATCH',
+      body: JSON.stringify({ bannedWords, autoDeleteBannedWords: autoDelete }),
+    })
+    if (!res.ok) {
+      const data = await res.json()
+      throw new Error(data.error ?? 'Something went wrong')
+    }
+    const updated = await res.json()
+    setSite(prev => prev
+      ? { ...prev, bannedWords: updated.bannedWords, autoDeleteBannedWords: updated.autoDeleteBannedWords }
+      : prev
+    )
+  }
+
   if (loading) return <div className="page-loading">Loading...</div>
 
   if (error) return (
@@ -118,10 +135,11 @@ function SiteWidgets() {
       <SubNav
         tabs={[
           { id: 'widgets', label: 'Widgets' },
+          { id: 'filter', label: 'Filter' },
           { id: 'settings', label: 'Settings' },
         ]}
         activeTab={activeTab}
-        onTabChange={(tab) => setActiveTab(tab as 'widgets' | 'settings')}
+        onTabChange={(tab) => setActiveTab(tab as 'widgets' | 'settings' | 'filter')}
       />
       {activeTab === 'widgets' && (
         <div>
@@ -152,6 +170,15 @@ function SiteWidgets() {
               />
             )}
           </div>
+        </div>
+      )}
+      {activeTab === 'filter' && (
+        <div className="sw-container">
+          <WordFilterTab
+            bannedWords={site!.bannedWords}
+            autoDelete={site!.autoDeleteBannedWords}
+            onSave={handleUpdateBannedWords}
+          />
         </div>
       )}
       {activeTab === 'settings' && (
