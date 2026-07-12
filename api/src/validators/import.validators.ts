@@ -36,7 +36,7 @@ const exportDataSchema = z.object({
 })
 
 export const importSiteSchema = z.object({
-  name: z.string().min(1).max(200),
+  name: z.string().min(1).max(30, "Name must be 30 characters or less"),
   domain: domainSchema,
   data: z.unknown(),
 }).superRefine((val, ctx) => {

@@ -7,12 +7,12 @@ export const domainSchema = z.string()
   .regex(domainRegex, 'Must be a valid domain (e.g. example.com)')
 
 export const createSiteSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
+  name: z.string().min(1, 'Name is required').max(30, 'Name must be 30 characters or less'),
   domain: domainSchema,
 })
 
 export const updateSiteSchema = z.object({
-  name: z.string().min(1).optional(),
+  name: z.string().min(1).max(30, 'Name must be 30 characters or less').optional(),
   domain: domainSchema.optional(),
 })
 
