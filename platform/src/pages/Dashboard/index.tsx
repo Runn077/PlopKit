@@ -9,7 +9,6 @@ import { apiFetch } from '../../lib/api'
 import Footer from '../../components/layout/Footer/Footer'
 import ImportSiteModal from './modals/ImportSiteModal'
 import { Button } from '../../components/ui/Button/Button'
-import { Modal } from '../../components/ui/Modal/Modal'
 
 function Dashboard() {
   const navigate = useNavigate()
@@ -18,7 +17,6 @@ function Dashboard() {
   const [error, setError] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [showImportModal, setShowImportModal] = useState(false)
-  const [testModal, setTestModal] = useState(false)
 
   useEffect(() => { fetchSites() }, [])
 
