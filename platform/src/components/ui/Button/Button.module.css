@@ -1,0 +1,43 @@
+.btn {
+  border: 3px solid var(--pk-color-border);
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 black;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.btn:hover {
+  transform: translate(2px, 2px);
+  box-shadow: var(--pk-shadow-sm);
+  background: var(--blue);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: var(--pk-shadow);
+}
+
+/* --- variants --- */
+
+.light {
+  background: white;
+  color: var(--pk-color-font);
+}
+
+.dark {
+  background: var(--pk-dark-bg);
+  color: white;
+}
+
+.danger {
+  background: var(--red);
+  color: white;
+}
+
+.danger:hover {
+  background: color-mix(in srgb, var(--red) 80%, white);
+}

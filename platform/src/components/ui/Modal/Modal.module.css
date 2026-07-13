@@ -1,0 +1,48 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--pk-z-modal);
+}
+
+.modal {
+  background: white;
+  border: 3px solid black;
+  padding: 32px;
+  width: 100%;
+  max-width: 480px;
+}
+
+.wide {
+  max-width: 620px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 900;
+  margin: 0;
+}
+
+.close {
+  background: var(--pk-color-bg);
+  border: 3px solid var(--pk-color-border);
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 4px 10px;
+  line-height: 1;
+}
+
+.close:hover {
+  background: var(--red);
+}

@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { useSession, signOut } from '../lib/auth-client'
+import { useSession, signOut } from '../../../lib/auth-client'
 import { useState, useRef, useEffect } from 'react'
 import './Navbar.css'
 
