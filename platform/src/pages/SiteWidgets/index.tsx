@@ -23,6 +23,10 @@ function SiteWidgets() {
   const [showModal, setShowModal] = useState(false)
   const [activeTab, setActiveTab] = useState<'widgets' | 'settings' | 'filter'>('widgets')
 
+  const sumWidgetLoads = widgets.reduce(
+    (total, widget) => total += widget.monthlyLoads, 0
+  )
+
   useEffect(() => { fetchData() }, [siteId])
 
   async function fetchData() {
@@ -153,6 +157,7 @@ function SiteWidgets() {
             <div className="sw-site-card">
               <h1>{site!.name}</h1>
               <p>{site!.domain}</p>
+              <p>Total Monthly Widget Loads: {sumWidgetLoads.toLocaleString()}</p>
             </div>
             <div className="sw-header">
               <h2 className="sw-title">Widgets</h2>
