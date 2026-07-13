@@ -52,6 +52,7 @@
 .site-card:hover {
   transform: translate(-2px, -2px);
   box-shadow: 8px 8px 0 #74c0fc;
+  cursor: pointer;
 }
 
 .site-name {

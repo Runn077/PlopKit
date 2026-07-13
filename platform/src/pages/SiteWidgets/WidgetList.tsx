@@ -1,5 +1,6 @@
 import './WidgetList.css'
 import type { Widget } from '../../types'
+import { Button } from '../../components/ui/Button/Button'
 
 interface Props {
   widgets: Widget[]
@@ -21,11 +22,11 @@ function WidgetList({ widgets, onOpen }: Props) {
         <div key={widget.id} className="widget-row">
           <div className="widget-row-info">
             <span className="widget-row-name">{widget.name}</span>
-            <span className="widget-row-type">{widget.type}</span>
+            <span className="widget-row-type">Monthly Loads: {widget.monthlyLoads}</span>
           </div>
-          <button className="widget-row-btn" onClick={() => onOpen(widget)}>
+          <Button variant="light" onClick={() => onOpen(widget)}>
             Open
-          </button>
+          </Button>
         </div>
       ))}
     </div>

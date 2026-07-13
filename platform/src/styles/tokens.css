@@ -15,7 +15,9 @@
   --yellow: #ffe66d;
   --mint: #4ecdc4;
   --blue: #74c0fc;
-  
+
+  --pk-dark-bg: #333;
+
   --pk-color-bg: #fff;
   --pk-color-bg-hover: #f5f5f5;
   --pk-color-bg-subtle: #fafafa;
@@ -28,9 +30,6 @@
   --pk-color-primary: #000;
   --pk-color-primary-hover: #333;
   --pk-color-on-primary: #fff;
-
-  --pk-color-accent: #9370db;
-  --pk-color-danger: red;
 
   --pk-radius-sm: 4px;
   --pk-radius: 6px;

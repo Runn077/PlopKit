@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import Navbar from '../../components/Navbar'
-import SubNav from '../../components/SubNav'
+import Navbar from '../../components/layout/Navbar/Navbar'
+import SubNav from '../../components/layout/SubNav/SubNav'
 import WidgetList from './WidgetList'
 import AddWidgetModal from './AddWidgetModal'
 import SiteSettings from './settings/SiteSettings'
@@ -10,7 +10,8 @@ import './SiteWidgets.css'
 import './settings/Settings.css'
 import type { Site, Widget } from '../../types'
 import { apiFetch } from '../../lib/api'
-import Footer from '../../components/Footer'
+import Footer from '../../components/layout/Footer/Footer'
+import { Button } from '../../components/ui/Button/Button'
 
 function SiteWidgets() {
   const { siteId } = useParams()
@@ -155,9 +156,9 @@ function SiteWidgets() {
             </div>
             <div className="sw-header">
               <h2 className="sw-title">Widgets</h2>
-              <button className="btn btn-primary" onClick={() => setShowModal(true)}>
+              <Button variant="dark" onClick={() => setShowModal(true)}>
                 + Add Widget
-              </button>
+              </Button>
             </div>
             <WidgetList
               widgets={widgets}

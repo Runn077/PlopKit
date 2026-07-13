@@ -1,0 +1,21 @@
+.body {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--pk-color-font);
+  margin: 0 0 16px;
+  line-height: 1.5;
+}
+
+.error {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--red);
+  margin: 0 0 8px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}

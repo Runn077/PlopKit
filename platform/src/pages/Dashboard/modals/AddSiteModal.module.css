@@ -1,0 +1,46 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.input {
+  width: 100%;
+  border: 3px solid var(--pk-color-border);
+  padding: 12px 14px;
+  font-size: 1rem;
+  font-weight: 500;
+  outline: none;
+  background: var(--pk-color-bg);
+  box-sizing: border-box;
+  transition: box-shadow 0.1s ease;
+}
+
+.input:focus {
+  box-shadow: 4px 4px 0 var(--blue);
+}
+
+.error {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--red);
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}

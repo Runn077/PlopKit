@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useSession, signOut } from '../../lib/auth-client'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import Navbar from '../../components/Navbar'
+import Navbar from '../../components/layout/Navbar/Navbar'
 import { apiFetch } from '../../lib/api'
 import './Account.css'
 import UpgradeModal from './UpgradeModal'

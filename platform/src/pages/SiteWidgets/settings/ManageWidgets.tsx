@@ -1,56 +1,13 @@
 import { useState } from 'react'
 import '../SiteWidgets.css'
 import type { Widget } from '../../../types'
+import DeleteWidgetModal from './DeleteWidgetModal'
 
 interface Props {
   widgets: Widget[]
   onOpen: (widget: Widget) => void
   onDelete: (widgetId: string) => Promise<void>
   onRename: (widgetId: string, name: string) => Promise<void>
-}
-
-function DeleteWidgetModal({ onClose, onConfirm }: { onClose: () => void, onConfirm: () => Promise<void> }) {
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-
-  async function handleConfirm() {
-    setLoading(true)
-    setError('')
-    try {
-      await onConfirm()
-      onClose()
-    } catch (err: any) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return (
-    <div
-      className="pk-modal-overlay"
-      onClick={e => { if (e.target === e.currentTarget) onClose() }}
-    >
-      <div className="pk-modal">
-        <p className="pk-modal-title">Delete widget</p>
-        <p className="pk-modal-body">
-          This will permanently delete the widget and all its comments.
-        </p>
-        {error && <p className="pk-modal-error">{error}</p>}
-        <div className="pk-modal-actions">
-          <button type="button" className="btn" onClick={onClose}>Cancel</button>
-          <button
-            type="button"
-            className="btn btn-danger"
-            onClick={handleConfirm}
-            disabled={loading}
-          >
-            {loading ? 'Deleting...' : 'Confirm delete'}
-          </button>
-        </div>
-      </div>
-    </div>
-  )
 }
 
 function WidgetRow({ widget, onOpen, onDelete, onRename }: {

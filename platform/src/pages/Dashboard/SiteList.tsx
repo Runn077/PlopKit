@@ -39,7 +39,11 @@ function SiteList({ sites, onManage, onAdd, onImport }: Props) {
   return (
     <div className="site-grid">
       {sites.map(site => (
-        <div key={site.id} className="site-card">
+        <div 
+          key={site.id}
+          onClick={() => onManage(site.id)} 
+          className="site-card"
+        >
           <div>
             <h3 className="site-name">
               {site.name}
@@ -49,13 +53,6 @@ function SiteList({ sites, onManage, onAdd, onImport }: Props) {
               {site.domain}
             </p>
           </div>
-
-          <button
-            className="btn btn-primary"
-            onClick={() => onManage(site.id)}
-          >
-            Manage Site
-          </button>
         </div>
       ))}
     </div>

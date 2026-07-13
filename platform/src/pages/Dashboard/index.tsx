@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Navbar from '../../components/Navbar'
+import Navbar from '../../components/layout/Navbar/Navbar'
 import SiteList from './SiteList'
-import AddSiteModal from './AddSiteModal'
+import AddSiteModal from './modals/AddSiteModal'
 import './Dashboard.css'
 import type { Site } from '../../types'
 import { apiFetch } from '../../lib/api'
-import Footer from '../../components/Footer'
-import ImportSiteModal from './ImportSiteModal'
+import Footer from '../../components/layout/Footer/Footer'
+import ImportSiteModal from './modals/ImportSiteModal'
+import { Button } from '../../components/ui/Button/Button'
+import { Modal } from '../../components/ui/Modal/Modal'
 
 function Dashboard() {
   const navigate = useNavigate()
@@ -16,6 +18,7 @@ function Dashboard() {
   const [error, setError] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [showImportModal, setShowImportModal] = useState(false)
+  const [testModal, setTestModal] = useState(false)
 
   useEffect(() => { fetchSites() }, [])
 
@@ -83,12 +86,12 @@ function Dashboard() {
 
           {sites.length > 0 && (
           <div className="dashboard-header-actions">
-            <button className="btn btn-primary" onClick={() => setShowModal(true)}>
+            <Button variant="dark" onClick={() => setShowModal(true)}>
               + Add Website
-            </button>
-            <button className="btn" onClick={() => setShowImportModal(true)}>
+            </Button>
+            <Button variant="light" onClick={() => setShowImportModal(true)}>
               Import site
-            </button>
+            </Button>
           </div>
           )}
         </div>
@@ -99,6 +102,7 @@ function Dashboard() {
           onAdd={() => setShowModal(true)}
           onImport={() => setShowImportModal(true)}
         />
+
         {showModal && (
           <AddSiteModal
             onClose={() => setShowModal(false)}

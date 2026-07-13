@@ -10,81 +10,10 @@
   font-family: var(--pk-font);
 }
 
-/* --- Page states --- */
-.page-loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 200px;
-  font-size: 14px;
-  color: var(--pk-color-font-muted);
-  font-family: var(--pk-font);
-}
-
-.page-error {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 200px;
-  gap: 12px;
-  font-family: var(--pk-font);
-}
-
-.page-error-message {
-  font-size: 14px;
-  color: var(--pk-color-text);
-}
-
-.page-error-retry {
-  font-size: 13px;
-  font-weight: 500;
-  font-family: var(--pk-font);
-  padding: 7px 14px;
-  border-radius: var(--pk-radius);
-  cursor: pointer;
-  border: 1px solid var(--pk-color-border);
-  background: var(--pk-color-bg);
-  color: var(--pk-color-text);
-}
-
-.page-error-retry:hover {
-  background: var(--pk-color-bg-hover);
-}
-
 /* --- Buttons --- */
-.btn {
-  border: 3px solid black;
-  padding: 10px 20px;
-  font-size: 0.95rem;
-  font-weight: 800;
-  font-family: var(--pk-font);
-  cursor: pointer;
-  background: white;
-  color: var(--pk-color-text);
-  box-shadow: 4px 4px 0 black;
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
-}
-
-.btn:hover {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 black;
-}
-
-.btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: 4px 4px 0 black;
-}
 
 .btn-primary {
   background: #333;
-  color: white;
-}
-
-.btn-danger {
-  background: #ff6b6b;
   color: white;
 }
 
@@ -108,27 +37,12 @@
   background: var(--pk-color-bg-hover);
 }
 
-.sc-btn-primary,
-.sw-btn-primary,
-.account-btn-primary {
+.sw-btn-primary {
   background: #333;
   color: var(--pk-color-on-primary);
 }
 
-.sc-btn-primary:hover,
-.sw-btn-primary:hover,
-.account-btn-primary:hover:not(:disabled) {
-  background: #74c0fc;
-}
-
-.account-btn:disabled,
-.account-btn-primary:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
 .sc-btn-danger,
-.account-btn-danger,
 .sw-btn-danger-outline {
   border-color: #ff6b6b;
   color: var(--pk-color-text);
@@ -159,11 +73,6 @@
   background: var(--pk-color-primary-hover);
 }
 
-.sw-btn-danger-fill {
-  background: var(--pk-color-primary);
-  color: var(--pk-color-on-primary);
-  border-color: var(--pk-color-primary);
-}
 
 .sw-btn-danger-fill:hover:not(:disabled) {
   background: var(--pk-color-primary-hover);
@@ -459,7 +368,6 @@
 }
 
 /* --- Section title (uppercase label) --- */
-.sc-section-label,
 .sw-settings-section-title {
   font-size: 11px;
   font-weight: 600;
@@ -473,13 +381,9 @@
   margin-bottom: 16px;
 }
 
-.sc-section-label {
-  margin: 24px 0 0;
-}
 
 /* --- Empty state text --- */
-.sc-empty,
-.sw-empty {
+.sc-empty {
   font-size: 14px;
   color: var(--pk-color-font-muted);
   text-align: center;
@@ -487,14 +391,6 @@
 
 .sc-empty {
   padding: 40px 0;
-}
-
-.sw-empty {
-  padding: 60px 0;
-}
-
-.sw-empty p {
-  margin-bottom: 16px;
 }
 
 /* --- Page header row --- */

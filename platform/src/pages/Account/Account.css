@@ -24,7 +24,7 @@
 
 .account-error {
   font-size: 12px;
-  color: var(--pk-color-danger);
+  color: var(--red);
   margin-top: 8px;
 }
 
@@ -104,7 +104,7 @@
 
 .account-error {
   font-size: 12px;
-  color: var(--pk-color-danger);
+  color: var(--red);
 }
 
 .account-success {

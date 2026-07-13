@@ -1,5 +1,5 @@
-import LandingNavbar from '../../components/LandingNavbar'
-import Footer from '../../components/Footer'
+import LandingNavbar from '../../components/layout/LandingNavbar/LandingNavbar'
+import Footer from '../../components/layout/Footer/Footer'
 import { useNavigate } from 'react-router-dom'
 import './Setup.css'
 

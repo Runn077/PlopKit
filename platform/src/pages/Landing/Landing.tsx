@@ -1,8 +1,8 @@
 import './Landing.css'
-import Footer from '../../components/Footer'
+import Footer from '../../components/layout/Footer/Footer'
 import { useEffect } from 'react'
 import { useNavigate, useLocation} from 'react-router-dom'
-import LandingNavbar from '../../components/LandingNavbar'
+import LandingNavbar from '../../components/layout/LandingNavbar/LandingNavbar'
 
 export default function LandingPage() {
   const navigate = useNavigate()

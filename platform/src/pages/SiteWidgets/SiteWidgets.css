@@ -83,7 +83,7 @@
 }
 
 .sw-btn:hover {
-  background: var(--pk-color-bg-hover);
+  background: var(--blue);
 }
 
 .sw-btn-primary {

@@ -1,7 +1,7 @@
-import LandingNavbar from "../../components/LandingNavbar"
+import LandingNavbar from "../../components/layout/LandingNavbar/LandingNavbar"
 import { useEffect, useRef } from "react"
 import './Demo.css'
-import Footer from "../../components/Footer"
+import Footer from "../../components/layout/Footer/Footer"
 
 export default function DemoPage() {
   const containerRef = useRef<HTMLDivElement>(null)

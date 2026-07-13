@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import Navbar from '../../components/Navbar'
-import SubNav from '../../components/SubNav'
+import Navbar from '../../components/layout/Navbar/Navbar'
+import SubNav from '../../components/layout/SubNav/SubNav'
 import CommentsTab from './tabs/CommentsTab'
 import PendingTab from './tabs/PendingTab'
 import DeletedTab from './tabs/DeletedTab'
 import './SiteComments.css'
 import type { Comment, Widget, Site, Reply } from '../../types'
 import { apiFetch } from '../../lib/api'
-import Footer from '../../components/Footer'
+import Footer from '../../components/layout/Footer/Footer'
 
 type Tab = 'comments' | 'pending' | 'deleted'
 
