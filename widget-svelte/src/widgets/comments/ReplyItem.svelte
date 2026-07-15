@@ -2,6 +2,7 @@
   import type { Reply } from '../../types'
   import { Toast } from './toast.svelte'
   import { timeAgo } from './timeago'
+  import { getTruncatedBody } from './truncate'
 
   interface Props {
     reply: Reply
@@ -19,9 +20,11 @@
   let replyOpen = $state(false)
   let replyBody = $state('')
   let replyAuthorName = $state('')
+  let expanded = $state(false)
   const toast = new Toast()
 
   const STORAGE_KEY = $derived(`plopkit_author_${widgetKey}`)
+  const truncated = $derived(getTruncatedBody(reply.body, expanded))
 
   const isQuoteDeleted = $derived(
     reply.quoted && (reply.quoted.deletedAt !== null || reply.quoted.status !== 'approved')
@@ -144,7 +147,12 @@
   {#if reply.commenterDisplayId}
     <span class="commenter-id">#{reply.commenterDisplayId}</span>
   {/if}
-  <p class="reply-body">{reply.body}</p>
+  <p class="reply-body">{truncated.displayBody}</p>
+  {#if truncated.isLong}
+    <button class="btn-show-more" onclick={() => expanded = !expanded}>
+      {expanded ? 'Show less' : 'Show more'}
+    </button>
+  {/if}
   <div class="reply-meta">
     <span class="comment-time">{timeAgo(reply.createdAt)}</span>
     <div style="display:flex;gap:8px">
@@ -161,8 +169,8 @@
       <div class="quoted-preview">
         <p class="quoted-preview-body">
           {
-            (reply.isOwnerReply ? 'Owner' : '#' 
-            + reply.commenterDisplayId) 
+            (reply.isOwnerReply ? 'Owner' : '#'
+            + reply.commenterDisplayId)
             + ': ' + reply.body
           }
         </p>

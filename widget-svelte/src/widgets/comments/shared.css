@@ -1,0 +1,86 @@
+.toast {
+  font-size: 13px;
+  color: #fff;
+  background: #ff6b6b;
+  padding: 10px 16px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+  animation: fade-in 0.2s ease;
+}
+
+.toast-fade-out {
+  animation: fade-out 0.5s ease forwards;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-out {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-4px); }
+}
+
+.owner-badge {
+  display: inline-block;
+  font-size: 11px;
+  color: #fff;
+  background: var(--pkw-badge-owner, #4ecdc4);
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+
+.pinned-badge {
+  display: inline-block;
+  font-size: 11px;
+  color: #ffffff;
+  background: var(--pkw-badge-pinned, #999999);
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+
+.btn-delete-own {
+  background: none;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pkw-color-danger, #ff4444);
+  cursor: pointer;
+  padding: 0;
+}
+
+.btn-delete-own:hover {
+  color: color-mix(in srgb, var(--pkw-color-danger, #ff4444) 80%, black);
+}
+
+.btn-show-more {
+  background: none;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pkw-color-text, #0f0f0f);
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 6px;
+}
+
+.btn-show-more:hover {
+  color: color-mix(in srgb, var(--pkw-color-text, #0f0f0f) 80%, transparent);
+}
+
+.btn-reply {
+  background: none;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pkw-color-text, #0f0f0f);
+  cursor: pointer;
+  padding: 0;
+}
+
+.btn-reply:hover {
+  color: color-mix(in srgb, var(--pkw-color-text, #0f0f0f) 80%, transparent);
+}

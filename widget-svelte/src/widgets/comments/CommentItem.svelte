@@ -3,6 +3,7 @@
   import type { Comment, Reply } from '../../types'
   import { Toast } from './toast.svelte'
   import { timeAgo } from './timeago'
+  import { getTruncatedBody } from './truncate'
 
   interface Props {
     comment: Comment
@@ -25,18 +26,13 @@
   const toast = new Toast()
 
   const STORAGE_KEY = $derived(`plopkit_author_${widgetKey}`)
-  const LIMIT = 300
-  const MAX_LINES = 3
+  const REPLIES_PAGE_SIZE = 20
 
-  const lines = $derived(comment.body.split('\n'))
-  const isLong = $derived(comment.body.length > LIMIT || lines.length > MAX_LINES)
-  const displayBody = $derived(
-    expanded || !isLong
-      ? comment.body
-      : lines.length > MAX_LINES
-        ? lines.slice(0, MAX_LINES).join('\n') + '...'
-        : comment.body.slice(0, LIMIT) + '...'
-  )
+  let visibleReplyCount = $state(REPLIES_PAGE_SIZE)
+
+  const truncated = $derived(getTruncatedBody(comment.body, expanded))
+  const visibleReplies = $derived(replies.slice(0, visibleReplyCount))
+  const hasMoreReplies = $derived(replies.length > visibleReplyCount)
 
   const isOwn = $derived(
     !!ownDisplayId &&
@@ -61,6 +57,10 @@
   function openReply() {
     replyAuthorName = loadSavedName()
     replyOpen = true
+  }
+
+  function showMoreReplies() {
+    visibleReplyCount += REPLIES_PAGE_SIZE
   }
 
   function handleReplyPosted(reply: Reply) {
@@ -143,8 +143,8 @@
   {#if comment.commenterDisplayId}
     <span class="commenter-id">#{comment.commenterDisplayId}</span>
   {/if}
-  <p class="comment-body">{displayBody}</p>
-  {#if isLong}
+  <p class="comment-body">{truncated.displayBody}</p>
+  {#if truncated.isLong}
     <button class="btn-show-more" onclick={() => expanded = !expanded}>
       {expanded ? 'Show less' : 'Show more'}
     </button>
@@ -195,7 +195,7 @@
     </button>
     {#if showReplies}
       <div class="replies">
-        {#each replies as r (r.id)}
+        {#each visibleReplies as r (r.id)}
           <ReplyItem
             reply={r}
             {widgetKey}
@@ -204,9 +204,14 @@
             onReplyPosted={handleReplyPosted}
             onDeleted={handleReplyDeleted}
             {commenterSecret}
-            ownDisplayId={ownDisplayId}
+            {ownDisplayId}
           />
         {/each}
+        {#if hasMoreReplies}
+          <button class="btn-show-replies" onclick={showMoreReplies}>
+            Show {Math.min(REPLIES_PAGE_SIZE, replies.length - visibleReplyCount)} more {replies.length - visibleReplyCount === 1 ? 'reply' : 'replies'}
+          </button>
+        {/if}
       </div>
     {/if}
   {/if}
