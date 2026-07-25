@@ -11,3 +11,7 @@ export const updateWidgetSchema = z.object({
   name: z.string().min(1).optional(),
   autoApprove: z.boolean().optional(),
 })
+
+export const getWidgetConfigSchema = z.object({
+  widget_key: z.string().min(1, 'widget_key is required'),
+})

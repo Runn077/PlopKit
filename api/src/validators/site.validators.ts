@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { THEME_TOKEN_KEYS } from '../constants/themeTokens.js'
 
 const domainRegex = /^(localhost|([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,})$/
 
@@ -19,4 +20,20 @@ export const updateSiteSchema = z.object({
 export const updateBannedWordsSchema = z.object({
   bannedWords: z.array(z.string()).optional(),
   autoDeleteBannedWords: z.boolean().optional(),
+})
+
+
+// --- THEMES ---
+const themeTokensSchema = z.object(
+  Object.fromEntries(
+    THEME_TOKEN_KEYS.map(key => [key, z.string().max(100).optional()])
+  )
+).strict()
+
+export const themeSchema = z.object({
+  tokens: themeTokensSchema,
+}).nullable().optional()
+
+export const updateThemeSchema = z.object({
+  theme: themeSchema
 })

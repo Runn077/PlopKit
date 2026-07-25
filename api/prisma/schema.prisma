@@ -105,6 +105,7 @@ model Site {
   updatedAt             DateTime @updatedAt
   bannedWords           String[]  @default([])
   autoDeleteBannedWords Boolean   @default(false)
+  theme Json?
 }
 
 model Widget {

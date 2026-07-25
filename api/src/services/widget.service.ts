@@ -101,3 +101,12 @@ export async function trackWidgetLoad(widgetKey: string) {
     data: { monthlyLoads: { increment: 1 } },
   })
 }
+
+export async function getPublicWidgetConfig(widgetKey: string) {
+  const widget = await getWidgetByKey(widgetKey)
+  if (!widget) throw new AppError(404, 'Widget not found')
+
+  return {
+    theme: widget.site.theme ?? null,
+  }
+}

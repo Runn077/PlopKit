@@ -1,6 +1,7 @@
 import { randomBytes } from 'crypto'
 import prisma from '../lib/prisma.js'
 import { AppError } from '../errors/appError.js'
+import { Prisma } from '../generated/prisma/client.js'
 
 export async function getSitesByUser(userId: string) {
   return prisma.site.findMany({
@@ -109,6 +110,26 @@ export async function updateBannedWords(
     data: {
       ...(data.bannedWords !== undefined && { bannedWords: data.bannedWords }),
       ...(data.autoDeleteBannedWords !== undefined && { autoDeleteBannedWords: data.autoDeleteBannedWords }),
+    },
+  })
+}
+
+export async function updateTheme(
+  id: string,
+  userId: string,
+  data: { theme?: { tokens: Record<string, string | undefined> } | null },
+) {
+  const site = await prisma.site.findUnique({ where: { id } })
+  if (!site || site.userId !== userId) throw new AppError(404, 'Site not found')
+
+  return prisma.site.update({
+    where: { id },
+    data: {
+      ...(data.theme !== undefined && {
+        theme: data.theme === null
+          ? Prisma.JsonNull
+          : (data.theme as Prisma.InputJsonValue),
+      }),
     },
   })
 }

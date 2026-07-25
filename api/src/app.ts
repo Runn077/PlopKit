@@ -10,6 +10,7 @@ import widgetsRouter from './routes/widgets.js'
 import accountRouter from './routes/account.js'
 import helmet from 'helmet'
 import { globalLimiter } from './middleware/rateLimiters.js'
+import widgetConfigRouter from './routes/public/widgetConfig.js'
 
 const app = express()
 app.set('trust proxy', 1)
@@ -35,6 +36,7 @@ app.use((req, res, next) => {
 
 app.use((req, res, next) => {
   if (req.method === 'GET' && req.path.startsWith('/api/public/comments')) return next()
+  if (req.method === 'GET' && req.path.startsWith('/api/public/widget-config')) return next()
   globalLimiter(req, res, next)
 })
 
@@ -51,8 +53,8 @@ if (process.env.ENABLE_CLOUD === 'true') {
       const signature = req.headers['stripe-signature'] as string
       await handleWebhook(req.body, signature)
       res.json({ received: true })
-    } catch (err) { 
-      next(err) 
+    } catch (err) {
+      next(err)
     }
   })
 }
@@ -60,8 +62,9 @@ if (process.env.ENABLE_CLOUD === 'true') {
 app.use(express.json())
 
 app.use('/api/comments', commentsRouter)
-
 app.use('/api/public/comments', publicCommentsRouter)
+app.use('/api/public/widget-config', widgetConfigRouter)
+
 app.use('/api/sites', sitesRouter)
 app.use('/api/widgets', widgetsRouter)
 app.use('/api/account', accountRouter)
