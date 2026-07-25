@@ -12,6 +12,7 @@ import type { Site, Widget } from '../../types'
 import { apiFetch } from '../../lib/api'
 import Footer from '../../components/layout/Footer/Footer'
 import { Button } from '../../components/ui/Button/Button'
+import CustomizeTab from './CustomizeTab'
 
 function SiteWidgets() {
   const { siteId } = useParams()
@@ -21,7 +22,7 @@ function SiteWidgets() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [showModal, setShowModal] = useState(false)
-  const [activeTab, setActiveTab] = useState<'widgets' | 'settings' | 'filter'>('widgets')
+  const [activeTab, setActiveTab] = useState<'widgets' | 'settings' | 'filter'| 'customize'>('widgets')
 
   const sumWidgetLoads = widgets.reduce(
     (total, widget) => total += widget.monthlyLoads, 0
@@ -122,6 +123,19 @@ function SiteWidgets() {
     )
   }
 
+  async function handleUpdateTheme(tokens: Record<string, string | undefined>) {
+    const res = await apiFetch(`/sites/${siteId}/theme`, {
+      method: 'PATCH',
+      body: JSON.stringify({ theme: { tokens } }),
+    })
+    if (!res.ok) {
+      const data = await res.json()
+      throw new Error(data.error ?? 'Something went wrong')
+    }
+    const updated = await res.json()
+    setSite(prev => prev ? { ...prev, theme: updated.theme } : prev)
+  }
+
   if (loading) return <div className="page-loading">Loading...</div>
 
   if (error) return (
@@ -141,10 +155,11 @@ function SiteWidgets() {
         tabs={[
           { id: 'widgets', label: 'Widgets' },
           { id: 'filter', label: 'Filter' },
+          { id: 'customize', label: 'Customize' },
           { id: 'settings', label: 'Settings' },
         ]}
         activeTab={activeTab}
-        onTabChange={(tab) => setActiveTab(tab as 'widgets' | 'settings' | 'filter')}
+        onTabChange={(tab) => setActiveTab(tab as 'widgets' | 'settings' | 'filter' | 'customize')}
       />
       {activeTab === 'widgets' && (
         <div>
@@ -184,6 +199,14 @@ function SiteWidgets() {
             bannedWords={site!.bannedWords}
             autoDelete={site!.autoDeleteBannedWords}
             onSave={handleUpdateBannedWords}
+          />
+        </div>
+      )}
+      {activeTab === 'customize' && (
+        <div className="sw-container">
+          <CustomizeTab
+            theme={site!.theme as { tokens: Record<string, string | undefined> } | null}
+            onSave={handleUpdateTheme}
           />
         </div>
       )}

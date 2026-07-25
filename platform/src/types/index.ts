@@ -52,6 +52,10 @@ export interface Comment {
   commenterDisplayId: string | null
 }
 
+export interface ThemeTokens {
+  [key: string]: string | undefined
+}
+
 export interface Site {
   id: string
   name: string
@@ -60,6 +64,7 @@ export interface Site {
   verified: boolean
   bannedWords: string[]
   autoDeleteBannedWords: boolean
+  theme: { tokens: ThemeTokens } | null
   expiresAt?: string | null
   createdAt: string
 }
