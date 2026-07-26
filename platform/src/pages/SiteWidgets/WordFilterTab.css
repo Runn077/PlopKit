@@ -65,3 +65,15 @@
 .sc-filter-tag-remove:hover {
   color: var(--pk-color-text);
 }
+
+.sc-error {
+  font-size: 12px;
+  color: red;
+  margin-top: 8px;
+}
+
+.sc-success {
+  font-size: 12px;
+  color: #000;
+  margin-top: 8px;
+}

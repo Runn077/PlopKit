@@ -92,9 +92,9 @@ function WordFilterTab({ bannedWords: initialWords, autoDelete: initialAutoDelet
         <p className="sc-empty">No banned words yet.</p>
       )}
 
-      {error && <p style={{ fontSize: 12, color: 'red', marginTop: 8 }}>{error}</p>}
-      {success && <p style={{ fontSize: 12, color: '#000', marginTop: 8 }}>{success}</p>}
-
+      {error && <p className="sc-error">{error}</p>}
+      {success && <p className="sc-success">{success}</p>}
+      
       <button
         className="sc-btn"
         onClick={handleSave}
