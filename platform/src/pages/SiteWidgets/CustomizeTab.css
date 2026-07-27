@@ -108,3 +108,20 @@
   color: #000;
   margin-top: 8px;
 }
+
+.ct-stepper-input {
+  width: 48px;
+  text-align: center;
+  border: none;
+  border-left: 1px solid var(--pk-color-border-muted);
+  border-right: 1px solid var(--pk-color-border-muted);
+  padding: 5px 0;
+  font-size: 13px;
+  -moz-appearance: textfield;
+}
+
+.ct-stepper-input::-webkit-outer-spin-button,
+.ct-stepper-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

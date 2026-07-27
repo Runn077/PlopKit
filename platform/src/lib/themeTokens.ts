@@ -1,4 +1,4 @@
-export type ThemeTokenType = 'color' | 'text'
+export type ThemeTokenType = 'color' | 'text' | 'font'
 
 export interface ThemeTokenDef {
   key: string
@@ -9,8 +9,8 @@ export interface ThemeTokenDef {
 }
 
 export const THEME_TOKENS: ThemeTokenDef[] = [
-  { key: 'fontFamily', group: 'General', label: 'Font', type: 'text', default: '' },
-  { key: 'fontFamilyBody', group: 'General', label: 'Comment Text Font (optional)', type: 'text', default: '' },
+  { key: 'fontFamily', group: 'General', label: 'Font', type: 'font', default: '' },
+  { key: 'fontFamilyBody', group: 'General', label: 'Comment Text Font (optional)', type: 'font', default: '' },
   { key: 'colorText', group: 'General', label: 'Text Color', type: 'color', default: '#0f0f0f' },
   { key: 'colorPrimary', group: 'General', label: 'Accent Color', type: 'color', default: '#0f0f0f' },
   { key: 'radius', group: 'General', label: 'Corner Radius', type: 'text', default: '10px' },
