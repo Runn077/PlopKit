@@ -108,5 +108,6 @@ export async function getPublicWidgetConfig(widgetKey: string) {
 
   return {
     theme: widget.site.theme ?? null,
+    updatedAt: widget.site.updatedAt,
   }
 }

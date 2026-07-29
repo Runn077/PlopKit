@@ -9,9 +9,16 @@ router.get('/', validate(getWidgetConfigSchema, 'query'), async (req, res, next)
   try {
     const { widget_key } = req.query as { widget_key: string }
     const config = await getPublicWidgetConfig(widget_key)
-    res.set('Cache-Control', 'public, max-age=300')
-    res.json(config)
+
+    const lastModified = new Date(config.updatedAt).toUTCString()
+    res.set('Last-Modified', lastModified)
+    res.set('Cache-Control', 'no-cache') // always revalidate, never blindly reuse
+
+    if (req.headers['if-modified-since'] === lastModified) {
+      return res.status(304).end()
+    }
+
+    res.json({ theme: config.theme })
   } catch (err) { next(err) }
 })
-
 export default router
