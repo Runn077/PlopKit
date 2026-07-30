@@ -158,7 +158,9 @@
 .replies {
   margin-top: 8px;
   margin-left: 16px;
+  margin-right: 16px;
   padding-left: 12px;
+  padding-right: 12px;
   border-left: 2px solid var(--pkw-divider-color, #e0e0e0);
   background: var(--pkw-reply-bg, transparent);
   border-radius: var(--pkw-reply-radius, 0px);
