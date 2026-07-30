@@ -16,6 +16,7 @@ function CustomizeTab({ theme: initialTheme, onSave }: Props) {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const RADIUS_KEYS = ['radius', 'cardRadius', 'replyRadius']
 
   function handleChange(key: string, value: string) {
     setTokens(prev => ({ ...prev, [key]: value || undefined }))
@@ -89,14 +90,14 @@ function CustomizeTab({ theme: initialTheme, onSave }: Props) {
                           value={tokens[token.key] ?? ''}
                           onChange={value => handleChange(token.key, value)}
                         />
-                      ) : token.key === 'radius' ? (
+                      ) : RADIUS_KEYS.includes(token.key) ? (
                         <div className="ct-stepper">
                           <button
                             type="button"
                             className="ct-stepper-btn"
                             onClick={() => {
-                              const current = parseFloat(tokens.radius ?? '10') || 0
-                              handleChange('radius', `${Math.max(0, current - 1)}px`)
+                              const current = parseFloat(tokens[token.key] ?? '0') || 0
+                              handleChange(token.key, `${Math.max(0, current - 1)}px`)
                             }}
                           >
                             −
@@ -104,21 +105,21 @@ function CustomizeTab({ theme: initialTheme, onSave }: Props) {
                           <input
                             type="number"
                             className="ct-stepper-input"
-                            value={parseFloat(tokens.radius ?? '10') || 0}
+                            value={parseFloat(tokens[token.key] ?? '0') || 0}
                             step={1}
                             min={0}
                             onChange={e => {
                               const n = parseFloat(e.target.value)
                               if (isNaN(n)) return
-                              handleChange('radius', `${Math.max(0, n)}px`)
+                              handleChange(token.key, `${Math.max(0, n)}px`)
                             }}
                           />
                           <button
                             type="button"
                             className="ct-stepper-btn"
                             onClick={() => {
-                              const current = parseFloat(tokens.radius ?? '10') || 0
-                              handleChange('radius', `${current + 1}px`)
+                              const current = parseFloat(tokens[token.key] ?? '0') || 0
+                              handleChange(token.key, `${current + 1}px`)
                             }}
                           >
                             +

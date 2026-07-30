@@ -7,7 +7,9 @@
 .widget {
   font-family: var(--pkw-font-family, arial, sans-serif);
   font-size: 14px;
-  color: var(--pkw-color-text, #0f0f0f);
+  color: var(--pkw-color-text, #000000);
+  background: var(--pkw-widget-bg, transparent);
+  border-radius: var(--pkw-widget-radius, 0px);
   width: 100%;
 }
 

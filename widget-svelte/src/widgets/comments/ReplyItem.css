@@ -50,7 +50,6 @@
 
 .quoted-comment:hover:not(:disabled) .quoted-body {
   text-decoration: underline;
-  color: var(--pkw-color-primary, #0f0f0f);
 }
 
 .quoted-highlight {
@@ -65,7 +64,7 @@
 
 .quoted-body {
   font-size: 11px;
-  color: color-mix(in srgb, var(--pkw-color-text, #0f0f0f) 60%, transparent);
+  color: color-mix(in srgb, var(--pkw-reply-text-color, #0f0f0f) 60%, transparent);
   white-space: pre-wrap;
   overflow: hidden;
   display: -webkit-box;
@@ -76,14 +75,14 @@
 .quoted-preview {
   margin: 2px 0 2px 0;
   padding: 4px 10px;
-  border-left: solid color-mix(in srgb, var(--pkw-color-text, #0f0f0f) 60%, transparent);
+  border-left: solid color-mix(in srgb, var(--pkw-reply-text-color, #0f0f0f) 60%, transparent);
   border-top-left-radius: 2px;
   border-bottom-left-radius: 2px;
 }
 
 .quoted-preview-body {
   font-size: 10.5px;
-  color: color-mix(in srgb, var(--pkw-color-text, #0f0f0f) 60%, transparent);
+  color: color-mix(in srgb, var(--pkw-reply-text-color, #0f0f0f) 60%, transparent);
   white-space: pre-wrap;
   overflow: hidden;
   display: -webkit-box;

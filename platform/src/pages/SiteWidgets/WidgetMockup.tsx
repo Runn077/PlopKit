@@ -12,6 +12,7 @@ function WidgetMockup({ tokens }: Props) {
       style={{
         fontFamily: tokens.fontFamily || undefined,
         color: tokens.colorText || undefined,
+        background: tokens.widgetBg || undefined,
       }}
     >
       <h3 className="ct-mock-heading">2 Comments</h3>
@@ -47,6 +48,7 @@ function WidgetMockup({ tokens }: Props) {
           background: tokens.cardBg || undefined,
           color: tokens.cardTextColor || undefined,
           borderTop: `1px solid ${tokens.dividerColor || '#f0f0f0'}`,
+          borderRadius: tokens.cardRadius || undefined,
         }}
       >
         <div style={{ display: 'flex', gap: 6, marginBottom: 6 }}>
@@ -66,7 +68,11 @@ function WidgetMockup({ tokens }: Props) {
 
         <div
           className="ct-mock-reply"
-          style={{ background: tokens.replyBg || undefined, color: tokens.replyTextColor || undefined }}
+          style={{
+            background: tokens.replyBg || undefined,
+            color: tokens.replyTextColor || undefined,
+            borderRadius: tokens.replyRadius || undefined,
+          }}
         >
           <div
             className="ct-mock-quoted"

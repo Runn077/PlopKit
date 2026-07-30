@@ -3,6 +3,7 @@
   border-top: 1px solid var(--pkw-divider-color, #f0f0f0);
   background: var(--pkw-card-bg, transparent);
   color: var(--pkw-card-text-color, #0f0f0f);
+  border-radius: var(--pkw-card-radius, 0px);
 }
 
 .comment-pinned {
@@ -20,7 +21,7 @@
 .commenter-id {
   display: inline-block;
   font-size: 11px;
-  color: color-mix(in srgb, var(--pkw-color-text, #0f0f0f) 60%, transparent);
+  color: color-mix(in srgb, 60%, transparent);
   font-family: monospace;
   margin-bottom: 4px;
 }
@@ -42,7 +43,16 @@
 
 .comment-time {
   font-size: 12px;
-  color: color-mix(in srgb, var(--pkw-color-text, #0f0f0f) 60%, transparent);
+}
+
+.btn-reply,
+.btn-show-more {
+  color: inherit;
+}
+
+.btn-reply:hover,
+.btn-show-more:hover{
+  text-decoration: underline;
 }
 
 .comment-actions {
@@ -102,7 +112,7 @@
 
 .char-count {
   font-size: 12px;
-  color: color-mix(in srgb, var(--pkw-color-text, #0f0f0f) 60%, transparent);
+  color: color-mix(in srgb, var(--pkw-card-color, #0f0f0f) 60%, transparent);
 }
 
 .btn-post-reply {
@@ -117,7 +127,7 @@
 }
 
 .btn-post-reply:hover {
-  background: color-mix(in srgb, var(--pkw-btn-post-bg, #0f0f0f) 80%, black);
+  background: color-mix(in srgb, var(--pkw-card-text-color, #0f0f0f) 80%, black);
 }
 
 .btn-cancel {
@@ -125,7 +135,7 @@
   border: none;
   font-size: 12px;
   font-weight: 600;
-  color: color-mix(in srgb, var(--pkw-color-text, #0f0f0f) 60%, transparent);
+  color: color-mix(in srgb, var(--pkw-card-text-color, #0f0f0f) 60%, transparent);
   cursor: pointer;
   padding: 0;
 }
@@ -135,13 +145,14 @@
   border: none;
   font-size: 12px;
   font-weight: 600;
-  color: var(--pkw-color-text, #0f0f0f);
+  color: inherit;
   cursor: pointer;
   padding: 4px 0;
 }
 
 .btn-show-replies:hover {
-  color: color-mix(in srgb, var(--pkw-color-text, #0f0f0f) 80%, transparent);
+  color: inherit;
+  text-decoration: underline;
 }
 
 .replies {
@@ -150,4 +161,6 @@
   padding-left: 12px;
   border-left: 2px solid var(--pkw-divider-color, #e0e0e0);
   background: var(--pkw-reply-bg, transparent);
+  border-radius: var(--pkw-reply-radius, 0px);
+  color: var(--pkw-reply-text-color, #0f0f0f);
 }

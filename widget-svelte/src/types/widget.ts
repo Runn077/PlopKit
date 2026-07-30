@@ -10,6 +10,9 @@ export interface ThemeTokens {
   btnPostBg?: string
   btnPostText?: string
   radius?: string
+  widgetBg?: string
+  cardRadius?: string
+  replyRadius?: string
   dividerColor?: string
   cardBg?: string
   cardTextColor?: string
