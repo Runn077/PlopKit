@@ -5,7 +5,7 @@ export function getFixtureComments(): CommentsResponse {
     pinnedCommentId: 'preview-pinned',
     pinnedComment: {
       id: 'preview-pinned',
-      body: 'Welcome! Please keep discussion on topic.',
+      body: 'This is what a comment looks like with your current theme.',
       authorName: 'Site Owner',
       createdAt: new Date(Date.now() - 86400000 * 3).toISOString(),
       isOwnerReply: true,

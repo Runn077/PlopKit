@@ -1,9 +1,10 @@
 .toast {
   font-size: 13px;
-  color: #fff;
-  background: #ff6b6b;
+  color: var(--pkw-toast-text-color, #fff);
+  background: var(--pkw-toast-bg, #333);
   padding: 10px 16px;
-  border-radius: 999px;
+  margin: 10px;
+  border-radius: var(--pkw-toast-radius, 10px);
   margin-bottom: 16px;
   animation: fade-in 0.2s ease;
 }

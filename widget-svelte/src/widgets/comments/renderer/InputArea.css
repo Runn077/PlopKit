@@ -50,7 +50,6 @@
 
 .char-count {
   font-size: 12px;
-  color: color-mix(in srgb, var(--pkw-color-text, #0f0f0f) 60%, transparent);
 }
 
 .btn-post {

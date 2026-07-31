@@ -10,6 +10,7 @@ export const THEME_TOKEN_KEYS = [
   'btnPostBg',
   'btnPostText',
   'radius',
+  'widgetRadius',
   'widgetBg',
   'cardRadius',
   'replyRadius',
@@ -21,6 +22,9 @@ export const THEME_TOKEN_KEYS = [
   'quoteAccent',
   'badgeOwner',
   'badgePinned',
+  'toastBg',
+  'toastTextColor',
+  'toastRadius',
 ] as const
 
 export type ThemeTokenKey = typeof THEME_TOKEN_KEYS[number]

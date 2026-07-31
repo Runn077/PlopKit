@@ -1,7 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { THEME_TOKENS, THEME_GROUPS } from '../../lib/themeTokens'
 import type { ThemeTokens } from '../../types'
-import WidgetMockup from './WidgetMockup'
 import './CustomizeTab.css'
 import FontPicker from '../../components/ui/FontPicker/FontPicker'
 
@@ -10,13 +9,82 @@ interface Props {
   onSave: (tokens: ThemeTokens) => Promise<void>
 }
 
+const PREVIEW_WIDGET_KEY = 'preview-key'
+const PREVIEW_INSTANCE_ID = `plopkit-${PREVIEW_WIDGET_KEY}`
+
+function cssVarName(key: string) {
+  return '--pkw-' + key.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
+}
+
 function CustomizeTab({ theme: initialTheme, onSave }: Props) {
   const [tokens, setTokens] = useState<ThemeTokens>(initialTheme?.tokens ?? {})
   const [openGroups, setOpenGroups] = useState<Set<string>>(new Set([THEME_GROUPS[0]]))
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
-  const RADIUS_KEYS = ['radius', 'cardRadius', 'replyRadius']
+  const RADIUS_KEYS = ['radius', 'cardRadius', 'replyRadius', 'widgetRadius', 'toastRadius']
+
+  const previewRef = useRef<HTMLDivElement>(null)
+  const [hostReady, setHostReady] = useState(false)
+
+  useEffect(() => {
+    if (!previewRef.current) return
+    if (document.getElementById(PREVIEW_INSTANCE_ID)) return
+
+    const script = document.createElement('script')
+    script.src = '/widget.js'
+    script.setAttribute('data-widget-key', PREVIEW_WIDGET_KEY)
+    script.setAttribute('data-preview', 'true')
+    previewRef.current.appendChild(script)
+
+    const observer = new MutationObserver(() => {
+      if (document.getElementById(PREVIEW_INSTANCE_ID)) {
+        setHostReady(true)
+        observer.disconnect()
+      }
+    })
+    observer.observe(previewRef.current, { childList: true })
+
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    if (!hostReady) return
+    const host = document.getElementById(PREVIEW_INSTANCE_ID)
+    if (!host) return
+    for (const token of THEME_TOKENS) {
+      const value = tokens[token.key]
+      if (value) {
+        host.style.setProperty(cssVarName(token.key), value)
+      } else {
+        host.style.removeProperty(cssVarName(token.key))
+      }
+    }
+  }, [tokens, hostReady])
+
+  useEffect(() => {
+    if (!previewRef.current) return
+    if (document.getElementById(PREVIEW_INSTANCE_ID)) return
+
+    const script = document.createElement('script')
+    script.src = '/widget.js'
+    script.setAttribute('data-widget-key', PREVIEW_WIDGET_KEY)
+    script.setAttribute('data-preview', 'true')
+    previewRef.current.appendChild(script)
+  }, [])
+
+  useEffect(() => {
+    const host = document.getElementById(PREVIEW_INSTANCE_ID)
+    if (!host) return
+    for (const token of THEME_TOKENS) {
+      const value = tokens[token.key]
+      if (value) {
+        host.style.setProperty(cssVarName(token.key), value)
+      } else {
+        host.style.removeProperty(cssVarName(token.key))
+      }
+    }
+  }, [tokens])
 
   function handleChange(key: string, value: string) {
     setTokens(prev => ({ ...prev, [key]: value || undefined }))
@@ -59,7 +127,7 @@ function CustomizeTab({ theme: initialTheme, onSave }: Props) {
   return (
     <div className="ct-layout">
       <div className="ct-preview">
-        <WidgetMockup tokens={tokens} />
+        <div ref={previewRef} />
       </div>
 
       <div className="ct-controls">
@@ -134,7 +202,7 @@ function CustomizeTab({ theme: initialTheme, onSave }: Props) {
                           onChange={e => handleChange(token.key, e.target.value)}
                         />
                       )}
-                      
+
                       {tokens[token.key] && (
                         <button className="ct-reset-btn" onClick={() => handleReset(token.key)}>
                           Reset

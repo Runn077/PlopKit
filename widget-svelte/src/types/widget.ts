@@ -11,6 +11,7 @@ export interface ThemeTokens {
   btnPostText?: string
   radius?: string
   widgetBg?: string
+  widgetRadius?: string
   cardRadius?: string
   replyRadius?: string
   dividerColor?: string
@@ -21,6 +22,9 @@ export interface ThemeTokens {
   quoteAccent?: string
   badgeOwner?: string
   badgePinned?: string
+  toastBg?: string
+  toastTextColor?: string
+  toastRadius?: string
 }
 
 export interface BaseWidgetProps {

@@ -10,13 +10,14 @@ export interface ThemeTokenDef {
 
 export const THEME_TOKENS: ThemeTokenDef[] = [
   { key: 'fontFamily', group: 'General', label: 'Font', type: 'font', default: '' },
-  { key: 'fontFamilyBody', group: 'General', label: 'Comment Text Font (optional)', type: 'font', default: '' },
+  { key: 'fontFamilyBody', group: 'General', label: 'Comment Body', type: 'font', default: '' },
   { key: 'colorText', group: 'General', label: 'Text Color', type: 'color', default: '#0f0f0f' },
   { key: 'colorPrimary', group: 'General', label: 'Accent Color', type: 'color', default: '#0f0f0f' },
-  { key: 'radius', group: 'General', label: 'Input Corner Radius', type: 'text', default: '10px' },
   { key: 'dividerColor', group: 'General', label: 'Divider Color', type: 'color', default: '#f0f0f0' },
   { key: 'widgetBg', group: 'General', label: 'Widget Background', type: 'color', default: 'transparent' },
+  { key: 'widgetRadius', group: 'General', label: 'Widget Corner Radius', type: 'text', default: '0px' },
 
+  { key: 'radius', group: 'Input Area', label: 'Input Corner Radius', type: 'text', default: '10px' },
   { key: 'inputBg', group: 'Input Area', label: 'Background', type: 'color', default: '#ffffff' },
   { key: 'inputTextColor', group: 'Input Area', label: 'Text Color', type: 'color', default: '#0f0f0f' },
   { key: 'inputBorder', group: 'Input Area', label: 'Border Color', type: 'color', default: '#cccccc' },
@@ -35,6 +36,10 @@ export const THEME_TOKENS: ThemeTokenDef[] = [
   { key: 'colorDanger', group: 'Badges & Accents', label: 'Delete Button', type: 'color', default: '#ff4444' },
   { key: 'badgeOwner', group: 'Badges & Accents', label: 'Owner Badge', type: 'color', default: '#4ecdc4' },
   { key: 'badgePinned', group: 'Badges & Accents', label: 'Pinned Badge', type: 'color', default: '#999999' },
+
+  { key: 'toastBg', group: 'Toast', label: 'Background', type: 'color', default: '#ff6b6b' },
+  { key: 'toastTextColor', group: 'Toast', label: 'Text Color', type: 'color', default: '#ffffff' },
+  { key: 'toastRadius', group: 'Toast', label: 'Corner Radius', type: 'text', default: '999px' },
 ]
 
 export const THEME_GROUPS = [...new Set(THEME_TOKENS.map(t => t.group))]
