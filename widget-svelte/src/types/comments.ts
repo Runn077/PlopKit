@@ -48,3 +48,13 @@ export interface CommentsResponse {
   total: number
   pinnedCommentId: string | null
 }
+
+export type PostCommentFn = (body: string, authorName: string) => Promise<NewComment>
+export type DeleteCommentFn = (commentId: string) => Promise<void>
+export type PostReplyFn = (
+  parentId: string,
+  body: string,
+  authorName: string,
+  quotedId?: string
+) => Promise<Reply & { status: 'approved' | 'pending' }>
+export type DeleteReplyFn = (replyId: string) => Promise<void>

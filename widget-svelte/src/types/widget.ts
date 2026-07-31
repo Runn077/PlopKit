@@ -30,4 +30,5 @@ export interface BaseWidgetProps {
   theme?: {
     tokens: ThemeTokens
   } | null
+  preview?: boolean
 }

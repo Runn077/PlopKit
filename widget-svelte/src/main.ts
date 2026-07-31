@@ -5,6 +5,7 @@ import type { BaseWidgetProps } from './types'
 const script = document.currentScript as HTMLScriptElement
 const widgetKey = script?.getAttribute('data-widget-key') ?? ''
 const widget = script?.getAttribute('data-widget') ?? 'comments'
+const preview = script?.getAttribute('data-preview') === 'true'
 
 async function fetchWidgetConfig(widgetKey: string) {
   try {
@@ -31,11 +32,11 @@ async function init() {
   shadow.appendChild(mountPoint)
 
   if (widget === 'comments') {
-    const theme = await fetchWidgetConfig(widgetKey)
+    const theme = preview ? null : await fetchWidgetConfig(widgetKey)
 
     mount(Comments, {
       target: mountPoint,
-      props: { widgetKey, pageUrl: window.location.href, shadowRoot: shadow, theme } as BaseWidgetProps,
+      props: { widgetKey, pageUrl: window.location.href, shadowRoot: shadow, theme, preview } as BaseWidgetProps,
     })
   }
 }
