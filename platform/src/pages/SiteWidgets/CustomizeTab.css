@@ -9,9 +9,6 @@
   min-width: 0;
   position: sticky;
   top: 24px;
-  border: 1px solid var(--pk-color-border-muted);
-  border-radius: var(--pk-radius);
-  background: var(--pk-color-bg-subtle);
 }
 
 .ct-controls {
@@ -116,7 +113,7 @@
   border-right: 1px solid var(--pk-color-border-muted);
   padding: 5px 0;
   font-size: 13px;
-  -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .ct-stepper-input::-webkit-outer-spin-button,

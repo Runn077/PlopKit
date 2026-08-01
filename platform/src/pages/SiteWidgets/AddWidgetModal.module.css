@@ -18,12 +18,12 @@
 
 .input {
   width: 100%;
-  border: 3px solid black; /* no --pk-color-border token yet */
+  border: 3px solid black; 
   padding: 12px 14px;
   font-size: 1rem;
   font-weight: 500;
   outline: none;
-  background: white; /* no --pk-color-bg token yet */
+  background: white;
   color: var(--pk-color-font);
   box-sizing: border-box;
   transition: box-shadow 0.1s ease;
