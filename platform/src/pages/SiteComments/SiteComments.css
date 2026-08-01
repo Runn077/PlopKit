@@ -74,12 +74,6 @@
   gap: 8px;
 }
 
-.sc-comment-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
 .sc-comment-url {
   font-size: 11px;
   color: var(--pk-color-font-muted);
@@ -89,12 +83,6 @@
 .sc-comment-date {
   font-size: 11px;
   color: var(--pk-color-text-subtle);
-}
-
-.sc-comment-actions {
-  display: flex;
-  gap: 8px;
-  flex-shrink: 0;
 }
 
 /* Replies */
@@ -141,11 +129,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-
-.sc-reply-date {
-  font-size: 11px;
-  color: var(--pk-color-text-subtle);
 }
 
 .sc-expiry {
@@ -573,7 +556,7 @@
   margin-left: auto;
 }
 
-.sc-comments-tab .sc-reply-date {
+.sc-comments-tab {
   font-size: 12px;
   color: #999;
 }

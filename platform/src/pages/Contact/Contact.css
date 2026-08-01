@@ -78,11 +78,6 @@
   margin: 2.5rem 0;
 }
 
-.response-note {
-  font-size: 14px;
-  color: var(--color-text-secondary, #555);
-}
-
 @media (max-width: 480px) {
   .contact-content {
     padding: 2rem 1.25rem;

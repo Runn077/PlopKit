@@ -73,16 +73,6 @@
   background: var(--pk-color-primary-hover);
 }
 
-
-.sw-btn-danger-fill:hover:not(:disabled) {
-  background: var(--pk-color-primary-hover);
-}
-
-.sw-btn-danger-fill:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
 /* --- Breadcrumb --- */
 .sc-breadcrumb,
 .sw-breadcrumb {
@@ -116,7 +106,6 @@
 }
 
 /* --- Tab subnav --- */
-.sc-subnav,
 .subnav {
   display: flex;
   border-bottom: 1px solid var(--pk-color-border);
@@ -124,7 +113,6 @@
   padding: 0 var(--pk-space-page-x);
 }
 
-.sc-subnav-tab,
 .subnav-tab {
   background: none;
   border: none;
@@ -139,12 +127,10 @@
   transition: color 0.15s;
 }
 
-.sc-subnav-tab:hover,
 .subnav-tab:hover {
   color: var(--pk-color-text);
 }
 
-.sc-subnav-tab-active,
 .subnav-tab-active {
   color: var(--pk-color-text);
   border-bottom-color: var(--pk-color-border);
@@ -277,8 +263,7 @@
   color: var(--pk-color-text);
 }
 
-.pk-modal-input,
-.pk-modal-select {
+.pk-modal-input {
   width: 100%;
   border: 3px solid black;
   padding: 12px 14px;
@@ -292,8 +277,7 @@
   transition: box-shadow 0.1s ease;
 }
 
-.pk-modal-input:focus,
-.pk-modal-select:focus {
+.pk-modal-input:focus {
   box-shadow: 4px 4px 0 #74c0fc;
 }
 
@@ -317,7 +301,6 @@
 
 /* --- Form fields --- */
 .sw-input,
-.sw-select,
 .sc-filter-input,
 .account-input {
   width: 100%;
@@ -339,7 +322,6 @@
 }
 
 .sw-input:focus,
-.sw-select:focus,
 .sc-filter-input:focus,
 .account-input:focus {
   border-color: var(--pk-color-border);

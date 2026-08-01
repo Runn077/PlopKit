@@ -107,24 +107,8 @@
   color: var(--pk-color-on-primary);
 }
 
-.sw-btn-danger-fill {
-  background: var(--pk-color-primary);
-  color: var(--pk-color-on-primary);
-  border-color: var(--pk-color-primary);
-}
-
-.sw-btn-danger-fill:hover:not(:disabled) {
-  background: var(--pk-color-primary-hover);
-}
-
-.sw-btn-danger-fill:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
 /* --- Form fields --- */
-.sw-input,
-.sw-select {
+.sw-input {
   width: 100%;
   padding: 8px 12px;
   font-size: 14px;
@@ -141,8 +125,7 @@
   color: #999;
 }
 
-.sw-input:focus,
-.sw-select:focus {
+.sw-input:focus {
   border-color: var(--pk-color-border);
 }
 

@@ -335,16 +335,6 @@ body {
   box-shadow: 5px 5px 0 black;
 }
 
-.pricing-card--featured {
-  transform: translateY(-12px);
-  box-shadow: 12px 12px 0 black;
-}
-
-.pricing-card--featured:hover {
-  transform: translateY(-12px) translate(3px, 3px);
-  box-shadow: 9px 9px 0 black;
-}
-
 .pricing-tier {
   display: inline-block;
   padding: 4px 10px;
@@ -434,15 +424,8 @@ body {
     width: 100%;
   }
 
-  .beta-banner,
   .coupon-card {
     margin: 0 24px 60px;
-  }
-
-  .beta-banner {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
   }
 
   .coupon-card {
@@ -503,11 +486,5 @@ body {
   .pricing-card {
     width: 100%;
     max-width: 380px;
-  }
-
-  .pricing-card--featured {
-    transform: none;
-    box-shadow: 8px 8px 0 black;
-    order: -1;
   }
 }
