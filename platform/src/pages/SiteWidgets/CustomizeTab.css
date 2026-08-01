@@ -11,7 +11,6 @@
   top: 24px;
   border: 1px solid var(--pk-color-border-muted);
   border-radius: var(--pk-radius);
-  padding: 20px;
   background: var(--pk-color-bg-subtle);
 }
 

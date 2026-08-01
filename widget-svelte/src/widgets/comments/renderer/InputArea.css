@@ -3,13 +3,14 @@
   flex-direction: column;
   gap: 8px;
   margin-bottom: 24px;
+  padding: var(--pkw-input-area-padding, 0px);
 }
 
 .input-area textarea {
   width: 100%;
   padding: 10px 10px;
   border: 1px solid var(--pkw-input-border, #ccc);
-  border-radius: var(--pkw-radius, 10px);
+  border-radius: var(--pkw-input-radius, 10px);
   outline: none;
   resize: none;
   font-size: 14px;
@@ -30,7 +31,7 @@
   font-size: 0.875rem;
   font-family: var(--pkw-font-family, inherit);
   border: 1px solid var(--pkw-input-border, #ccc);
-  border-radius: var(--pkw-radius, 10px);
+  border-radius: var(--pkw-input-radius, 10px);
   margin-bottom: 8px;
   background: var(--pkw-input-bg, #fff);
   color: var(--pkw-input-text-color, #0f0f0f);
@@ -57,7 +58,7 @@
   color: var(--pkw-btn-post-text, #fff);
   border: none;
   padding: 8px 16px;
-  border-radius: 999px;
+  border-radius: var(--pkw-btn-post-radius, 999px);
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;

@@ -22,7 +22,8 @@ function CustomizeTab({ theme: initialTheme, onSave }: Props) {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
-  const RADIUS_KEYS = ['radius', 'cardRadius', 'replyRadius', 'widgetRadius', 'toastRadius']
+  const RADIUS_KEYS = ['inputRadius', 'cardRadius', 'replyRadius', 'widgetRadius', 'toastRadius', 'btnPostRadius']
+  const SPACING_KEYS = ['widgetPadding', 'inputAreaPadding', 'cardPadding', 'replyPadding']
 
   const previewRef = useRef<HTMLDivElement>(null)
   const [hostReady, setHostReady] = useState(false)
@@ -158,7 +159,7 @@ function CustomizeTab({ theme: initialTheme, onSave }: Props) {
                           value={tokens[token.key] ?? ''}
                           onChange={value => handleChange(token.key, value)}
                         />
-                      ) : RADIUS_KEYS.includes(token.key) ? (
+                      ) : RADIUS_KEYS.includes(token.key) || SPACING_KEYS.includes(token.key) ? (
                         <div className="ct-stepper">
                           <button
                             type="button"

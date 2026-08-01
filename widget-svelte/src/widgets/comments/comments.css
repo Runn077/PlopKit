@@ -11,6 +11,7 @@
   background: var(--pkw-widget-bg, transparent);
   border-radius: var(--pkw-widget-radius, 0px);
   width: 100%;
+  padding: var(--pkw-widget-padding, 0px);
 }
 
 .widget h3 {

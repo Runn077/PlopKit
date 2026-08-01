@@ -1,5 +1,5 @@
 .comment {
-  padding: 12px;
+  padding: var(--pkw-card-padding, 12px);
   border-top: 1px solid var(--pkw-divider-color, #f0f0f0);
   background: var(--pkw-card-bg, transparent);
   color: var(--pkw-card-text-color, #0f0f0f);
@@ -72,7 +72,7 @@
   width: 100%;
   padding: 10px 10px;
   border: 1px solid var(--pkw-input-border, #ccc);
-  border-radius: var(--pkw-radius, 10px);
+  border-radius: var(--pkw-input-radius, 10px);
   outline: none;
   resize: none;
   font-size: 13px;
@@ -92,7 +92,7 @@
   font-size: 0.875rem;
   font-family: var(--pkw-font-family, inherit);
   border: 1px solid var(--pkw-input-border, #ccc);
-  border-radius: var(--pkw-radius, 10px);
+  border-radius: var(--pkw-input-radius, 10px);
   margin-bottom: 8px;
   background: var(--pkw-input-bg, #fff);
   color: var(--pkw-input-text-color, #0f0f0f);
@@ -115,7 +115,7 @@
   color: var(--pkw-btn-post-text, #fff);
   border: none;
   padding: 6px 14px;
-  border-radius: 999px;
+  border-radius: var(--pkw-btn-post-radius, 999px);
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;

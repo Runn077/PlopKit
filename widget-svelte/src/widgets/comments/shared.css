@@ -26,7 +26,7 @@
 .owner-badge {
   display: inline-block;
   font-size: 11px;
-  color: #fff;
+  color: var(--pkw-badge-text-color, #fff);
   background: var(--pkw-badge-owner, #4ecdc4);
   padding: 2px 8px;
   border-radius: 4px;
@@ -36,7 +36,7 @@
 .pinned-badge {
   display: inline-block;
   font-size: 11px;
-  color: #ffffff;
+  color: var(--pkw-badge-text-color, #fff);
   background: var(--pkw-badge-pinned, #999999);
   padding: 2px 8px;
   border-radius: 4px;

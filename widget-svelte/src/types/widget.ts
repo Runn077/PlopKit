@@ -9,7 +9,7 @@ export interface ThemeTokens {
   inputBorder?: string
   btnPostBg?: string
   btnPostText?: string
-  radius?: string
+  inputRadius?: string
   widgetBg?: string
   widgetRadius?: string
   cardRadius?: string
@@ -25,6 +25,12 @@ export interface ThemeTokens {
   toastBg?: string
   toastTextColor?: string
   toastRadius?: string
+  widgetPadding?: string
+  inputAreaPadding?: string
+  cardPadding?: string
+  replyPadding?: string
+  btnPostRadius?: string
+  badgeTextColor?: string
 }
 
 export interface BaseWidgetProps {

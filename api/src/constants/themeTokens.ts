@@ -9,7 +9,7 @@ export const THEME_TOKEN_KEYS = [
   'inputBorder',
   'btnPostBg',
   'btnPostText',
-  'radius',
+  'inputRadius',
   'widgetRadius',
   'widgetBg',
   'cardRadius',
@@ -25,6 +25,12 @@ export const THEME_TOKEN_KEYS = [
   'toastBg',
   'toastTextColor',
   'toastRadius',
+  'widgetPadding',
+  'inputAreaPadding',
+  'cardPadding',
+  'replyPadding',
+  'btnPostRadius',
+  'badgeTextColor',
 ] as const
 
 export type ThemeTokenKey = typeof THEME_TOKEN_KEYS[number]

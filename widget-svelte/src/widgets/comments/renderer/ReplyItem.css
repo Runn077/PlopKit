@@ -1,9 +1,8 @@
 .reply {
-  padding: 8px;
+  padding: var(--pkw-reply-padding, 8px);
   border-bottom: 1px solid var(--pkw-divider-color, #f0f0f0);
   color: var(--pkw-reply-text-color, #0f0f0f);
 }
-
 .reply-author {
   font-family: var(--pkw-font-family, inherit);
   display: block;
