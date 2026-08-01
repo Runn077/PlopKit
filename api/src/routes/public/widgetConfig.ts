@@ -12,7 +12,7 @@ router.get('/', validate(getWidgetConfigSchema, 'query'), async (req, res, next)
 
     const lastModified = new Date(config.updatedAt).toUTCString()
     res.set('Last-Modified', lastModified)
-    res.set('Cache-Control', 'no-cache') // always revalidate, never blindly reuse
+    res.set('Cache-Control', 'no-cache')
 
     if (req.headers['if-modified-since'] === lastModified) {
       return res.status(304).end()

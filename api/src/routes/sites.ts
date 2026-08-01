@@ -7,7 +7,7 @@ import { importSite } from '../services/import.service.js'
 import { importLimiter, exportLimiter } from '../middleware/rateLimiters.js'
 import * as siteService from '../services/site.service.js'
 import { updateBannedWordsSchema } from '../validators/site.validators.js'
-import { updateThemeSchema } from '../validators/site.validators.js'
+import { updateThemeSchema } from '../validators/theme.validators.js'
 
 const router = Router()
 
