@@ -139,45 +139,47 @@ describe('themeSchema', () => {
   })
 
   // --- font tokens ---
-  describe('font tokens', () => {
-    it('accepts a simple generic family', () => {
-      const result = themeSchema.safeParse({ tokens: { fontFamily: 'Arial, sans-serif' } })
-      expect(result.success).toBe(true)
+describe('font tokens', () => {
+  it('accepts a font from the allowed list', () => {
+    const result = themeSchema.safeParse({
+      tokens: { fontFamily: 'Arial, sans-serif' },
     })
-
-    it('accepts a quoted multi-word font name', () => {
-      const result = themeSchema.safeParse({
-        tokens: { fontFamily: '"Arial Black", sans-serif' },
-      })
-      expect(result.success).toBe(true)
-    })
-
-    it('accepts a fallback chain', () => {
-      const result = themeSchema.safeParse({
-        tokens: { fontFamily: '"Trebuchet MS", Verdana, sans-serif' },
-      })
-      expect(result.success).toBe(true)
-    })
-
-    it('rejects a value missing a generic family', () => {
-      const result = themeSchema.safeParse({ tokens: { fontFamily: 'Arial' } })
-      expect(result.success).toBe(false)
-    })
-
-    it('rejects a url() injection attempt', () => {
-      const result = themeSchema.safeParse({
-        tokens: { fontFamily: 'url(javascript:alert(1)), sans-serif' },
-      })
-      expect(result.success).toBe(false)
-    })
-
-    it('rejects a value with a semicolon', () => {
-      const result = themeSchema.safeParse({
-        tokens: { fontFamily: 'Arial; } body { color:red' },
-      })
-      expect(result.success).toBe(false)
-    })
+    expect(result.success).toBe(true)
   })
+
+  it('accepts an empty string (no font override)', () => {
+    const result = themeSchema.safeParse({ tokens: { fontFamily: '' } })
+    expect(result.success).toBe(true)
+  })
+
+  it('accepts a quoted multi-word font from the list', () => {
+    const result = themeSchema.safeParse({
+      tokens: { fontFamily: '"Trebuchet MS", sans-serif' },
+    })
+    expect(result.success).toBe(true)
+  })
+
+  it('rejects a font not in the allowed list', () => {
+    const result = themeSchema.safeParse({
+      tokens: { fontFamily: '"Comic Sans MS", cursive' },
+    })
+    expect(result.success).toBe(false)
+  })
+
+  it('rejects a url() injection attempt', () => {
+    const result = themeSchema.safeParse({
+      tokens: { fontFamily: 'url(javascript:alert(1)), sans-serif' },
+    })
+    expect(result.success).toBe(false)
+  })
+
+  it('rejects a value with a semicolon', () => {
+    const result = themeSchema.safeParse({
+      tokens: { fontFamily: 'Arial; } body { color:red' },
+    })
+    expect(result.success).toBe(false)
+  })
+})
 
   // --- length limits ---
   describe('length limits', () => {
