@@ -1,0 +1,15 @@
+:root {
+  --pk-brand-font: 'IBM Plex Mono', monospace;
+  --pk-heading-font: 'Space Mono', monospace;
+  --pk-body-font: Arial, sans-serif;
+  --pk-font-mono: 'IBM Plex Mono', monospace;
+
+  --pk-color-font: #000;
+  --pk-color-font-muted: #555;
+  --pk-color-text-subtle: #aaa;
+
+  --red: #ff6b6b;
+  --yellow: #ffe66d;
+  --mint: #4ecdc4;
+  --blue: #74c0fc;
+}

@@ -1,0 +1,39 @@
+---
+const year = new Date().getFullYear()
+---
+<footer class="footer">
+  <p>© {year} PlopKit. All rights reserved.</p>
+  <p class="footer-links">
+    <a href="/contact">Contact</a>
+    <a href="/privacy">Privacy Policy</a>
+    <a href="/terms">Terms of Service</a>
+  </p>
+</footer>
+
+<style>
+  .footer {
+    text-align: center;
+    padding: 2rem 1rem;
+    margin-top: auto;
+    font-size: 0.875rem;
+    color: var(--pk-color-font-muted);
+  }
+
+  .footer-links {
+    margin-top: 0.5rem;
+  }
+
+  .footer-links a {
+    color: #888;
+    margin-right: 1rem;
+    text-decoration: none;
+  }
+
+  .footer-links a:last-child {
+    margin-right: 0;
+  }
+
+  .footer-links a:hover {
+    color: #555;
+  }
+</style>

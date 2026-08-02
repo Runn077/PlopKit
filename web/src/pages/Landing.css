@@ -1,0 +1,454 @@
+
+.landing-page {
+  min-height: 100vh;
+}
+
+/* HERO */
+
+.hero {
+  padding-top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero h1 {
+  color: var(--red);
+  font-family: var(--pk-brand-font);
+  font-size: clamp(2.4rem, 8vw, 6rem);
+  font-weight: 900;
+  line-height: 0.95;
+  text-align: center;
+  text-shadow: 6px 6px 0 black;
+  margin-bottom: 24px;
+}
+
+.hero .logo {
+  width: 200px;
+  height: auto;
+}
+
+.hero-subtitle {
+  max-width: 700px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 40px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 60px;
+  align-items: center;
+}
+
+.primary-btn,
+.secondary-btn {
+  height: 60px; 
+  padding: 16px 28px;
+  border: 3px solid black;
+  box-shadow: 6px 6px 0 black;
+  font-size: 1.1rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.primary-btn {
+  background: var(--yellow);
+}
+
+.secondary-btn {
+  background: white;
+}
+
+.github-btn {
+  display: flex;          
+  align-items: center;    
+  justify-content: center;
+}
+
+.primary-btn:hover,
+.secondary-btn:hover {
+  transform: translate(3px, 3px);
+  box-shadow: 3px 3px 0 black;
+}
+
+/* WORKFLOW */
+
+.workflow-section {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.section-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 900;
+  text-align: center;
+  text-shadow: 4px 4px 0 #74c0fc;
+  margin-bottom: 80px;
+}
+
+.workflow-grid {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 80px 120px;
+}
+
+.step-card {
+  min-height: 220px;
+  padding: 24px 20px;
+  border: 4px solid black;
+  background: #fff;
+  position: relative;
+}
+
+.step-1 { grid-column: 1; grid-row: 1; }
+.step-2 { grid-column: 2; grid-row: 1; }
+.step-3 { grid-column: 2; grid-row: 2; }
+.step-4 { grid-column: 1; grid-row: 2; }
+.step-5 {
+  grid-column: 1 / 3;
+  min-height: 260px;
+}
+
+.step-num {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 3.5rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.step-label {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.step-desc {
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.step-1::after,
+.step-2::after,
+.step-3::after,
+.step-4::after {
+  content: '';
+  position: absolute;
+  background: black;
+}
+
+.step-1::after {
+  top: 50%;
+  left: 100%;
+  width: 124px;
+  height: 6px;
+}
+
+.step-2::after {
+  top: 100%;
+  left: 50%;
+  width: 6px;
+  height: 84px;
+}
+
+.step-3::after {
+  top: 50%;
+  right: 100%;
+  width: 124px;
+  height: 6px;
+}
+
+.step-4::after {
+  top: 100%;
+  left: 50%;
+  width: 6px;
+  height: 84px;
+}
+
+.step-5-inner {
+  display: flex;
+  gap: 40px;
+  height: 100%;
+}
+
+.step-5-left {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 200px;
+}
+
+.mod-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.mod-features li {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.step-5-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  justify-content: center;
+}
+
+.embed-headline {
+  font-size: 1.5rem;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.embed-code-block {
+  border: 3px solid black;
+  padding: 4px;
+}
+
+.embed-code {
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  word-break: break-all;
+  color: black;
+}
+
+/* SELFHOST */
+.selfhost-section {
+  padding: 40px 20px 100px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.selfhost-card {
+  background: var(--red);
+  border: 4px solid black;
+  box-shadow: 8px 8px 0 black;
+  padding: 48px 40px;
+  text-align: center;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.selfhost-desc {
+  font-size: 1.1rem;
+  font-weight: 500;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 16px auto 28px;
+}
+
+@media (max-width: 480px) {
+  .selfhost-card {
+    padding: 28px 20px;
+  }
+}
+
+/* PRICING */
+
+.pricing-section {
+  padding: 60px 24px 120px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.pricing-subtitle {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-top: -40px;
+  margin-bottom: 60px;
+}
+
+.pricing-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.pricing-card {
+  width: 300px;
+  height: 370px;
+  border: 4px solid black;
+  box-shadow: 8px 8px 0 black;
+  padding: 36px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.pricing-card:hover {
+  transform: translate(3px, 3px);
+  box-shadow: 5px 5px 0 black;
+}
+
+.pricing-tier {
+  display: inline-block;
+  padding: 4px 10px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border: 3px solid black;
+}
+
+.pricing-price {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  font-size: 3.5rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.pricing-period {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.pricing-loads {
+  font-size: 0.90rem;
+  font-weight: 700;
+  border-bottom: 3px solid black;
+  padding-bottom: 16px;
+}
+
+.pricing-desc {
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.pricing-cta {
+  width: 100%;
+  padding: 14px;
+  background: black;
+  color: white;
+  border: 3px solid black;
+  box-shadow: 4px 4px 0 black;
+  font-size: 1rem;
+  font-weight: 800;
+  font-family: var(--pk-heading-font);
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.pricing-cta:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+  .navbar-landing {
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+    height: auto;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .navbar-landing .logo {
+    font-size: 2rem;
+  }
+
+  .hero h1 {
+    font-size: 4rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .coupon-card {
+    margin: 0 24px 60px;
+  }
+
+  .coupon-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .coupon-right {
+    width: 100%;
+    align-items: center;
+  }
+
+  .workflow-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .step-1,
+  .step-2,
+  .step-3,
+  .step-4,
+  .step-5 {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .step-1::after,
+  .step-2::after,
+  .step-3::after,
+  .step-4::after,
+  .step-5::before {
+    display: none;
+  }
+
+  .step-5 {
+    min-height: auto;
+  }
+
+  .step-5-inner {
+    flex-direction: column;
+  }
+
+  .step-card {
+    width: 100%;
+    max-width: 380px;
+  }
+
+  .pricing-subtitle {
+    margin-top: 16px;
+    margin-bottom: 40px;
+  }
+
+  .pricing-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .pricing-card {
+    width: 100%;
+    max-width: 380px;
+  }
+}
