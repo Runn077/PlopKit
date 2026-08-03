@@ -1,0 +1,122 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import LandingNavbar from '../components/layout/LandingNavbar.astro'
+import Footer from '../components/layout/Footer.astro'
+---
+<BaseLayout title="Contact — PlopKit" description="Get in touch with the PlopKit team.">
+  <div class="contact-wrap">
+    <LandingNavbar />
+    <div class="contact-content">
+      <h1>Get in touch</h1>
+      <p class="subtitle">
+        Found a bug? Have a feature idea? Just want to say hi? Contact us.
+      </p>
+      <div class="contact-cards">
+        <a class="contact-card github-btn"
+          href="https://github.com/Runn077/PlopKit"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="View source on GitHub"
+        >
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+            <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.4 7.86 10.93.58.1.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.04-.72.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.75 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.58.23 2.75.11 3.04.74.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14 0 1.55-.01 2.79-.01 3.17 0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12c0-6.35-5.15-11.5-11.5-11.5Z"/>
+          </svg>
+          <p class="card-title">Star us on GitHub</p>
+          <p class="card-desc">Open source, self-hostable, contributions welcome.</p>
+          <span class="card-action">View repo →</span>
+        </a>
+        <a href="mailto:plopkitcontact@gmail.com" class="contact-card">
+          <p class="card-title">Email us directly</p>
+          <p class="card-desc">For questions or anything else.</p>
+          <span class="card-action">plopkitcontact@gmail.com →</span>
+        </a>
+      </div>
+    </div>
+    <Footer />
+  </div>
+</BaseLayout>
+
+<style>
+  .contact-wrap {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .contact-content {
+    flex: 1;
+    max-width: 640px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 4rem 1.5rem;
+  }
+
+  .contact-wrap h1 {
+    font-size: 38px;
+    font-weight: 500;
+    margin: 0 0 1rem;
+    line-height: 1.15;
+  }
+
+  .subtitle {
+    font-size: 16px;
+    color: var(--pk-color-font-muted);
+    line-height: 1.7;
+    margin: 0 0 2.5rem;
+  }
+
+  .contact-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 2.5rem;
+  }
+
+  .contact-card {
+    background: #fff;
+    border: 1px solid #000000;
+    padding: 1.25rem;
+    box-shadow: 4px 4px 0 #000000;
+    transition: box-shadow 0.1s, transform 0.1s;
+    text-decoration: none;
+    display: block;
+    color: inherit;
+  }
+
+  .contact-card:hover {
+    box-shadow: 2px 2px 0 #000000;
+    transform: translate(2px, 2px);
+  }
+
+  .card-title {
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0 0 4px;
+  }
+
+  .card-desc {
+    font-size: 13px;
+    color: var(--pk-color-font-muted);
+    margin: 0 0 12px;
+    line-height: 1.5;
+  }
+
+  .card-action {
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  @media (max-width: 480px) {
+    .contact-content {
+      padding: 2rem 1.25rem;
+    }
+
+    .contact-cards {
+      grid-template-columns: 1fr;
+    }
+
+    .contact-wrap h1 {
+      font-size: 28px;
+    }
+  }
+</style>

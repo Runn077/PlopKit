@@ -1,4 +1,5 @@
 ---
+const appUrl = import.meta.env.PUBLIC_APP_URL
 ---
 <nav class="navbar-landing">
   <a class="logo" href="/">PlopKit</a>
@@ -7,7 +8,7 @@
     <a href="/demo"><button>Demo</button></a>
     <a href="/#pricing-section"><button>Pricing</button></a>
     <a href="/setup"><button>Setup</button></a>
-    <a href="/login"><button>Login</button></a>
+    <a href={`${appUrl}/login`}><button>Login</button></a>
   </div>
 </nav>
 

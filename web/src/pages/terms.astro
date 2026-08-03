@@ -1,0 +1,31 @@
+---
+import { getEntry, render } from 'astro:content'
+import BaseLayout from '../layouts/BaseLayout.astro'
+import LandingNavbar from '../components/layout/LandingNavbar.astro'
+import Footer from '../components/layout/Footer.astro'
+
+const entry = await getEntry('legal', 'terms')
+
+if (!entry) {
+  throw new Error('Privacy entry not found')
+}
+
+const { Content } = await render(entry)
+---
+<BaseLayout title={`${entry.data.title} — PlopKit`}>
+  <LandingNavbar />
+  <div class="legal-page">
+    <Content />
+  </div>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .legal-page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    line-height: 1.6;
+    font-family: var(--pk-body-font);
+  }
+</style>
