@@ -1,0 +1,23 @@
+---
+import { getEntry, render } from 'astro:content'
+import DocsLayout from '../../layouts/DocsLayout.astro'
+
+const entry = await getEntry('docs', 'getting-started')
+
+if (!entry) {
+  throw new Error('Docs entry not found')
+}
+
+const { Content } = await render(entry)
+---
+<DocsLayout title={entry.data.title} currentSlug="">
+  <Content />
+</DocsLayout>
+
+<style>
+  .docs-page {
+    max-width: 720px;
+    margin: 2rem auto;
+    padding: 0 24px;
+  }
+</style>
