@@ -1,5 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro'
+import LandingNavbar from '../components/layout/LandingNavbar.astro'
+import Footer from '../components/layout/Footer.astro'
 import { docsNav } from '../config/docsNav'
 
 interface Props {
@@ -9,7 +11,9 @@ interface Props {
 
 const { title, currentSlug } = Astro.props
 ---
-<BaseLayout title={`${title} — PlopKit Docs`}>
+<BaseLayout title={`${title} Docs`}>
+  <LandingNavbar />
+
   <div class="docs-layout">
     <aside class="docs-sidebar">
       {docsNav.map((group) => (
@@ -34,6 +38,8 @@ const { title, currentSlug } = Astro.props
       <slot />
     </main>
   </div>
+
+  <Footer />
 </BaseLayout>
 
 <style>
@@ -43,6 +49,7 @@ const { title, currentSlug } = Astro.props
     margin: 0 auto;
     padding: 2rem 24px;
     gap: 48px;
+    min-height: 100vh;
   }
 
   .docs-sidebar {
