@@ -30,12 +30,17 @@ run npm run build
 run pm2 restart api
 
 echo "── widget ──"
-cd "$REPO_ROOT/widget-svelte"
+cd "$REPO_ROOT/widget"
 run npm install
 run npm run build
 
 echo "── platform ──"
 cd "$REPO_ROOT/platform"
+run npm install
+run npm run build
+
+echo "── web ──"
+cd "$REPO_ROOT/web"
 run npm install
 run npm run build
 
