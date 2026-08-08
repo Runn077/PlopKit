@@ -1,5 +1,6 @@
 .sc-container {
   min-height: 100vh;
+  font-family: var(--pk-heading-font);
 }
 .sc-script-block {
   border: 3px solid var(--pk-color-border);
@@ -93,7 +94,6 @@
   color: var(--pk-color-font-muted);
   cursor: pointer;
   padding: 4px 0;
-  font-family: var(--pk-font);
   margin-top: 8px;
 }
 
@@ -142,7 +142,6 @@
   width: 100%;
   padding: 10px;
   font-size: 13px;
-  font-family: var(--pk-font);
   font-weight: 500;
   border: 1px solid var(--pk-color-border);
   border-radius: var(--pk-radius);
@@ -276,7 +275,6 @@
   border: 1px solid var(--pk-color-border-muted);
   border-radius: var(--pk-radius);
   font-size: 13px;
-  font-family: var(--pk-font);
   resize: none;
   height: 70px;
   outline: none;
@@ -306,7 +304,6 @@
   color: var(--pk-color-text);
   cursor: pointer;
   padding: 0;
-  font-family: var(--pk-font);
 }
 
 .sc-btn-reply-text:hover {
@@ -321,7 +318,6 @@
   color: var(--pk-color-text-secondary);
   cursor: pointer;
   padding: 0;
-  font-family: var(--pk-font);
 }
 
 .sc-script-header-right {
@@ -379,7 +375,6 @@
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  font-family: var(--pk-font);
 }
 
 .sc-comments-tab .sc-btn-post:hover {
@@ -430,7 +425,6 @@
   cursor: pointer;
   padding: 0;
   margin-bottom: 6px;
-  font-family: var(--pk-font);
 }
 
 .sc-comments-tab .sc-btn-show-more:hover {
@@ -644,7 +638,6 @@
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  font-family: var(--pk-font);
 }
 
 .sc-comments-tab .sc-btn-post-reply:hover {

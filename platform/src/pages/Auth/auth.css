@@ -6,7 +6,7 @@
   align-items: center;
   justify-content: center;
   background: var(--pk-color-bg);
-  font-family: var(--pk-font);
+  font-family: var(--pk-heading-font);
   padding: var(--pk-space-page-x);
 }
 
@@ -65,7 +65,6 @@
   background: var(--pk-color-bg);
   font-size: 14px;
   font-weight: 500;
-  font-family: var(--pk-font);
   cursor: pointer;
   color: var(--pk-color-text);
 }
@@ -103,7 +102,6 @@
   border-radius: var(--pk-radius-lg);
   background: var(--pk-color-bg);
   font-size: 14px;
-  font-family: var(--pk-font);
   color: var(--pk-color-text);
   box-sizing: border-box;
 }
@@ -119,7 +117,6 @@
   background: var(--pk-color-bg);
   font-size: 14px;
   font-weight: 500;
-  font-family: var(--pk-font);
   cursor: pointer;
   color: var(--pk-color-text);
 }

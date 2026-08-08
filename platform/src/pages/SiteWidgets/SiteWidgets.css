@@ -1,4 +1,6 @@
-/* SiteWidgets — page layout, settings, modals, forms, buttons */
+.sw-index {
+  font-family: var(--pk-heading-font);
+}
 
 /* --- Page shell --- */
 .sw-container {
@@ -6,7 +8,7 @@
   margin: 0 auto;
   padding: 32px;
   min-height: 100vh;
-  font-family: var(--pk-font);
+  font-family: var(--pk-heading-font);
 }
 
 .sw-breadcrumb {
@@ -17,6 +19,7 @@
   margin-bottom: 24px;
   font-size: 13px;
   background: white;
+  font-family: var(--pk-heading-font);
 }
 
 .sw-breadcrumb-link {
@@ -73,7 +76,6 @@
 .sw-btn {
   font-size: 13px;
   font-weight: 500;
-  font-family: var(--pk-font);
   padding: 7px 14px;
   border-radius: var(--pk-radius);
   cursor: pointer;
@@ -112,7 +114,6 @@
   width: 100%;
   padding: 8px 12px;
   font-size: 14px;
-  font-family: var(--pk-font);
   border: 1px solid var(--pk-color-border);
   border-radius: var(--pk-radius);
   outline: none;

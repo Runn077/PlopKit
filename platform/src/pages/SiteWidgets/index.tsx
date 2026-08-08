@@ -149,7 +149,7 @@ function SiteWidgets() {
   )
 
   return (
-    <div>
+    <div className='sw-index'>
       <Navbar />
       <SubNav
         tabs={[

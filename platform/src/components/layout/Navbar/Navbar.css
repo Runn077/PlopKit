@@ -9,6 +9,7 @@
   top: 0;
   z-index: var(--pk-z-nav);
   width: 100%;
+  font-family: var(--pk-heading-font);
 }
 
 .navbar-logo {
@@ -38,7 +39,6 @@
   font-size: 13px;
   font-weight: 600;
   color: #000;
-  font-family: var(--pk-font);
 }
 
 .navbar-plan-badge {
@@ -50,7 +50,6 @@
   border: 2px solid black;
   background: #ffe66d;
   box-shadow: 2px 2px 0 black;
-  font-family: var(--pk-font);
 }
 
 /* HAMBURGER */
@@ -110,7 +109,6 @@
   padding: 14px 16px;
   font-size: 14px;
   font-weight: 700;
-  font-family: var(--pk-font);
   text-align: left;
   cursor: pointer;
   transition: background 0.1s ease;
@@ -134,7 +132,6 @@
   padding: 10px 20px;
   font-size: 13px;
   font-weight: 800;
-  font-family: var(--pk-font);
   cursor: pointer;
   box-shadow: 4px 4px 0 black;
   transition: transform 0.1s ease, box-shadow 0.1s ease;

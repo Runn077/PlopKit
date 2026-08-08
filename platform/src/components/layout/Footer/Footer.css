@@ -4,6 +4,7 @@
   margin-top: auto;
   font-size: 0.875rem;
   color: var(--pk-color-font-muted);
+  font-family: var(--pk-heading-font);
 }
 
 .footer-links {

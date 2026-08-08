@@ -48,7 +48,6 @@
   padding: 8px 14px;
   font-size: 0.875rem;
   font-weight: 800;
-  font-family: var(--pk-font);
   cursor: pointer;
   background: #333;
   color: white;
@@ -96,7 +95,6 @@
   padding: 8px 14px;
   font-size: 0.875rem;
   font-weight: 800;
-  font-family: var(--pk-font);
   cursor: pointer;
   background: white;
   color: var(--pk-color-font);

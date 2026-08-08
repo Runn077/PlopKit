@@ -6,6 +6,7 @@
   letter-spacing: 0.05em;
   color: var(--pk-color-font-muted);
   margin-bottom: 16px;
+  font-family: var(--pk-heading-font);
 }
 
 .sw-settings-fields {
@@ -108,7 +109,6 @@
 .settings-sidenav-item {
   background: none;
   border: none;
-  font-family: var(--pk-font);
   font-size: 13px;
   font-weight: 500;
   color: var(--pk-color-font-muted);

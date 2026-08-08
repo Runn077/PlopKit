@@ -116,7 +116,6 @@
 .account-manage-btn {
   font-size: 13px;
   font-weight: 500;
-  font-family: var(--pk-font);
   padding: 7px 14px;
   cursor: pointer;
   border: 1px solid var(--pk-color-border);
