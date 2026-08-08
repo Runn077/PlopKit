@@ -6,23 +6,16 @@ import Dashboard from './pages/Dashboard/index'
 import SiteWidgets from './pages/SiteWidgets/index'
 import SiteComments from './pages/SiteComments/index'
 import Account from './pages/Account/index'
-import Landing from './pages/Landing/Landing'
-import PrivacyPolicy from './pages/Legal/PrivacyPolicy'
-import Terms from './pages/Legal/Terms'
-import Demo from './pages/Demo/Demo'
-import Setup from './pages/Setup/Setup'
-import Contact from './pages/Contact/Contact'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Landing />} />
-        <Route path='/demo' element={<Demo />} />
-        <Route path='/setup' element={<Setup />} />
+        <Route path='/' element={
+          <ProtectedRoute><Dashboard /></ProtectedRoute>
+        } />
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
-        <Route path='/contact' element={<Contact />} />
         <Route path='/dashboard' element={
           <ProtectedRoute><Dashboard /></ProtectedRoute>
         } />
@@ -36,8 +29,6 @@ function App() {
           <ProtectedRoute><Account /></ProtectedRoute>
         } />
         <Route path='*' element={<Navigate to='/login' />} />
-        <Route path="/privacy" element={<PrivacyPolicy />} />
-        <Route path="/terms" element={<Terms />} />
       </Routes>
     </BrowserRouter>
   )
