@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { Comment, Reply } from '../../../types'
 import PlatformCommentItem from '../components/PlatformCommentItem'
 import '../SiteComments.css'
+import '../shared.css'
 
 interface Props {
   pinnedComment: Comment | null
@@ -41,7 +42,7 @@ function CommentsTab({
 
       <div className="sc-owner-post">
         <textarea
-          className="sc-reply-textarea sc-owner-textarea"
+          className="sc-reply-textarea"
           value={postBody}
           onChange={e => setPostBody(e.target.value)}
           placeholder="Post as site owner..."

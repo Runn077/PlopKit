@@ -2,6 +2,7 @@ import type { Comment, Reply, FeedItem } from '../../../types'
 import CommentRow from '../components/CommentRow'
 import OrphanReplyItem from '../components/OrphanReplyItem'
 import '../SiteComments.css'
+import '../shared.css'
 
 const PENDING_EXPIRY_DAYS = 30
 

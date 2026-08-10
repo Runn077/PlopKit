@@ -1,0 +1,303 @@
+.sc-comments-tab {
+  font-size: 14px;
+  color: #0f0f0f;
+}
+
+.sc-comment-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.sc-empty {
+  color: #999;
+  font-size: 14px;
+  padding: 16px 0;
+}
+
+.sc-comment {
+  padding: 12px 0;
+  border-top: 1px solid #f0f0f0;
+}
+
+.sc-comment-author {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.sc-comment-body {
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 6px;
+  white-space: pre-wrap;
+  color: #0f0f0f;
+}
+
+.sc-comment-url {
+  display: block;
+  font-size: 11px;
+  color: #999;
+  font-family: var(--pk-font-mono);
+  margin-bottom: 6px;
+}
+
+.sc-comment-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sc-comment-date {
+  font-size: 12px;
+  color: #999;
+}
+
+.sc-commenter-id {
+  display: inline-block;
+  font-size: 11px;
+  color: #999;
+  font-family: monospace;
+}
+
+.sc-comment-mod-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.sc-expiry {
+  font-size: 11px;
+  color: var(--pk-color-text-subtle);
+}
+
+.sc-owner-badge {
+  display: inline-block;
+  align-self: flex-start;
+  width: fit-content;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  background: #4ecdc4;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.sc-replies-toggle {
+  background: none;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: #0f0f0f;
+  cursor: pointer;
+  padding: 4px 0;
+  margin-top: 8px;
+}
+
+.sc-replies-toggle:hover {
+  color: #555;
+}
+
+.sc-replies {
+  margin-top: 8px;
+  margin-left: 16px;
+  padding-left: 12px;
+  border-left: 2px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sc-reply {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 0;
+}
+
+.sc-reply-author {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.sc-reply-body {
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 4px;
+  white-space: pre-wrap;
+  color: #0f0f0f;
+}
+
+.sc-reply-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.sc-reply-meta .sc-comment-mod-actions {
+  margin-left: auto;
+}
+
+.sc-btn-show-more {
+  background: none;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: #0f0f0f;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 6px;
+}
+
+.sc-btn-show-more:hover {
+  color: #555;
+}
+
+.sc-reply-input {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sc-reply-textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 13px;
+  resize: none;
+  height: 60px;
+  outline: none;
+  box-sizing: border-box;
+  background: transparent;
+  color: #0f0f0f;
+}
+
+.sc-reply-textarea:focus {
+  border: 2px solid #0f0f0f;
+}
+
+.sc-reply-input-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sc-char-count {
+  font-size: 12px;
+  color: #999;
+}
+
+.sc-btn-reply-text {
+  background: none;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: #0f0f0f;
+  cursor: pointer;
+  padding: 0;
+}
+
+.sc-btn-reply-text:hover {
+  color: #555;
+}
+
+.sc-btn-cancel-text {
+  background: none;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: #555;
+  cursor: pointer;
+  padding: 0;
+}
+
+.sc-btn-cancel-text:hover {
+  color: #0f0f0f;
+}
+
+.sc-btn-post,
+.sc-btn-post-reply {
+  background: #0f0f0f;
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sc-btn-post-reply:hover {
+  background: #333;
+}
+
+.sc-btn-post-reply:disabled {
+  background: #ccc;
+  cursor: default;
+}
+
+.sc-btn {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid #e0e0e0;
+  background: transparent;
+  color: #0f0f0f;
+  cursor: pointer;
+}
+
+.sc-btn:hover {
+  background: #f5f5f5;
+}
+
+.sc-btn-danger {
+  border-color: #ff6b6b;
+  color: #0f0f0f;
+  background: transparent;
+}
+
+.sc-btn-danger:hover {
+  background: #ff6b6b;
+  color: #fff;
+}
+
+.sc-btn-approve {
+  border-color: #4ecdc4;
+  color: #0f0f0f;
+  background: transparent;
+}
+
+.sc-btn-approve:hover {
+  background: #4ecdc4;
+  color: #fff;
+}
+
+.sc-load-more {
+  background: none;
+  border: 1px solid #e0e0e0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f0f0f;
+  padding: 8px 16px;
+  border-radius: 20px;
+  margin-top: 12px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.sc-load-more:hover {
+  background: #f5f5f5;
+}
+
+.sc-load-more:disabled {
+  color: #999;
+  cursor: default;
+  opacity: 1;
+}

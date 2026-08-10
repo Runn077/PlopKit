@@ -3,6 +3,7 @@ import type { Reply } from '../../../types'
 import { truncateBody } from '../../../lib/truncateBody'
 import { timeAgo } from '../../../lib/timeago'
 import '../SiteComments.css'
+import '../shared.css'
 
 interface Props {
   reply: Reply

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import '../SiteComments.css'
+import '../shared.css'
 import type { Comment, Reply } from '../../../types'
 import { truncateBody } from '../../../lib/truncateBody'
 import { timeAgo } from '../../../lib/timeago'

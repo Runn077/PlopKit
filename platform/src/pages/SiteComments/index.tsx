@@ -9,6 +9,7 @@ import './SiteComments.css'
 import type { Comment, Widget, Site, Reply } from '../../types'
 import { apiFetch } from '../../lib/api'
 import Footer from '../../components/layout/Footer/Footer'
+import './shared.css'
 
 type Tab = 'comments' | 'pending' | 'deleted'
 

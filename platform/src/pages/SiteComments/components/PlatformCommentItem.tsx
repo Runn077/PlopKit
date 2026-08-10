@@ -2,9 +2,11 @@ import { useState } from 'react'
 import { apiFetch } from '../../../lib/api'
 import type { Comment, Reply } from '../../../types'
 import { useSession } from '../../../lib/auth-client'
-import '../SiteComments.css'
+import './PlatformCommentItem.css'
 import { timeAgo } from '../../../lib/timeago'
 import { truncateBody } from '../../../lib/truncateBody'
+import PlatformReplyItem from './PlatformReplyItem'
+import ReplyArea from './ReplyArea'
 
 interface Props {
   comment: Comment
@@ -13,99 +15,6 @@ interface Props {
   onReplyPosted: (commentId: string, reply: Reply) => void
   onPin: (commentId: string) => Promise<void>
   onUnpin: () => Promise<void>
-}
-
-function PlatformReplyItem({
-  reply,
-  parentId,
-  onDelete,
-  onReplyPosted,
-}: {
-  reply: Reply
-  parentId: string
-  onDelete: (commentId: string, parentId?: string) => Promise<void>
-  onReplyPosted: (commentId: string, reply: Reply) => void
-}) {
-  const [replyOpen, setReplyOpen] = useState(false)
-  const [replyBody, setReplyBody] = useState('')
-  const [replyLoading, setReplyLoading] = useState(false)
-  const { data: session } = useSession()
-
-  const isQuoteDeleted = reply.quoted && (reply.quoted.deletedAt !== null || reply.quoted.status !== 'approved')
-
-  const handleOwnerReply = async () => {
-    if (!replyBody.trim()) return
-    setReplyLoading(true)
-    const res = await apiFetch(`/comments/${reply.id}/owner-reply`, {
-      method: 'POST',
-      body: JSON.stringify({ body: replyBody }),
-    })
-    if (res.ok) {
-      const newReply = await res.json()
-      onReplyPosted(parentId, newReply)
-      setReplyBody('')
-      setReplyOpen(false)
-    }
-    setReplyLoading(false)
-  }
-
-  return (
-    <div className="sc-reply">
-      {reply.quoted && (
-        <div className="sc-quoted-comment">
-          <p className="sc-quoted-body">
-            {isQuoteDeleted ? 'Deleted message' : reply.quoted.body}
-          </p>
-        </div>
-      )}
-      {reply.isOwnerReply && <span className="sc-owner-badge">Site owner</span>}
-      <span className="sc-reply-author">{reply.isOwnerReply ? session?.user.name : reply.authorName}</span>
-      {reply.commenterDisplayId && !reply.isOwnerReply && (
-        <span className="sc-commenter-id">#{reply.commenterDisplayId}</span>
-      )}
-      <p className="sc-reply-body">{reply.body}</p>
-      <div className="sc-reply-meta">
-        <span className="sc-comment-date">
-          {timeAgo(reply.createdAt)} · {new Date(reply.createdAt).toLocaleDateString()}
-        </span>
-        <button className="sc-btn-reply-text" onClick={() => setReplyOpen(v => !v)}>
-          {replyOpen ? 'Cancel' : 'Reply'}
-        </button>
-        <div className="sc-comment-mod-actions">
-          <button className="sc-btn sc-btn-danger" onClick={() => onDelete(reply.id, parentId)}>
-            Delete
-          </button>
-        </div>
-      </div>
-      {replyOpen && (
-        <div className="sc-reply-input">
-          <textarea
-            className="sc-reply-textarea"
-            value={replyBody}
-            onChange={e => setReplyBody(e.target.value)}
-            placeholder="Reply as site owner..."
-            maxLength={2500}
-            autoFocus
-          />
-          <div className="sc-reply-input-actions">
-            <span className="sc-char-count">{replyBody.length}/2500</span>
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <button className="sc-btn-cancel-text" onClick={() => { setReplyOpen(false); setReplyBody('') }}>
-                Cancel
-              </button>
-              <button
-                className="sc-btn-post-reply"
-                onClick={handleOwnerReply}
-                disabled={replyLoading || !replyBody.trim()}
-              >
-                {replyLoading ? 'Posting...' : 'Reply'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  )
 }
 
 function PlatformCommentItem({ comment, pinnedCommentId, onDelete, onReplyPosted, onPin, onUnpin }: Props) {
@@ -151,7 +60,7 @@ function PlatformCommentItem({ comment, pinnedCommentId, onDelete, onReplyPosted
   }
 
   return (
-    <div className={`sc-comment ${isPinned ? 'sc-comment-pinned' : ''}`}>
+    <div className={`sc-comment ${isPinned ? 'sc-comment-pinned' : ''}`} id={`comment-${comment.id}`}>
       {(isPinned || comment.isOwnerReply) && (
         <div className="sc-comment-badges">
           {isPinned && <span className="sc-pin-badge">Pinned</span>}
@@ -192,31 +101,13 @@ function PlatformCommentItem({ comment, pinnedCommentId, onDelete, onReplyPosted
         </div>
       </div>
       {replyOpen && (
-        <div className="sc-reply-input">
-          <textarea
-            className="sc-reply-textarea"
-            value={replyBody}
-            onChange={e => setReplyBody(e.target.value)}
-            placeholder="Reply as site owner..."
-            maxLength={2500}
-            autoFocus
-          />
-          <div className="sc-reply-input-actions">
-            <span className="sc-char-count">{replyBody.length}/2500</span>
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <button className="sc-btn-cancel-text" onClick={() => { setReplyOpen(false); setReplyBody('') }}>
-                Cancel
-              </button>
-              <button
-                className="sc-btn-post-reply"
-                onClick={handleOwnerReply}
-                disabled={replyLoading || !replyBody.trim()}
-              >
-                {replyLoading ? 'Posting...' : 'Reply'}
-              </button>
-            </div>
-          </div>
-        </div>
+        <ReplyArea
+          value={replyBody}
+          onChange={setReplyBody}
+          onCancel={() => { setReplyOpen(false); setReplyBody('') }}
+          onSubmit={handleOwnerReply}
+          loading={replyLoading}
+        />
       )}
       {comment.replies.length > 0 && (
         <>
