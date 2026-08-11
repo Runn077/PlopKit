@@ -5,6 +5,8 @@ import { useSession } from '../../../lib/auth-client'
 import './PlatformReplyItem.css'
 import { timeAgo } from '../../../lib/timeago'
 import ReplyArea from './ReplyArea'
+import { truncateBody } from '../../../lib/truncateBody'
+import '../shared.css'
 
 interface Props {
   reply: Reply
@@ -17,8 +19,10 @@ function PlatformReplyItem({ reply, parentId, onDelete, onReplyPosted }: Props) 
   const [replyOpen, setReplyOpen] = useState(false)
   const [replyBody, setReplyBody] = useState('')
   const [replyLoading, setReplyLoading] = useState(false)
+  const [expanded, setExpanded] = useState(false)
   const { data: session } = useSession()
 
+  const { displayBody, isLong } = truncateBody(reply.body, expanded)
   const isQuoteDeleted = !!reply.quoted && (reply.quoted.deletedAt !== null || reply.quoted.status !== 'approved')
 
   function scrollToQuoted() {
@@ -60,7 +64,12 @@ function PlatformReplyItem({ reply, parentId, onDelete, onReplyPosted }: Props) 
       {reply.commenterDisplayId && !reply.isOwnerReply && (
         <span className="sc-commenter-id">#{reply.commenterDisplayId}</span>
       )}
-      <p className="sc-reply-body">{reply.body}</p>
+      <p className="sc-reply-body">{displayBody}</p>
+      {isLong && (
+        <button className="sc-btn-show-more" onClick={() => setExpanded(v => !v)}>
+          {expanded ? 'Show less' : 'Show more'}
+        </button>
+      )}
       <div className="sc-reply-meta">
         <span className="sc-comment-date">
           {timeAgo(reply.createdAt)} · {new Date(reply.createdAt).toLocaleDateString()}

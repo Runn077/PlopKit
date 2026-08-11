@@ -146,6 +146,9 @@
 }
 
 .sc-btn-show-more {
+  display: inline-block;
+  align-self: flex-start;
+  width: fit-content;
   background: none;
   border: none;
   font-size: 12px;
@@ -154,6 +157,7 @@
   cursor: pointer;
   padding: 0;
   margin-bottom: 6px;
+  text-align: left;
 }
 
 .sc-btn-show-more:hover {
