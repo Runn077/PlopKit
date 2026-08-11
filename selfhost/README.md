@@ -1,3 +1,11 @@
+# Self-hosting PlopKit
+
+Run your own PlopKit instance with Docker Compose. Self-hosted
+instances have no feature restrictions compared to the hosted
+version at plopkit.com, billing and usage limits are the only
+things specific to the hosted service, and none of that code runs
+here.
+
 ## Requirements
 
 - Docker and Docker Compose
@@ -6,6 +14,7 @@
 - (Optional) A Google OAuth client, if you also want Google sign-in
 
 ## 1. Clone the repo
+
 ```bash
 git clone https://github.com/runn077/plopkit
 cd plopkit/selfhost
@@ -18,10 +27,11 @@ required. Users enter their email and get a one-click sign-in link, so
 you'll need SMTP credentials for PlopKit to send that email.
 
 Any SMTP provider works. Quick options:
+
 - **Gmail** (fastest for testing): enable 2FA on a Gmail account, then
   generate an app password.
 - **Amazon SES** (recommended for real use): cheap, no restrictive
-  daily cap, but requires verifying a sending domain
+  daily cap, but requires verifying a sending domain.
 
 You'll need the host, port, username, and password for the next step.
 
@@ -43,6 +53,7 @@ link:
 Skip this step if magic link alone is enough for you.
 
 ## 4. Configure environment variables
+
 ```bash
 cp .env.example .env
 ```
@@ -62,24 +73,29 @@ Open `.env` and fill in:
 | `VITE_API_URL` | Yes | Platform's view of the API, e.g. `http://localhost:3000/api` |
 | `VITE_AUTH_URL` | Yes | Same as `BETTER_AUTH_URL` |
 | `VITE_APP_URL` | Yes | Same as `PLATFORM_URL` |
-| `ENABLE_CLOUD` | No | Leave as `false`. Enables Stripe billing and usage limits, which only make sense for the hosted plopkit.com service |
+| `PUBLIC_DEMO_WIDGET_KEY` | No | Optional demo widget key for the marketing site. Leave blank to skip it |
 
 `VITE_*` variables are baked into the dashboard at build time, so
 changing them later requires rebuilding the `platform` image (see
 Troubleshooting below).
 
-## 5. Run the container
+## 5. Run the containers
 
-Make sure you are in the selfhost directory when running this.
+Make sure you are in the `selfhost` directory when running this.
 
 ```bash
 docker compose up -d
 ```
 
-This builds and starts three containers: `db` (Postgres), `api`
-(Express server, runs migrations automatically on boot), and
-`platform` (the dashboard, served via Nginx). First boot takes a
-couple of minutes while images build from source.
+This builds and starts four containers:
+
+- `db` — Postgres, with a healthcheck the `api` container waits on
+- `api` — Express server; runs `prisma migrate deploy` automatically
+  on every boot, then starts the server
+- `platform` — the dashboard, served via Nginx on port 8080
+- `web` — the marketing site and docs, served via Nginx on port 4321
+
+First boot takes a couple of minutes while images build from source.
 
 Check everything's healthy:
 
@@ -87,7 +103,7 @@ Check everything's healthy:
 docker ps
 ```
 
-All three containers should show `Up`. If `api` is stuck in
+All four containers should show `Up`. If `api` is stuck in
 `Restarting`, check the logs:
 
 ```bash
@@ -100,6 +116,9 @@ Visit whatever you set `PLATFORM_URL` to (e.g. `http://localhost:8080`).
 Sign in with your email (magic link) or Google if configured, create a
 site, create a widget, and grab the embed script from the dashboard.
 
+The marketing site and docs are served separately at
+`http://localhost:4321`.
+
 ## Updating
 
 ```bash
@@ -107,6 +126,24 @@ git pull
 docker compose up -d --build
 ```
 
-This rebuilds all three images from the latest source and restarts
-the stack. Database data persists in a Docker volume and is not
-affected.
+This rebuilds all images from the latest source and restarts the
+stack. Database data persists in the `postgres_data` Docker volume
+and is not affected. Migrations are re-applied automatically on `api`
+startup.
+
+## Troubleshooting
+
+**Changed a `VITE_*` variable and the dashboard didn't pick it up:**
+these are baked in at build time. Rebuild the platform image:
+
+```bash
+docker compose up -d --build platform
+```
+
+**`api` container keeps restarting:** almost always a bad or missing
+`DATABASE_URL`, `SMTP_*`, or `BETTER_AUTH_SECRET`. Check logs with
+`docker logs selfhost-api-1` and confirm your `.env` values.
+
+**Sign-in emails aren't arriving:** double-check `SMTP_HOST` /
+`SMTP_PORT` / `SMTP_SECURE` against your provider's docs — a mismatched
+`SMTP_SECURE` value against the port is the most common cause.

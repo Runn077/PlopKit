@@ -51,5 +51,14 @@ services:
     ports:
       - "8080:8080"
 
+  web:
+    build:
+      context: ../web
+      args:
+        PUBLIC_APP_URL: ${PLATFORM_URL}
+    restart: always
+    ports:
+      - "4321:4321"
+      
 volumes:
   postgres_data:
