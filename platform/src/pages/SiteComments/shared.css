@@ -32,6 +32,8 @@
   margin-bottom: 6px;
   white-space: pre-wrap;
   color: #0f0f0f;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .sc-comment-url {
@@ -123,11 +125,13 @@
 }
 
 .sc-reply-body {
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.5;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   white-space: pre-wrap;
   color: #0f0f0f;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .sc-reply-meta {
@@ -170,8 +174,9 @@
   border: 1px solid #ccc;
   border-radius: 10px;
   font-size: 13px;
-  resize: none;
+  resize: vertical;
   height: 60px;
+  min-height: 60px;
   outline: none;
   box-sizing: border-box;
   background: transparent;
