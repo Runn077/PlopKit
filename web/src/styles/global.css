@@ -13,3 +13,10 @@ body {
   font-family: var(--pk-heading-font);
   overflow-x: hidden;
 }
+
+.docs-content img,
+article img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
