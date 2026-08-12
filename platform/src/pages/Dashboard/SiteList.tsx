@@ -1,5 +1,6 @@
 import './Dashboard.css'
 import type { Site } from '../../types'
+import { Button } from '../../components/ui/Button/Button'
 
 interface Props {
   sites: Site[]
@@ -19,18 +20,12 @@ function SiteList({ sites, onManage, onAdd, onImport }: Props) {
           comments.
         </p>
         <div className="empty-dashboard-header-actions">
-          <button
-            className="btn btn-primary"
-            onClick={onAdd}
-          >
+          <Button variant="dark" onClick={onAdd}>
             + Add Website
-          </button>
-          <button 
-            className="btn" 
-            onClick={onImport}
-          >
+          </Button>
+          <Button variant="light" onClick={onImport}>
             Import site
-          </button>
+          </Button>
         </div>
       </div>
     )
