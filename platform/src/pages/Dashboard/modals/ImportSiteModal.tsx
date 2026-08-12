@@ -30,7 +30,7 @@ function ImportSiteModal({ onClose, onSubmit }: Props) {
     e.preventDefault();
     setError('');
     if (!file) {
-      setError('Please select an export file');
+      setError('Please select an valid file');
       return;
     }
     setLoading(true);
@@ -77,7 +77,7 @@ function ImportSiteModal({ onClose, onSubmit }: Props) {
           />
         </div>
         <div className={styles.field}>
-          <label className={styles.label}>Export file</label>
+          <label className={styles.label}>Import file</label>
           <input
             className={styles.input}
             type="file"
