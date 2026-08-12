@@ -25,8 +25,12 @@ const pricingPlans = [
       </p>
 
       <div class="hero-actions">
-        <a class="primary-btn" href={`${appUrl}/signup`}>Start Free</a>
-
+        <button
+          class="primary-btn"
+          onclick={`window.location.href = '${appUrl}/signup'`}
+        >
+          Start Free
+        </button>
         
         <a class="secondary-btn github-btn" 
             href="https://github.com/Runn077/PlopKit" 

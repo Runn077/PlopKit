@@ -10,7 +10,11 @@ no backend required on your end.
 
 <br />
 
-The widget is made with svelte and is 21.3 kB gzipped.
+**Lightweight:** built with Svelte, 21.3 kB gzipped.
+
+**Self-serve moderation:** commenters can delete their own comments.
+
+**Persistent identity, no accounts:** each commenter gets a unique ID, so returning visitors are recognizable and makes the comment section more identifiable while still not requiring accounts.
 
 <br />
 

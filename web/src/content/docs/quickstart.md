@@ -49,3 +49,8 @@ with a defined width so it doesn't stretch edge-to-edge unexpectedly:
 
 ## 5. Moderate
 Manage comments, pin, filter words, and more from your dashboard.
+
+<br />
+
+## Extra
+**Note:** If you want more than one comment section, you will have to add a brand new widget with a different widget key.
