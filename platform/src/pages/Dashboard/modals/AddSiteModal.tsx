@@ -44,7 +44,7 @@ function AddSiteModal({ onClose, onSubmit }: Props) {
             className={styles.input}
             placeholder="really cool website"
             value={name}
-            maxLength={30}
+            maxLength={100}
             onChange={(e) => setName(e.target.value)}
             required
           />
@@ -55,6 +55,7 @@ function AddSiteModal({ onClose, onSubmit }: Props) {
             className={styles.input}
             placeholder="mywebsite.com"
             value={domain}
+            maxLength={253}
             onChange={(e) => setDomain(e.target.value)}
             required
           />

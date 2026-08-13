@@ -45,6 +45,7 @@ function AddWidgetModal({ onClose, onSubmit }: Props) {
             className={styles.input}
             placeholder="e.g. page name"
             value={name}
+            maxLength={100}
             onChange={(e) => setName(e.target.value)}
             required
           />
