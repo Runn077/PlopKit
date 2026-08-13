@@ -61,7 +61,6 @@ export interface Site {
   name: string
   domain: string
   siteKey: string
-  verified: boolean
   bannedWords: string[]
   autoDeleteBannedWords: boolean
   theme: { tokens: ThemeTokens } | null

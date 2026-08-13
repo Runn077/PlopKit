@@ -116,24 +116,6 @@ function GeneralSettings({ site, onSave, onDelete }: Props) {
         </button>
       </form>
 
-      <div className="sw-verification-section">
-        <p className="sw-settings-section-title">Domain verification</p>
-        <div className="sw-verification-status">
-          <span
-            className="sw-verification-dot"
-            style={{ background: site.verified ? '#22c55e' : '#f59e0b' }}
-          />
-          <span className="sw-verification-label">
-            {site.verified ? 'Verified' : 'Unverified'}
-          </span>
-        </div>
-        {!site.verified && (
-          <p className="sw-verification-hint">
-            Embed a widget on your site to verify your domain. Once a page with your widget loads, your domain will be automatically verified and locked to your account.
-          </p>
-        )}
-      </div>
-
       <div className="sw-export-section">
         <p className="sw-settings-section-title">Data export</p>
         <p className="sw-export-description">

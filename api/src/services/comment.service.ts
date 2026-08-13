@@ -248,7 +248,7 @@ export async function createComment(
   const cleanBody = sanitizeHtml(rawBody, { allowedTags: [], allowedAttributes: {} })
   if (!cleanBody || cleanBody.trim().length === 0) throw new AppError(400, 'Comment body is required')
   if (cleanBody.length > LIMITS.COMMENT_MAX_LENGTH) throw new AppError(400, `Comment must be under ${LIMITS.COMMENT_MAX_LENGTH} characters`)
-  
+
   const cleanAuthorName = authorName
     ? sanitizeHtml(authorName.trim(), { allowedTags: [], allowedAttributes: {} })
     : 'Anonymous'
@@ -257,10 +257,9 @@ export async function createComment(
   const widget = await getWidgetByKey(widgetKey)
   if (!widget?.commentWidget) throw new AppError(404, 'Invalid widget key')
 
-  let isLocalhost = false
   try {
     const originHostname = new URL(origin).hostname
-    isLocalhost = originHostname === 'localhost' || originHostname === '127.0.0.1'
+    const isLocalhost = originHostname === 'localhost' || originHostname === '127.0.0.1'
 
     if (!isLocalhost) {
       const siteHostname = new URL(`https://${widget.site.domain}`).hostname
@@ -269,13 +268,6 @@ export async function createComment(
   } catch (e) {
     if (e instanceof AppError) throw e
     throw new AppError(403, 'Domain not allowed')
-  }
-
-  if (!widget.site.verified && !isLocalhost) {
-    await prisma.site.update({
-      where: { id: widget.site.id },
-      data: { verified: true },
-    })
   }
 
   const bannedWords: string[] = widget.site.bannedWords ?? []

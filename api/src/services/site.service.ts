@@ -18,14 +18,7 @@ export async function getSiteById(id: string, userId: string) {
 
 export async function createSite(userId: string, name: string, domain: string) {
   const existing = await prisma.site.findUnique({ where: { domain } })
-  if (existing?.verified) throw new AppError(409, 'This domain is already registered and verified')
-  if (existing && existing.userId !== userId) {
-    // Domain registered but unverified by someone else — allow re-registration by new user
-    await prisma.site.delete({ where: { id: existing.id } })
-  }
-  if (existing && existing.userId === userId) {
-    throw new AppError(409, 'You already have a site with this domain')
-  }
+  if (existing) throw new AppError(409, 'This domain is already registered')
 
   return prisma.site.create({
     data: {
@@ -33,7 +26,6 @@ export async function createSite(userId: string, name: string, domain: string) {
       domain,
       siteKey: randomBytes(16).toString('hex'),
       userId,
-      verified: false,
     },
   })
 }
@@ -43,7 +35,7 @@ export async function updateSite(id: string, userId: string, data: { name?: stri
   if (!site || site.userId !== userId) throw new AppError(404, 'Site not found')
   if (data.domain && data.domain !== site.domain) {
     const existing = await prisma.site.findUnique({ where: { domain: data.domain } })
-    if (existing?.verified) throw new AppError(409, 'This domain is already registered and verified')
+    if (existing) throw new AppError(409, 'This domain is already registered')
   }
   return prisma.site.update({
     where: { id },
