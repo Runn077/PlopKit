@@ -64,6 +64,7 @@ export interface Site {
   bannedWords: string[]
   autoDeleteBannedWords: boolean
   theme: { tokens: ThemeTokens } | null
+  allowLocalhost: boolean
   expiresAt?: string | null
   createdAt: string
 }

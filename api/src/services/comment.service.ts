@@ -3,7 +3,7 @@ import prisma from '../lib/prisma.js'
 import { AppError } from '../errors/appError.js'
 import { LIMITS } from '../constants/index.js'
 import { CommentStatus } from '../generated/prisma/enums.js'
-import { getWidgetOwnedByUser, trackWidgetLoad, getWidgetByKey } from './widget.service.js'
+import { getWidgetOwnedByUser, trackWidgetLoad, getWidgetByKey, isOriginAllowed } from './widget.service.js'
 import { createHash } from 'crypto'
 
 function hashSecret(secret: string): string {
@@ -26,11 +26,16 @@ async function getCommentAndVerifyOwnership(commentId: string, userId: string) {
 
 export async function getApprovedComments(
   widgetKey: string,
+  origin: string | null,
   cursor?: string,
   skipQuota = false,
 ) {
   const widget = await getWidgetByKey(widgetKey)
   if (!widget?.commentWidget) throw new AppError(404, 'Widget not found')
+
+  if (origin !== null && !isOriginAllowed(origin, widget.site)) {
+    throw new AppError(403, 'Domain not allowed')
+  }
 
   const commentWidgetId = widget.commentWidget.id
   const pinnedCommentId = widget.commentWidget.pinnedCommentId
@@ -259,7 +264,8 @@ export async function createComment(
 
   try {
     const originHostname = new URL(origin).hostname
-    const isLocalhost = originHostname === 'localhost' || originHostname === '127.0.0.1'
+    const isLocalhost = widget.site.allowLocalhost
+      && (originHostname === 'localhost' || originHostname === '127.0.0.1')
 
     if (!isLocalhost) {
       const siteHostname = new URL(`https://${widget.site.domain}`).hostname

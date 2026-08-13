@@ -125,3 +125,13 @@ export async function updateTheme(
     },
   })
 }
+
+export async function updateAllowLocalhost(id: string, userId: string, allowLocalhost: boolean) {
+  const site = await prisma.site.findUnique({ where: { id } })
+  if (!site || site.userId !== userId) throw new AppError(404, 'Site not found')
+
+  return prisma.site.update({
+    where: { id },
+    data: { allowLocalhost },
+  })
+}

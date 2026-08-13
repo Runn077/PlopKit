@@ -21,3 +21,7 @@ export const updateBannedWordsSchema = z.object({
   bannedWords: z.array(z.string()).optional(),
   autoDeleteBannedWords: z.boolean().optional(),
 })
+
+export const updateAllowLocalhostSchema = z.object({
+  allowLocalhost: z.boolean(),
+})

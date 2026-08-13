@@ -111,3 +111,17 @@ export async function getPublicWidgetConfig(widgetKey: string) {
     updatedAt: widget.site.updatedAt,
   }
 }
+
+export function isOriginAllowed(origin: string, site: { domain: string; allowLocalhost: boolean }): boolean {
+  try {
+    const originHostname = new URL(origin).hostname
+    const isLocalhost = site.allowLocalhost
+      && (originHostname === 'localhost' || originHostname === '127.0.0.1')
+    if (isLocalhost) return true
+
+    const siteHostname = new URL(`https://${site.domain}`).hostname
+    return originHostname === siteHostname
+  } catch {
+    return false
+  }
+}

@@ -8,6 +8,7 @@ import { importLimiter, exportLimiter } from '../middleware/rateLimiters.js'
 import * as siteService from '../services/site.service.js'
 import { updateBannedWordsSchema } from '../validators/site.validators.js'
 import { updateThemeSchema } from '../validators/theme.validators.js'
+import { updateAllowLocalhostSchema } from '../validators/site.validators.js'
 
 const router = Router()
 
@@ -90,6 +91,16 @@ router.post('/import', requireAuth, importLimiter, validate(importSiteSchema), a
     const { name, domain, data } = req.body
     const site = await importSite(user.id, name, domain, data)
     res.status(201).json(site)
+  } catch (err) { next(err) }
+})
+
+router.patch('/:id/allow-localhost', requireAuth, validate(updateAllowLocalhostSchema), async (req, res, next) => {
+  try {
+    const { user } = res.locals.session
+    const { id } = req.params as { id: string }
+    const { allowLocalhost } = req.body
+    const updated = await siteService.updateAllowLocalhost(id, user.id, allowLocalhost)
+    res.json(updated)
   } catch (err) { next(err) }
 })
 

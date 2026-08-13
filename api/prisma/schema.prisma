@@ -104,6 +104,7 @@ model Site {
   updatedAt             DateTime @updatedAt
   bannedWords           String[]  @default([])
   autoDeleteBannedWords Boolean   @default(false)
+  allowLocalhost        Boolean   @default(false)
   theme Json?
 }
 

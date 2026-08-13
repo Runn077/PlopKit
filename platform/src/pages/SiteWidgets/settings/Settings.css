@@ -51,6 +51,23 @@
   line-height: 1.5;
 }
 
+.sw-localhost-section {
+  margin-bottom: 40px;
+}
+
+.sw-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.sw-checkbox-row input[type='checkbox'] {
+  cursor: pointer;
+}
+
 .sw-export-section {
   margin-bottom: 40px;
 }

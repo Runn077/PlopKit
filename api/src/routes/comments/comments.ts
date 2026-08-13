@@ -10,7 +10,7 @@ const router = Router()
 router.get('/approved', requireAuth, validate(getWidgetCommentsSchema, 'query'), async (req, res, next) => {
   try {
     const { widget_key, cursor } = req.query as { widget_key: string; cursor?: string }
-    const data = await commentService.getApprovedComments(widget_key, cursor, true)
+    const data = await commentService.getApprovedComments(widget_key, null, cursor, true)
     res.json(data)
   } catch (err) { next(err) }
 })

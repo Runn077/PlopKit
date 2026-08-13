@@ -21,6 +21,10 @@ function GeneralSettings({ site, onSave, onDelete }: Props) {
   const [exporting, setExporting] = useState(false)
   const [exportError, setExportError] = useState('')
   const [exportSize, setExportSize] = useState<string | null>(null)
+  const [allowLocalhost, setAllowLocalhost] = useState(site.allowLocalhost)
+  const [savingLocalhost, setSavingLocalhost] = useState(false)
+  const [localhostError, setLocalhostError] = useState('')
+
 
   useEffect(() => {
     async function fetchExportSize() {
@@ -80,6 +84,26 @@ function GeneralSettings({ site, onSave, onDelete }: Props) {
     }
   }
 
+  async function handleToggleLocalhost(checked: boolean) {
+    const previous = allowLocalhost
+    setAllowLocalhost(checked)
+    setSavingLocalhost(true)
+    setLocalhostError('')
+    try {
+      const res = await apiFetch(`/sites/${site.id}/allow-localhost`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ allowLocalhost: checked }),
+      })
+      if (!res.ok) throw new Error('Failed to update setting')
+    } catch (err: any) {
+      setAllowLocalhost(previous)
+      setLocalhostError(err.message)
+    } finally {
+      setSavingLocalhost(false)
+    }
+  }
+
   return (
     <div>
       <form onSubmit={handleSave} style={{ marginBottom: 40 }}>
@@ -115,6 +139,24 @@ function GeneralSettings({ site, onSave, onDelete }: Props) {
           {saving ? 'Saving...' : success ? 'Saved!' : 'Save changes'}
         </button>
       </form>
+
+      <div className="sw-localhost-section">
+        <p className="sw-settings-section-title">Local development</p>
+        <p className="sw-export-description">
+          Allow widgets to load and accept comments from localhost and 127.0.0.1,
+          regardless of the domain above. Intended for testing only. Turn this off once your site is live.
+        </p>
+        {localhostError && <p className="sw-settings-error">{localhostError}</p>}
+        <label className="sw-checkbox-row">
+          <input
+            type="checkbox"
+            checked={allowLocalhost}
+            disabled={savingLocalhost}
+            onChange={e => handleToggleLocalhost(e.target.checked)}
+          />
+          <span>Allow localhost</span>
+        </label>
+      </div>
 
       <div className="sw-export-section">
         <p className="sw-settings-section-title">Data export</p>
