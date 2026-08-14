@@ -28,6 +28,8 @@ import {
   deleteSite,
   exportSite,
   updateBannedWords,
+  updateTheme,
+  updateAllowLocalhost,
 } from '../site.service.js'
 
 beforeEach(() => {
@@ -77,51 +79,19 @@ describe('createSite', () => {
         domain: 'example.com',
         siteKey: 'generated_site_key',
         userId: 'user_1',
-        verified: false,
       },
     })
   })
 
-  it('throws 409 when the domain is already registered and verified', async () => {
+  it('throws 409 when the domain is already registered', async () => {
     vi.mocked(prisma.site.findUnique).mockResolvedValue({
       id: 'existing_site',
       userId: 'other_user',
-      verified: true,
     } as any)
 
     await expect(createSite('user_1', 'My Blog', 'example.com')).rejects.toThrow(
-      'This domain is already registered and verified'
+      'This domain is already registered'
     )
-    expect(prisma.site.delete).not.toHaveBeenCalled()
-    expect(prisma.site.create).not.toHaveBeenCalled()
-  })
-
-  it('deletes an unverified site owned by a different user and creates a new one', async () => {
-    vi.mocked(prisma.site.findUnique).mockResolvedValue({
-      id: 'existing_site',
-      userId: 'other_user',
-      verified: false,
-    } as any)
-    vi.mocked(prisma.site.delete).mockResolvedValue({} as any)
-    vi.mocked(prisma.site.create).mockResolvedValue({ id: 'site_new' } as any)
-
-    await createSite('user_1', 'My Blog', 'example.com')
-
-    expect(prisma.site.delete).toHaveBeenCalledWith({ where: { id: 'existing_site' } })
-    expect(prisma.site.create).toHaveBeenCalled()
-  })
-
-  it('throws 409 when the same user already has an unverified site with this domain', async () => {
-    vi.mocked(prisma.site.findUnique).mockResolvedValue({
-      id: 'existing_site',
-      userId: 'user_1',
-      verified: false,
-    } as any)
-
-    await expect(createSite('user_1', 'My Blog', 'example.com')).rejects.toThrow(
-      'You already have a site with this domain'
-    )
-    expect(prisma.site.delete).not.toHaveBeenCalled()
     expect(prisma.site.create).not.toHaveBeenCalled()
   })
 })
@@ -166,28 +136,28 @@ describe('updateSite', () => {
     expect(prisma.site.findUnique).toHaveBeenCalledTimes(1)
   })
 
-  it('throws 409 when changing to a domain already verified by another site', async () => {
+  it('throws 409 when changing to a domain already registered', async () => {
     vi.mocked(prisma.site.findUnique)
       .mockResolvedValueOnce({ id: 'site_1', userId: 'user_1', domain: 'old.com' } as any)
-      .mockResolvedValueOnce({ id: 'other_site', verified: true } as any)
+      .mockResolvedValueOnce({ id: 'other_site' } as any)
 
     await expect(
       updateSite('site_1', 'user_1', { domain: 'taken.com' })
-    ).rejects.toThrow('This domain is already registered and verified')
+    ).rejects.toThrow('This domain is already registered')
     expect(prisma.site.update).not.toHaveBeenCalled()
   })
 
-  it('allows changing to a domain that is registered but unverified', async () => {
+  it('allows changing to a domain that is not yet registered', async () => {
     vi.mocked(prisma.site.findUnique)
       .mockResolvedValueOnce({ id: 'site_1', userId: 'user_1', domain: 'old.com' } as any)
-      .mockResolvedValueOnce({ id: 'other_site', verified: false } as any)
+      .mockResolvedValueOnce(null)
     vi.mocked(prisma.site.update).mockResolvedValue({} as any)
 
-    await updateSite('site_1', 'user_1', { domain: 'unverified.com' })
+    await updateSite('site_1', 'user_1', { domain: 'unregistered.com' })
 
     expect(prisma.site.update).toHaveBeenCalledWith({
       where: { id: 'site_1' },
-      data: { domain: 'unverified.com' },
+      data: { domain: 'unregistered.com' },
     })
   })
 
@@ -330,6 +300,92 @@ describe('updateBannedWords', () => {
     expect(prisma.site.update).toHaveBeenCalledWith({
       where: { id: 'site_1' },
       data: {},
+    })
+  })
+})
+
+describe('updateTheme', () => {
+  it('throws 404 when the site does not exist', async () => {
+    vi.mocked(prisma.site.findUnique).mockResolvedValue(null)
+    await expect(updateTheme('site_1', 'user_1', {})).rejects.toThrow(AppError)
+  })
+
+  it('throws 404 when the site belongs to a different user', async () => {
+    vi.mocked(prisma.site.findUnique).mockResolvedValue({ id: 'site_1', userId: 'other_user' } as any)
+    await expect(updateTheme('site_1', 'user_1', {})).rejects.toThrow('Site not found')
+  })
+
+  it('updates the theme with tokens when provided', async () => {
+    vi.mocked(prisma.site.findUnique).mockResolvedValue({ id: 'site_1', userId: 'user_1' } as any)
+    vi.mocked(prisma.site.update).mockResolvedValue({} as any)
+
+    const theme = { tokens: { primary: '#000000', secondary: '#ffffff' } }
+    await updateTheme('site_1', 'user_1', { theme })
+
+    expect(prisma.site.update).toHaveBeenCalledWith({
+      where: { id: 'site_1' },
+      data: { theme },
+    })
+  })
+
+  it('sets theme to null when explicitly provided as null', async () => {
+    vi.mocked(prisma.site.findUnique).mockResolvedValue({ id: 'site_1', userId: 'user_1' } as any)
+    vi.mocked(prisma.site.update).mockResolvedValue({} as any)
+
+    await updateTheme('site_1', 'user_1', { theme: null })
+
+    expect(prisma.site.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: 'site_1' },
+      })
+    )
+  })
+
+  it('does not update theme when theme is not provided', async () => {
+    vi.mocked(prisma.site.findUnique).mockResolvedValue({ id: 'site_1', userId: 'user_1' } as any)
+    vi.mocked(prisma.site.update).mockResolvedValue({} as any)
+
+    await updateTheme('site_1', 'user_1', {})
+
+    expect(prisma.site.update).toHaveBeenCalledWith({
+      where: { id: 'site_1' },
+      data: {},
+    })
+  })
+})
+
+describe('updateAllowLocalhost', () => {
+  it('throws 404 when the site does not exist', async () => {
+    vi.mocked(prisma.site.findUnique).mockResolvedValue(null)
+    await expect(updateAllowLocalhost('site_1', 'user_1', true)).rejects.toThrow(AppError)
+  })
+
+  it('throws 404 when the site belongs to a different user', async () => {
+    vi.mocked(prisma.site.findUnique).mockResolvedValue({ id: 'site_1', userId: 'other_user' } as any)
+    await expect(updateAllowLocalhost('site_1', 'user_1', true)).rejects.toThrow('Site not found')
+  })
+
+  it('updates allowLocalhost to true', async () => {
+    vi.mocked(prisma.site.findUnique).mockResolvedValue({ id: 'site_1', userId: 'user_1' } as any)
+    vi.mocked(prisma.site.update).mockResolvedValue({} as any)
+
+    await updateAllowLocalhost('site_1', 'user_1', true)
+
+    expect(prisma.site.update).toHaveBeenCalledWith({
+      where: { id: 'site_1' },
+      data: { allowLocalhost: true },
+    })
+  })
+
+  it('updates allowLocalhost to false', async () => {
+    vi.mocked(prisma.site.findUnique).mockResolvedValue({ id: 'site_1', userId: 'user_1' } as any)
+    vi.mocked(prisma.site.update).mockResolvedValue({} as any)
+
+    await updateAllowLocalhost('site_1', 'user_1', false)
+
+    expect(prisma.site.update).toHaveBeenCalledWith({
+      where: { id: 'site_1' },
+      data: { allowLocalhost: false },
     })
   })
 })

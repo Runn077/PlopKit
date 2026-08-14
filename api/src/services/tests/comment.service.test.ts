@@ -26,10 +26,11 @@ vi.mock('../widget.service.js', () => ({
   getWidgetOwnedByUser: vi.fn(),
   trackWidgetLoad: vi.fn(),
   getWidgetByKey: vi.fn(),
+  isOriginAllowed: vi.fn(),
 }))
 
 import prisma from '../../lib/prisma.js'
-import { getWidgetOwnedByUser, trackWidgetLoad, getWidgetByKey } from '../widget.service.js'
+import { getWidgetOwnedByUser, trackWidgetLoad, getWidgetByKey, isOriginAllowed } from '../widget.service.js'
 import {
   getApprovedComments,
   getPendingComments,
@@ -55,19 +56,38 @@ function realHash(secret: string): string {
 
 beforeEach(() => {
   vi.clearAllMocks()
+  vi.mocked(isOriginAllowed).mockReturnValue(true)
 })
 
 // --- getApprovedComments ---
 
 describe('getApprovedComments', () => {
   const widgetBase = {
-    site: { id: 'site_1', userId: 'user_1', domain: 'example.com', verified: true },
+    site: { id: 'site_1', userId: 'user_1', domain: 'example.com', allowLocalhost: false },
     commentWidget: { id: 'cw_1', pinnedCommentId: null },
   }
 
   it('throws 404 when the widget or its commentWidget does not exist', async () => {
     vi.mocked(getWidgetByKey).mockResolvedValue(null)
-    await expect(getApprovedComments('wk_123')).rejects.toThrow(AppError)
+    await expect(getApprovedComments('wk_123', 'https://example.com')).rejects.toThrow(AppError)
+  })
+
+  it('throws 403 when isOriginAllowed returns false', async () => {
+    vi.mocked(getWidgetByKey).mockResolvedValue(widgetBase as any)
+    vi.mocked(isOriginAllowed).mockReturnValue(false)
+
+    await expect(getApprovedComments('wk_123', 'https://evil.com')).rejects.toThrow('Domain not allowed')
+  })
+
+  it('skips the origin check when origin is null (authenticated/internal call)', async () => {
+    vi.mocked(getWidgetByKey).mockResolvedValue(widgetBase as any)
+    vi.mocked(isOriginAllowed).mockReturnValue(false)
+    vi.mocked(prisma.comment.count).mockResolvedValue(0)
+    vi.mocked(prisma.comment.findMany).mockResolvedValue([])
+    vi.mocked(prisma.user.findUnique).mockResolvedValue({ name: 'Ru' } as any)
+
+    await expect(getApprovedComments('wk_123', null, undefined, true)).resolves.toBeDefined()
+    expect(isOriginAllowed).not.toHaveBeenCalled()
   })
 
   it('excludes the pinned comment id from the main list query when one is pinned', async () => {
@@ -80,7 +100,7 @@ describe('getApprovedComments', () => {
     vi.mocked(prisma.comment.findMany).mockResolvedValue([])
     vi.mocked(prisma.user.findUnique).mockResolvedValue({ name: 'Ru' } as any)
 
-    await getApprovedComments('wk_123', undefined, true)
+    await getApprovedComments('wk_123', 'https://example.com', undefined, true)
 
     const findManyArg = vi.mocked(prisma.comment.findMany).mock.calls[0]![0] as any
     expect(findManyArg.where.id).toEqual({ not: 'pinned_1' })
@@ -92,7 +112,7 @@ describe('getApprovedComments', () => {
     vi.mocked(prisma.comment.findMany).mockResolvedValue([])
     vi.mocked(prisma.user.findUnique).mockResolvedValue({ name: 'Ru' } as any)
 
-    await getApprovedComments('wk_123', undefined, true)
+    await getApprovedComments('wk_123', 'https://example.com', undefined, true)
 
     const findManyArg = vi.mocked(prisma.comment.findMany).mock.calls[0]![0] as any
     expect(findManyArg.where.id).toBeUndefined()
@@ -104,7 +124,7 @@ describe('getApprovedComments', () => {
     vi.mocked(prisma.comment.findMany).mockResolvedValue([])
     vi.mocked(prisma.user.findUnique).mockResolvedValue({ name: 'Ru' } as any)
 
-    await getApprovedComments('wk_123')
+    await getApprovedComments('wk_123', 'https://example.com')
 
     expect(trackWidgetLoad).toHaveBeenCalledWith('wk_123')
   })
@@ -116,7 +136,7 @@ describe('getApprovedComments', () => {
     vi.mocked(prisma.comment.findMany).mockResolvedValue([])
     vi.mocked(prisma.user.findUnique).mockResolvedValue({ name: 'Ru' } as any)
 
-    await getApprovedComments('wk_123', 'cursor_1')
+    await getApprovedComments('wk_123', 'https://example.com', 'cursor_1')
 
     expect(trackWidgetLoad).not.toHaveBeenCalled()
   })
@@ -127,7 +147,7 @@ describe('getApprovedComments', () => {
     vi.mocked(prisma.comment.findMany).mockResolvedValue([])
     vi.mocked(prisma.user.findUnique).mockResolvedValue({ name: 'Ru' } as any)
 
-    await getApprovedComments('wk_123', undefined, true)
+    await getApprovedComments('wk_123', 'https://example.com', undefined, true)
 
     expect(trackWidgetLoad).not.toHaveBeenCalled()
   })
@@ -139,7 +159,7 @@ describe('getApprovedComments', () => {
     vi.mocked(prisma.comment.findMany).mockResolvedValue([])
     vi.mocked(prisma.user.findUnique).mockResolvedValue({ name: 'Ru' } as any)
 
-    await getApprovedComments('wk_123', 'bad_cursor', true)
+    await getApprovedComments('wk_123', 'https://example.com', 'bad_cursor', true)
 
     const findManyArg = vi.mocked(prisma.comment.findMany).mock.calls[0]![0] as any
     expect(findManyArg.where.createdAt).toBeUndefined()
@@ -157,7 +177,7 @@ describe('getApprovedComments', () => {
     vi.mocked(prisma.comment.findMany).mockResolvedValue(fullPage as any)
     vi.mocked(prisma.user.findUnique).mockResolvedValue({ name: 'Ru' } as any)
 
-    const result = await getApprovedComments('wk_123', undefined, true)
+    const result = await getApprovedComments('wk_123', 'https://example.com', undefined, true)
     expect(result.hasMore).toBe(true)
   })
 
@@ -169,7 +189,7 @@ describe('getApprovedComments', () => {
     ] as any)
     vi.mocked(prisma.user.findUnique).mockResolvedValue({ name: 'Ru' } as any)
 
-    const result = await getApprovedComments('wk_123', undefined, true)
+    const result = await getApprovedComments('wk_123', 'https://example.com', undefined, true)
     expect(result.hasMore).toBe(false)
   })
 
@@ -179,7 +199,7 @@ describe('getApprovedComments', () => {
     vi.mocked(prisma.comment.findMany).mockResolvedValue([])
     vi.mocked(prisma.user.findUnique).mockResolvedValue({ name: 'Ru' } as any)
 
-    const result = await getApprovedComments('wk_123', undefined, true)
+    const result = await getApprovedComments('wk_123', 'https://example.com', undefined, true)
     expect(result.total).toBe(10)
   })
 
@@ -199,7 +219,7 @@ describe('getApprovedComments', () => {
     ] as any)
     vi.mocked(prisma.user.findUnique).mockResolvedValue({ name: 'Ru' } as any)
 
-    const result = await getApprovedComments('wk_123', undefined, true)
+    const result = await getApprovedComments('wk_123', 'https://example.com', undefined, true)
     expect(result.comments[0].authorName).toBe('Ru')
     expect(result.comments[0].replies[0].authorName).toBe('Ru')
     expect(result.comments[0].replies[1].authorName).toBe('Jane')
@@ -213,7 +233,7 @@ describe('getApprovedComments', () => {
     ] as any)
     vi.mocked(prisma.user.findUnique).mockResolvedValue({ name: null } as any)
 
-    const result = await getApprovedComments('wk_123', undefined, true)
+    const result = await getApprovedComments('wk_123', 'https://example.com', undefined, true)
     expect(result.comments[0].authorName).toBe('Site owner')
   })
 })
@@ -337,7 +357,7 @@ describe('createComment', () => {
     site: {
       id: 'site_1',
       domain: 'example.com',
-      verified: true,
+      allowLocalhost: false,
       userId: 'user_1',
       bannedWords: [] as string[],
       autoDeleteBannedWords: false,
@@ -400,63 +420,34 @@ describe('createComment', () => {
     ).rejects.toThrow('Invalid widget key')
   })
 
-  it('allows a localhost origin regardless of the site domain', async () => {
+  it('allows the comment when origin matches the site domain', async () => {
     vi.mocked(getWidgetByKey).mockResolvedValue(widgetBase as any)
     vi.mocked(prisma.comment.create).mockResolvedValue({} as any)
 
     await expect(
-      createComment('wk_123', '/post', 'Hello', undefined, undefined, 'http://localhost:5173')
+      createComment('wk_123', '/post', 'Hello', undefined, undefined, 'https://example.com')
     ).resolves.toBeDefined()
   })
 
-  it('throws 403 when the origin hostname does not match the site domain', async () => {
+  it('throws 403 when isOriginAllowed returns false', async () => {
     vi.mocked(getWidgetByKey).mockResolvedValue(widgetBase as any)
+    vi.mocked(isOriginAllowed).mockReturnValue(false)
+
     await expect(
       createComment('wk_123', '/post', 'Hello', undefined, undefined, 'https://evil.com')
     ).rejects.toThrow('Domain not allowed')
   })
 
-  it('throws 403 when the origin is not a valid URL', async () => {
-    vi.mocked(getWidgetByKey).mockResolvedValue(widgetBase as any)
+  it('allows localhost origin when allowLocalhost is true', async () => {
+    vi.mocked(getWidgetByKey).mockResolvedValue({
+      ...widgetBase,
+      site: { ...widgetBase.site, allowLocalhost: true },
+    } as any)
+    vi.mocked(prisma.comment.create).mockResolvedValue({} as any)
+
     await expect(
-      createComment('wk_123', '/post', 'Hello', undefined, undefined, 'not-a-url')
-    ).rejects.toThrow('Domain not allowed')
-  })
-
-  it('marks an unverified site as verified after a matching non-localhost origin comment', async () => {
-    vi.mocked(getWidgetByKey).mockResolvedValue({
-      ...widgetBase,
-      site: { ...widgetBase.site, verified: false },
-    } as any)
-    vi.mocked(prisma.comment.create).mockResolvedValue({} as any)
-
-    await createComment('wk_123', '/post', 'Hello', undefined, undefined, 'https://example.com')
-
-    expect(prisma.site.update).toHaveBeenCalledWith({
-      where: { id: 'site_1' },
-      data: { verified: true },
-    })
-  })
-
-  it('does not re-verify an already-verified site', async () => {
-    vi.mocked(getWidgetByKey).mockResolvedValue(widgetBase as any)
-    vi.mocked(prisma.comment.create).mockResolvedValue({} as any)
-
-    await createComment('wk_123', '/post', 'Hello', undefined, undefined, 'https://example.com')
-
-    expect(prisma.site.update).not.toHaveBeenCalled()
-  })
-
-  it('does not verify the site when the origin is localhost, even if unverified', async () => {
-    vi.mocked(getWidgetByKey).mockResolvedValue({
-      ...widgetBase,
-      site: { ...widgetBase.site, verified: false },
-    } as any)
-    vi.mocked(prisma.comment.create).mockResolvedValue({} as any)
-
-    await createComment('wk_123', '/post', 'Hello', undefined, undefined, 'http://localhost:5173')
-
-    expect(prisma.site.update).not.toHaveBeenCalled()
+      createComment('wk_123', '/post', 'Hello', undefined, undefined, 'http://localhost:5173')
+    ).resolves.toBeDefined()
   })
 
   it('rejects a comment containing a banned word when autoDeleteBannedWords is true', async () => {
@@ -1118,7 +1109,7 @@ describe('getApprovedComments - quoted fallback logic', () => {
       },
     ] as any)
 
-    const result = await getApprovedComments('widget-key-1')
+    const result = await getApprovedComments('widget-key-1', 'https://example.com')
 
     expect(result.comments[0].replies[0].quoted).toEqual({
       id: 'r0', body: 'original text', deletedAt: null, status: 'approved', commenterDisplayId: 'abc123', isOwnerReply: false,
@@ -1145,7 +1136,7 @@ describe('getApprovedComments - quoted fallback logic', () => {
       },
     ] as any)
 
-    const result = await getApprovedComments('widget-key-1')
+    const result = await getApprovedComments('widget-key-1', 'https://example.com')
     const quoted = result.comments[0].replies[0].quoted
 
     expect(quoted).toBeTruthy()
@@ -1174,7 +1165,7 @@ describe('getApprovedComments - quoted fallback logic', () => {
       },
     ] as any)
 
-    const result = await getApprovedComments('widget-key-1')
+    const result = await getApprovedComments('widget-key-1', 'https://example.com')
 
     expect(result.comments[0].replies[0].quoted).toBeNull()
   })
