@@ -4,10 +4,11 @@ Thanks for wanting to contribute! Here's what you need to know.
 
 ## Project structure
 
-- `api/` — Node/Express/TypeScript backend
-- `platform/` — React/Vite dashboard
-- `widget-svelte/` — Svelte 5 embeddable widget
-- `selfhost/` — Docker Compose for self-hosting
+- `api/` Node/Express/TypeScript backend
+- `platform/` React/Vite dashboard
+- `widget/` Svelte 5 embeddable widget
+- `web/` Astro for the landing and static pages
+- `selfhost/` Docker Compose for self-hosting
 
 ### Prerequisites
 
@@ -23,6 +24,7 @@ Thanks for wanting to contribute! Here's what you need to know.
    cp api/.env.example api/.env
    cp platform/.env.example platform/.env
    cp widget-svelte/.env.example widget-svelte/.env
+   cp web/.env.example web/.env
 ```
 
 2. Start Postgres
@@ -44,6 +46,12 @@ Thanks for wanting to contribute! Here's what you need to know.
 ```bash
    cd platform && npm install && npm run dev
 ```
+
+6. Start the web (marketing site)
+```bash
+cd web && npm install && npm run dev
+```
+
 ## How to contribute
 
 1. Fork the repo on GitHub.
@@ -56,7 +64,7 @@ Thanks for wanting to contribute! Here's what you need to know.
 5. Commit using conventional commits (`feat:`, `fix:`, `chore:`, etc.).
 6. Push to your fork and open a pull request against `Runn077/plopkit`'s `main` branch, with a clear description of what changed and why.
 
-For small fixes, feel free to open a PR directly. For larger changes (new features, architecture changes), consider opening an issue first to discuss the approach before investing a lot of time.
+For small fixes, feel free to open a PR directly. For larger changes (new features, architecture changes), consider starting a discussion or opening an issue first to discuss the approach before investing a lot of time.
 
 ## Guidelines
 

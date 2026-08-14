@@ -24,7 +24,7 @@ Name your widget and click open.
 <br />
 
 ## 4. Copy the script tag
-Paste the script tag into your HTML wherever you want comments to appear
+Paste the script tag into your HTML wherever you want comments to appear. If you want to post comments from that widget on localhost, you will have to check "Allow localhost" in the websites settings.
 
 ```
 <script 

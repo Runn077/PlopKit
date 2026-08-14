@@ -1,22 +1,23 @@
 # PlopKit
 
-PlopKit is an open-source, self-hostable comment platform. 
+PlopKit is an open-source, self-hostable comments platform. 
 Create comment widgets in seconds, embed them anywhere with a
 single script and manage everything from a clean web dashboard.
 
 - 💬 Modern embedded comment widgets
+- ☁️ Lightweight, Only 21.3 kB gzip
+- 🎨 Customize your own widget
+- 📦 Import and export website data for easy migration between selfhost and cloud 
+- 🐳 Easy Docker deployment
 - 🛡️ Built-in moderation tools such as:
    - Accepting or rejecting incoming comments
    - Auto accept comments
    - Ban certain words
-   - And many more in the future
-- 📦 Import and export website data for easy migration between selfhost and cloud 
-- 🐳 Easy Docker deployment
+   - And many more
 - 🔓 Fully open source and self-hostable
 
-Visit [plopkit.com](https://plopkit.com)!.
+Visit [plopkit.com](https://plopkit.com).
 
-![PlopKit dashboard screenshot](docs/images/admin-dashboard.png)
 # Self hosting PlopKit
  
 PlopKit is fully self-hostable. Self-hosted instances have no feature

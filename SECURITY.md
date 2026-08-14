@@ -8,5 +8,3 @@ Include:
 - A description of the issue and its impact
 - Steps to reproduce
 - Whether it affects PlopKit Cloud, self-hosted deployments, or both
-
-Please give me reasonable time to fix the issue before disclosing it publicly.
