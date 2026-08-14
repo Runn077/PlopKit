@@ -62,7 +62,7 @@ function ImportSiteModal({ onClose, onSubmit }: Props) {
             placeholder="really cool website"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            maxLength={30}
+            maxLength={100}
             required
           />
         </div>
@@ -73,6 +73,7 @@ function ImportSiteModal({ onClose, onSubmit }: Props) {
             placeholder="mywebsite.com"
             value={domain}
             onChange={(e) => setDomain(e.target.value)}
+            maxLength={253}
             required
           />
         </div>

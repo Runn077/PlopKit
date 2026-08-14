@@ -117,6 +117,7 @@ function GeneralSettings({ site, onSave, onDelete }: Props) {
               value={name}
               onChange={e => setName(e.target.value)}
               required
+              maxLength={100}
             />
           </div>
           <div className="sw-field">
@@ -126,6 +127,7 @@ function GeneralSettings({ site, onSave, onDelete }: Props) {
               type="text"
               value={domain}
               onChange={e => setDomain(e.target.value)}
+              maxLength={253}
               required
             />
           </div>

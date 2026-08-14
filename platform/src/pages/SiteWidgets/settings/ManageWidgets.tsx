@@ -55,6 +55,7 @@ function WidgetRow({ widget, onOpen, onDelete, onRename }: {
               className="sw-input"
               value={name}
               onChange={e => setName(e.target.value)}
+              maxLength={100}
               autoFocus
               onKeyDown={e => {
                 if (e.key === 'Enter') handleRename()
