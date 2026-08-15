@@ -17,9 +17,6 @@ export async function getSiteById(id: string, userId: string) {
 }
 
 export async function createSite(userId: string, name: string, domain: string) {
-  const existing = await prisma.site.findUnique({ where: { domain } })
-  if (existing) throw new AppError(409, 'This domain is already registered')
-
   return prisma.site.create({
     data: {
       name,
@@ -33,10 +30,7 @@ export async function createSite(userId: string, name: string, domain: string) {
 export async function updateSite(id: string, userId: string, data: { name?: string; domain?: string }) {
   const site = await prisma.site.findUnique({ where: { id } })
   if (!site || site.userId !== userId) throw new AppError(404, 'Site not found')
-  if (data.domain && data.domain !== site.domain) {
-    const existing = await prisma.site.findUnique({ where: { domain: data.domain } })
-    if (existing) throw new AppError(409, 'This domain is already registered')
-  }
+
   return prisma.site.update({
     where: { id },
     data: {

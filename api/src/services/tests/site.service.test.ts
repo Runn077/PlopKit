@@ -67,8 +67,7 @@ describe('getSiteById', () => {
 })
 
 describe('createSite', () => {
-  it('creates a new site with a generated siteKey when the domain is unregistered', async () => {
-    vi.mocked(prisma.site.findUnique).mockResolvedValue(null)
+  it('creates a new site with a generated siteKey', async () => {
     vi.mocked(prisma.site.create).mockResolvedValue({ id: 'site_new' } as any)
 
     await createSite('user_1', 'My Blog', 'example.com')
@@ -81,18 +80,6 @@ describe('createSite', () => {
         userId: 'user_1',
       },
     })
-  })
-
-  it('throws 409 when the domain is already registered', async () => {
-    vi.mocked(prisma.site.findUnique).mockResolvedValue({
-      id: 'existing_site',
-      userId: 'other_user',
-    } as any)
-
-    await expect(createSite('user_1', 'My Blog', 'example.com')).rejects.toThrow(
-      'This domain is already registered'
-    )
-    expect(prisma.site.create).not.toHaveBeenCalled()
   })
 })
 
@@ -123,48 +110,28 @@ describe('updateSite', () => {
     })
   })
 
-  it('does not re-check domain uniqueness when the domain is unchanged', async () => {
+  it('updates only the domain when name is not provided', async () => {
     vi.mocked(prisma.site.findUnique).mockResolvedValueOnce({
       id: 'site_1',
       userId: 'user_1',
-      domain: 'example.com',
+      domain: 'old.com',
     } as any)
     vi.mocked(prisma.site.update).mockResolvedValue({} as any)
 
-    await updateSite('site_1', 'user_1', { domain: 'example.com' })
-
-    expect(prisma.site.findUnique).toHaveBeenCalledTimes(1)
-  })
-
-  it('throws 409 when changing to a domain already registered', async () => {
-    vi.mocked(prisma.site.findUnique)
-      .mockResolvedValueOnce({ id: 'site_1', userId: 'user_1', domain: 'old.com' } as any)
-      .mockResolvedValueOnce({ id: 'other_site' } as any)
-
-    await expect(
-      updateSite('site_1', 'user_1', { domain: 'taken.com' })
-    ).rejects.toThrow('This domain is already registered')
-    expect(prisma.site.update).not.toHaveBeenCalled()
-  })
-
-  it('allows changing to a domain that is not yet registered', async () => {
-    vi.mocked(prisma.site.findUnique)
-      .mockResolvedValueOnce({ id: 'site_1', userId: 'user_1', domain: 'old.com' } as any)
-      .mockResolvedValueOnce(null)
-    vi.mocked(prisma.site.update).mockResolvedValue({} as any)
-
-    await updateSite('site_1', 'user_1', { domain: 'unregistered.com' })
+    await updateSite('site_1', 'user_1', { domain: 'new.com' })
 
     expect(prisma.site.update).toHaveBeenCalledWith({
       where: { id: 'site_1' },
-      data: { domain: 'unregistered.com' },
+      data: { domain: 'new.com' },
     })
   })
 
-  it('updates both name and domain when both are provided and valid', async () => {
-    vi.mocked(prisma.site.findUnique)
-      .mockResolvedValueOnce({ id: 'site_1', userId: 'user_1', domain: 'old.com' } as any)
-      .mockResolvedValueOnce(null)
+  it('updates both name and domain when both are provided', async () => {
+    vi.mocked(prisma.site.findUnique).mockResolvedValueOnce({
+      id: 'site_1',
+      userId: 'user_1',
+      domain: 'old.com',
+    } as any)
     vi.mocked(prisma.site.update).mockResolvedValue({} as any)
 
     await updateSite('site_1', 'user_1', { name: 'New Name', domain: 'new.com' })

@@ -95,7 +95,7 @@ model Verification {
 model Site {
   id                    String   @id @default(cuid())
   name                  String
-  domain                String   @unique
+  domain                String
   siteKey               String   @unique
   widgets               Widget[]
   userId                String
