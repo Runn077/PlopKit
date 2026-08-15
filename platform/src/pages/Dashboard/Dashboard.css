@@ -47,6 +47,7 @@
   justify-content: space-between;
   gap: 20px;
   transition: 0.15s ease;
+  overflow: hidden;
 }
 
 .site-card:hover {
@@ -59,12 +60,17 @@
   font-size: 1.25rem;
   font-weight: 700;
   margin-bottom: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .site-domain {
   color: var(--pk-color-font-muted);
   font-size: 0.95rem;
-  word-break: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .empty-state {

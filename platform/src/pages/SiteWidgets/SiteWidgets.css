@@ -61,6 +61,9 @@
   background: #ffeb3b;
   padding: 24px;
   margin-bottom: 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .sw-site-card h1 {
