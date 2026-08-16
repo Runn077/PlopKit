@@ -112,7 +112,7 @@ function GeneralSettings({ site, onSave, onDelete }: Props) {
           <div className="sw-field">
             <label className="sw-label">Site name</label>
             <input
-              className="sw-input"
+              className="input"
               type="text"
               value={name}
               onChange={e => setName(e.target.value)}
@@ -123,7 +123,7 @@ function GeneralSettings({ site, onSave, onDelete }: Props) {
           <div className="sw-field">
             <label className="sw-label">Domain</label>
             <input
-              className="sw-input"
+              className="input"
               type="text"
               value={domain}
               onChange={e => setDomain(e.target.value)}
@@ -135,7 +135,7 @@ function GeneralSettings({ site, onSave, onDelete }: Props) {
         {error && <p className="sw-settings-error">{error}</p>}
         <button
           type="submit"
-          className="sw-btn sw-btn-primary sw-save-btn"
+          className="btn sw-btn-primary sw-save-btn"
           disabled={!hasChanges || saving}
         >
           {saving ? 'Saving...' : success ? 'Saved!' : 'Save changes'}
@@ -168,7 +168,7 @@ function GeneralSettings({ site, onSave, onDelete }: Props) {
         {exportError && <p className="sw-settings-error">{exportError}</p>}
         <div className="sw-export-actions">
           <button
-            className="sw-btn sw-btn-primary"
+            className="btn sw-btn-primary"
             onClick={handleExport}
             disabled={exporting}
           >
@@ -188,7 +188,7 @@ function GeneralSettings({ site, onSave, onDelete }: Props) {
             </p>
           </div>
           <button
-            className="sw-btn sw-btn-danger-outline"
+            className="btn-red"
             onClick={() => setShowDeleteModal(true)}
           >
             Delete site

@@ -3,6 +3,13 @@
   color: #0f0f0f;
 }
 
+.sc-tab-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px 0;
+  margin-bottom: 8px;
+}
+
 .sc-comment-list {
   display: flex;
   flex-direction: column;
@@ -12,6 +19,9 @@
   color: #999;
   font-size: 14px;
   padding: 16px 0;
+  font-size: 14px;
+  color: var(--pk-color-font-muted);
+  text-align: center;
 }
 
 .sc-comment {
@@ -255,7 +265,6 @@
   font-size: 12px;
   font-weight: 600;
   padding: 4px 12px;
-  border-radius: 20px;
   border: 1px solid #e0e0e0;
   background: transparent;
   color: #0f0f0f;
@@ -268,7 +277,7 @@
 
 .sc-btn-danger {
   border-color: #ff6b6b;
-  color: #0f0f0f;
+  color: black;
   background: transparent;
 }
 

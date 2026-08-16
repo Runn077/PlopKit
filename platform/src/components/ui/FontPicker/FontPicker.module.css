@@ -8,8 +8,7 @@
   text-align: left;
   padding: 6px 10px;
   font-size: 13px;
-  border: 1px solid var(--pk-color-border-muted);
-  border-radius: var(--pk-radius-sm);
+  border: 1px solid black;
   background: #fff;
   cursor: pointer;
 }
@@ -25,8 +24,7 @@
   width: 240px;
   max-height: 280px;
   background: #fff;
-  border: 1px solid var(--pk-color-border);
-  border-radius: var(--pk-radius-sm);
+  border: 1px solid black;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   z-index: var(--pk-z-modal);
   display: flex;

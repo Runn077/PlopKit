@@ -37,7 +37,7 @@ function DeleteAccountModal({ userEmail, onConfirm, onClose, loading, error }: P
             </button>
             <button
               type="button"
-              className="btn btn-danger"
+              className="btn"
               onClick={onConfirm}
               disabled={!emailMatches || loading}
             >

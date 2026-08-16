@@ -163,10 +163,10 @@ function SiteWidgets() {
       />
       {activeTab === 'widgets' && (
         <div>
-          <div className="sw-breadcrumb">
-            <span className="sw-breadcrumb-link" onClick={() => navigate('/dashboard')}>Sites</span>
-            <span className="sw-breadcrumb-sep">/</span>
-            <span className="sw-breadcrumb-current">{site!.name}</span>
+          <div className="breadcrumb">
+            <span className="breadcrumb-link" onClick={() => navigate('/dashboard')}>Sites</span>
+            <span className="breadcrumb-sep">/</span>
+            <span className="breadcrumb-current">{site!.name}</span>
           </div>
           <div className="sw-container">
             <div className="sw-site-card">

@@ -42,16 +42,16 @@ function PendingTab({
 
   return (
     <div className="sc-comments-tab">
-      <div className="sc-auto-approve">
-        <div className="sc-auto-approve-label">
+      <div className="switch">
+        <div className="switch-label">
           <span>Auto-approve comments</span>
-          <span className="sc-auto-approve-hint">New comments will be approved automatically</span>
+          <span className="switch-hint">New comments will be approved automatically</span>
         </div>
         <button
-          className={`sc-toggle ${autoApprove ? 'sc-toggle-on' : ''}`}
+          className={`toggle ${autoApprove ? 'toggle-on' : ''}`}
           onClick={() => onToggleAutoApprove(!autoApprove)}
         >
-          <span className="sc-toggle-knob" />
+          <span className="toggle-knob" />
         </button>
       </div>
 

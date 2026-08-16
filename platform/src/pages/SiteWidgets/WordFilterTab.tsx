@@ -53,38 +53,38 @@ function WordFilterTab({ bannedWords: initialWords, autoDelete: initialAutoDelet
 
   return (
     <div>
-      <div className="sc-auto-approve">
-        <div className="sc-auto-approve-label">
+      <div className="switch">
+        <div className="switch-label">
           <span>Auto reject flagged comments</span>
-          <span className="sc-auto-approve-hint">Reject comments containing banned words instead of censoring</span>
+          <span className="switch-hint">Reject comments containing banned words instead of censoring</span>
         </div>
         <button
-          className={`sc-toggle ${autoDelete ? 'sc-toggle-on' : ''}`}
+          className={`toggle ${autoDelete ? 'toggle-on' : ''}`}
           onClick={() => setAutoDelete(v => !v)}
         >
-          <span className="sc-toggle-knob" />
+          <span className="toggle-knob" />
         </button>
       </div>
 
-      <div className="sc-filter-input-row">
+      <div className="sw-filter-input-row">
         <input
-          className="sc-filter-input"
+          className="input"
           placeholder="Add a word..."
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
         />
-        <button className="sc-btn" onClick={handleAdd} disabled={!input.trim()}>
+        <button className="btn-light" onClick={handleAdd} disabled={!input.trim()}>
           Add
         </button>
       </div>
 
       {words.length > 0 ? (
-        <div className="sc-filter-tags">
+        <div className="sw-filter-tags">
           {words.map(word => (
-            <span key={word} className="sc-filter-tag">
+            <span key={word} className="sw-filter-tag">
               {word}
-              <button className="sc-filter-tag-remove" onClick={() => handleRemove(word)}>×</button>
+              <button className="sw-filter-tag-remove" onClick={() => handleRemove(word)}>×</button>
             </span>
           ))}
         </div>
@@ -92,14 +92,13 @@ function WordFilterTab({ bannedWords: initialWords, autoDelete: initialAutoDelet
         <p className="sc-empty">No banned words yet.</p>
       )}
 
-      {error && <p className="sc-error">{error}</p>}
-      {success && <p className="sc-success">{success}</p>}
+      {error && <p className="sw-error">{error}</p>}
+      {success && <p className="sw-success">{success}</p>}
       
       <button
-        className="sc-btn"
+        className="btn"
         onClick={handleSave}
         disabled={saving}
-        style={{ marginTop: 16 }}
       >
         {saving ? 'Saving...' : 'Save filter'}
       </button>

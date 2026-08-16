@@ -17,7 +17,7 @@
 
 .input {
   width: 100%;
-  border: 3px solid var(--pk-color-border);
+  border: 3px solid black;
   padding: 12px 14px;
   font-size: 1rem;
   font-weight: 500;

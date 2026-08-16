@@ -1,5 +1,5 @@
 .navbar {
-  height: var(--pk-nav-height);
+  height: 56px;
   background: #ffffff;
   border-bottom: 3px solid black;
   display: flex;
@@ -7,7 +7,7 @@
   padding: 0 var(--pk-space-page-x);
   position: sticky;
   top: 0;
-  z-index: var(--pk-z-nav);
+  z-index: 10;
   width: 100%;
   font-family: var(--pk-heading-font);
 }

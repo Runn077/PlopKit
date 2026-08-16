@@ -3,17 +3,8 @@
   font-family: var(--pk-heading-font);
 }
 
-.sc-breadcrumb {
-  padding: 14px 52px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: white;
-}
-
 .sc-script-block {
   border: 3px solid var(--pk-color-border);
-  border-radius: var(--pk-radius-lg);
   overflow: hidden;
   margin-bottom: 32px;
 }

@@ -153,7 +153,7 @@ function Account() {
           <div className="account-field">
             <label className="account-label">Display name</label>
             <input
-              className="account-input"
+              className="input"
               value={name}
               onChange={e => setName(e.target.value)}
               placeholder="Your name"
@@ -162,7 +162,7 @@ function Account() {
           {nameError && <p className="account-error">{nameError}</p>}
           {nameSuccess && <p className="account-success">{nameSuccess}</p>}
           <button
-            className="account-btn account-btn-primary"
+            className="btn"
             onClick={handleSaveName}
             disabled={nameLoading || !name.trim()}
           >
@@ -208,7 +208,7 @@ function Account() {
                 </p>
               )}
               <button
-                className="account-btn account-btn-primary"
+                className="btn"
                 onClick={() => setShowUpgradeModal(true)}
               >
                 Upgrade plan
@@ -244,7 +244,7 @@ function Account() {
               </p>
             </div>
             <button
-              className="account-btn account-btn-danger"
+              className="btn-red"
               onClick={() => setShowDeleteModal(true)}
             >
               Delete account

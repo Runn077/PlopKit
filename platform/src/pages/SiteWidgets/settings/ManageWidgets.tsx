@@ -52,7 +52,7 @@ function WidgetRow({ widget, onOpen, onDelete, onRename }: {
         {editing ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             <input
-              className="sw-input"
+              className="input"
               value={name}
               onChange={e => setName(e.target.value)}
               maxLength={100}
@@ -64,10 +64,10 @@ function WidgetRow({ widget, onOpen, onDelete, onRename }: {
             />
             {error && <p className="pk-modal-error">{error}</p>}
             <div style={{ display: 'flex', gap: 8 }}>
-              <button className="sw-btn sw-btn-primary" onClick={handleRename} disabled={saving}>
+              <button className="btn sw-btn-primary" onClick={handleRename} disabled={saving}>
                 {saving ? 'Saving...' : 'Confirm'}
               </button>
-              <button className="sw-btn" onClick={handleCancel}>Cancel</button>
+              <button className="btn" onClick={handleCancel}>Cancel</button>
             </div>
           </div>
         ) : (
@@ -87,8 +87,8 @@ function WidgetRow({ widget, onOpen, onDelete, onRename }: {
 
       {!editing && (
         <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
-          <button className="sw-btn" onClick={() => onOpen(widget)}>Open</button>
-          <button className="sw-btn sw-btn-danger-outline" onClick={() => setShowDeleteModal(true)}>Delete</button>
+          <button className="btn" onClick={() => onOpen(widget)}>Open</button>
+          <button className="btn-red" onClick={() => setShowDeleteModal(true)}>Delete</button>
         </div>
       )}
 

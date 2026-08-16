@@ -25,23 +25,10 @@
 
   --pk-color-border: #000;
   --pk-color-border-muted: #e4e2dc;
-  --pk-color-border-nav: #ccc9c0;
-
-  --pk-color-primary: #000;
-  --pk-color-primary-hover: #333;
-  --pk-color-on-primary: #fff;
-
-  --pk-radius-sm: 4px;
-  --pk-radius: 6px;
-  --pk-radius-lg: 8px;
-  --pk-radius-pill: 20px;
-  --pk-radius-full: 999px;
-
+  
   --pk-content-max: 680px;
   --pk-space-page-x: 24px;
   --pk-space-page-y: 40px;
 
-  --pk-nav-height: 56px;
-  --pk-z-nav: 10;
   --pk-z-modal: 100;
 }

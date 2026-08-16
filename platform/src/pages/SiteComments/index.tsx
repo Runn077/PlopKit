@@ -345,12 +345,12 @@ function SiteComments() {
         activeTab={activeTab}
         onTabChange={(tab) => setActiveTab(tab as Tab)}
       />
-      <div className="sc-breadcrumb">
-        <span className="sc-breadcrumb-link" onClick={() => navigate('/dashboard')}>Sites</span>
-        <span className="sc-breadcrumb-sep">/</span>
-        <span className="sc-breadcrumb-link" onClick={() => navigate(`/dashboard/sites/${siteId}`)}>{site.name}</span>
-        <span className="sc-breadcrumb-sep">/</span>
-        <span className="sc-breadcrumb-current">{widget.name}</span>
+      <div className="breadcrumb">
+        <span className="breadcrumb-link" onClick={() => navigate('/dashboard')}>Sites</span>
+        <span className="breadcrumb-sep">/</span>
+        <span className="breadcrumb-link" onClick={() => navigate(`/dashboard/sites/${siteId}`)}>{site.name}</span>
+        <span className="breadcrumb-sep">/</span>
+        <span className="breadcrumb-current">{widget.name}</span>
       </div>
       <div className="sc-container">
         <div className="sc-script-block">
@@ -360,7 +360,7 @@ function SiteComments() {
               <span className="sc-script-loads">
                 loads this month: {(widget.monthlyLoads ?? 0).toLocaleString()}
               </span>
-              <button className="sc-btn" onClick={() => handleCopy(scriptTag)}>
+              <button className="btn-light" onClick={() => handleCopy(scriptTag)}>
                 {copied ? 'Copied!' : 'Copy'}
               </button>
             </div>

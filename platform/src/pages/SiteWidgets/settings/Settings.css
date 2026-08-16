@@ -61,7 +61,6 @@
 
 .sw-danger-zone {
   border: 3px solid #ff6b6b;
-  border-radius: var(--pk-radius-lg);
   padding: 16px;
 }
 
@@ -99,7 +98,7 @@
   color: var(--pk-color-font-muted);
   cursor: pointer;
   padding: 8px 12px;
-  border-radius: var(--pk-radius);
+  border-radius: 6px;
   text-align: left;
   transition: all 0.12s;
 }
@@ -133,7 +132,6 @@
   padding: 14px 0;
   border-bottom: 1px solid var(--pk-color-border-muted);
   gap: 16px;
-  overflow: hidden;
 }
 
 .sw-manage-widget-row:last-child {
@@ -144,6 +142,9 @@
   font-size: 14px;
   font-weight: 500;
   color: var(--pk-color-text);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .sw-manage-widget-type {

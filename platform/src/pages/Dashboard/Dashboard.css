@@ -102,7 +102,7 @@
     align-items: flex-start;
     gap: 16px;
   }
-  .dashboard-header .btn-primary {
+  .dashboard-header {
     width: 100%;
   }
   .dashboard-heading h1 {

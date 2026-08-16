@@ -144,7 +144,7 @@ function UpgradeModal({ currentPlan, pendingPlan, onClose, onPlanChanged }: Prop
                 </button>
                 <button
                   type="button"
-                  className="btn btn-primary"
+                  className="btn"
                   onClick={() => handleUpgrade(confirmUpgrade)}
                   disabled={loading !== null}
                 >
