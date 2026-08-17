@@ -22,7 +22,7 @@ function WidgetList({ widgets, onOpen }: Props) {
         <div key={widget.id} className="widget-row">
           <div className="widget-row-info">
             <span className="widget-row-name">{widget.name}</span>
-            <span className="widget-row-type">Monthly Loads: {widget.monthlyLoads}</span>
+            <span className="widget-row-loads">Monthly Loads: {widget.monthlyLoads}</span>
           </div>
           <Button variant="light" onClick={() => onOpen(widget)}>
             Open

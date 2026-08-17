@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import '../SiteWidgets.css'
 import type { Widget } from '../../../types'
-import DeleteWidgetModal from './DeleteWidgetModal'
+import DeleteWidgetModal from '../modals/DeleteWidgetModal'
 
 interface Props {
   widgets: Widget[]

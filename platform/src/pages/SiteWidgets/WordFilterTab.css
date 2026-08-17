@@ -13,37 +13,43 @@
 
 .sw-filter-tag {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 4px;
-  background: var(--pk-color-bg-hover);
   border: 1px solid var(--pk-color-border-muted);
   padding: 3px 8px;
-  font-size: 12px;
-  color: var(--pk-color-text);
+  font-size: var(--pk-body-font-size);
+}
+
+.sw-filter-tag span {
+  min-width: 0;
+  white-space: normal;
+  overflow: visible;
+  overflow-wrap: anywhere;
 }
 
 .sw-filter-tag-remove {
+  flex-shrink: 0;
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 14px;
+  font-size: var(--pk-body-font-size);
   color: var(--pk-color-font-muted);
   padding: 0;
   line-height: 1;
 }
 
 .sw-filter-tag-remove:hover {
-  color: var(--pk-color-text);
+  color: black;
 }
 
 .sw-error {
-  font-size: 12px;
+  font-size: var(--pk-body-font-size);
   color: var(--red);
   margin-top: 8px;
 }
 
 .sw-success {
-  font-size: 12px;
+  font-size: var(--pk-body-font-size);
   color: #000;
   margin-top: 8px;
 }

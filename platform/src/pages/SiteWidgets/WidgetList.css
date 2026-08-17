@@ -23,33 +23,13 @@
 }
 
 .widget-row-name {
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: #000;
+  font-size: var(--pk-body-font-size);
 }
 
-.widget-row-type {
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: #666;
+.widget-row-loads {
+  font-size: var(--pk-body-font-size-sm);
+  color: var(--pk-color-font-muted);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.widget-row-btn {
-  border: 2px solid black;
-  background: white;
-  padding: 6px 14px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  cursor: pointer;
-  box-shadow: 3px 3px 0 black;
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
-}
-
-.widget-row-btn:hover {
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 black;
 }
 
 .widget-list-empty {

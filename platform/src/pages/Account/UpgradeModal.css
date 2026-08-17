@@ -33,14 +33,12 @@
 .upgrade-card-loads {
   font-size: 0.85rem;
   font-weight: 500;
-  color: var(--pk-color-text-secondary);
   margin-bottom: 8px;
 }
 
 .upgrade-card-current-label {
   font-size: 0.85rem;
   font-weight: 700;
-  color: var(--pk-color-text-secondary);
 }
 
 .upgrade-card-btn {

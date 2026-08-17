@@ -28,15 +28,15 @@
   background: none;
   border: none;
   font-family: var(--pk-heading-font);
-  font-size: 14px;
-  font-weight: 600;
+  font-size: var(--pk-body-font-size);
+  font-weight: var(--pk-bold-weight);
   padding: 14px 4px;
   cursor: pointer;
   color: var(--pk-color-font);
 }
 
 .ct-group-chevron {
-  font-size: 16px;
+  font-size: var(--pk-body-font-size);
   color: var(--pk-color-font-muted);
 }
 
@@ -55,7 +55,7 @@
 }
 
 .ct-field-label {
-  font-size: 13px;
+  font-size: var(--pk-body-font-size-sm);
   color: var(--pk-color-font);
 }
 
@@ -77,14 +77,14 @@
 .ct-text-input {
   width: 160px;
   padding: 6px 10px;
-  font-size: 13px;
+  font-size: var(--pk-body-font-size-sm);
   border: 1px solid var(--pk-color-border-muted);
 }
 
 .ct-reset-btn {
   background: none;
   border: none;
-  font-size: 11px;
+  font-size: var(--pk-body-font-size-sm);
   color: var(--pk-color-font-muted);
   cursor: pointer;
   padding: 0;
@@ -92,13 +92,13 @@
 }
 
 .ct-error {
-  font-size: 12px;
-  color: red;
+  font-size: var(--pk-body-font-size);
+  color: var(--red);
   margin-top: 8px;
 }
 
 .ct-success {
-  font-size: 12px;
+  font-size: var(--pk-body-font-size);
   color: #000;
   margin-top: 8px;
 }
@@ -110,7 +110,7 @@
   border-left: 1px solid var(--pk-color-border-muted);
   border-right: 1px solid var(--pk-color-border-muted);
   padding: 5px 0;
-  font-size: 13px;
+  font-size: var(--pk-body-font-size);
   appearance: textfield;
 }
 

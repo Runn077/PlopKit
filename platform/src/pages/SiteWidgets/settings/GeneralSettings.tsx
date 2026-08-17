@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import '../SiteWidgets.css'
-import DeleteSiteModal from './DeleteSiteModal'
+import DeleteSiteModal from '../modals/DeleteSiteModal'
 import type { Site } from '../../../types'
 import { apiFetch } from '../../../lib/api'
 

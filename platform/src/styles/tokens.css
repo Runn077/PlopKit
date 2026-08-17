@@ -1,5 +1,7 @@
 
 :root {
+  /* ---------- TEXT ---------- */
+
   /* Fonts */
   --pk-brand-font: 'IBM Plex Mono', monospace;
   --pk-heading-font: 'Space Mono', monospace;
@@ -10,13 +12,21 @@
   --pk-color-font-muted: #555;
   --pk-color-text-subtle: #aaa;
 
-  /* Colours */
+  /* Sizes */
+  --pk-heading-size: 3rem;
+  --pk-subheading-size: 1.3rem;
+  --pk-body-font-size: 1rem;
+  --pk-body-font-size-sm: 0.8rem;
+
+  /* Weights */
+  --pk-heading-weight: 800;
+  --pk-bold-weight: 700;
+
+  /* ---------- Colours ---------- */
   --red: #ff6b6b;
   --yellow: #ffe66d;
   --mint: #4ecdc4;
   --blue: #74c0fc;
-
-  --pk-dark-bg: #333;
 
   --pk-color-bg: #fff;
   --pk-color-bg-hover: #f5f5f5;
@@ -26,6 +36,7 @@
   --pk-color-border: #000;
   --pk-color-border-muted: #e4e2dc;
   
+  /* ---------- Other ---------- */
   --pk-content-max: 680px;
   --pk-space-page-x: 24px;
   --pk-space-page-y: 40px;

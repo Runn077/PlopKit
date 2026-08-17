@@ -1,13 +1,13 @@
-.sc-comments-tab {
-  font-size: 14px;
-  color: #0f0f0f;
-}
-
 .sc-tab-header {
   display: flex;
   justify-content: flex-end;
   padding: 12px 0;
   margin-bottom: 8px;
+}
+
+.sc-comments-tab {
+  font-size: var(--pk-body-font-size);
+  color: black;
 }
 
 .sc-comment-list {
@@ -17,9 +17,7 @@
 
 .sc-empty {
   color: #999;
-  font-size: 14px;
   padding: 16px 0;
-  font-size: 14px;
   color: var(--pk-color-font-muted);
   text-align: center;
 }
@@ -91,7 +89,7 @@
   font-size: 11px;
   font-weight: 600;
   color: #fff;
-  background: #4ecdc4;
+  background: var(--mint);
   padding: 2px 8px;
   border-radius: 4px;
 }
@@ -174,6 +172,8 @@
   color: #555;
 }
 
+
+/* Comments Tab */
 .sc-reply-input {
   margin-top: 10px;
   display: flex;
@@ -240,8 +240,7 @@
   color: #0f0f0f;
 }
 
-.sc-btn-post,
-.sc-btn-post-reply {
+.sc-btn-post {
   background: #0f0f0f;
   color: #fff;
   border: none;
@@ -252,49 +251,13 @@
   cursor: pointer;
 }
 
-.sc-btn-post-reply:hover {
+.sc-btn-post:hover {
   background: #333;
 }
 
-.sc-btn-post-reply:disabled {
+.sc-btn-post:disabled {
   background: #ccc;
   cursor: default;
-}
-
-.sc-btn {
-  font-size: 12px;
-  font-weight: 600;
-  padding: 4px 12px;
-  border: 1px solid #e0e0e0;
-  background: transparent;
-  color: #0f0f0f;
-  cursor: pointer;
-}
-
-.sc-btn:hover {
-  background: #f5f5f5;
-}
-
-.sc-btn-danger {
-  border-color: #ff6b6b;
-  color: black;
-  background: transparent;
-}
-
-.sc-btn-danger:hover {
-  background: #ff6b6b;
-  color: #fff;
-}
-
-.sc-btn-approve {
-  border-color: #4ecdc4;
-  color: #0f0f0f;
-  background: transparent;
-}
-
-.sc-btn-approve:hover {
-  background: #4ecdc4;
-  color: #fff;
 }
 
 .sc-load-more {
@@ -318,4 +281,42 @@
   color: #999;
   cursor: default;
   opacity: 1;
+}
+
+/* Buttons for all three tabs */
+
+.sc-btn {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border: 1px solid #b4b4b4;
+  background: transparent;
+  color: #0f0f0f;
+  cursor: pointer;
+}
+
+.sc-btn:hover {
+  background: #f5f5f5;
+}
+
+.sc-btn-danger {
+  border-color: var(--red);
+  color: var(--red);
+  background: transparent;
+}
+
+.sc-btn-danger:hover {
+  background: var(--red);
+  color: white;
+}
+
+.sc-btn-approve {
+  border-color: var(--mint);
+  color: var(--mint);
+  background: transparent;
+}
+
+.sc-btn-approve:hover {
+  background: var(--mint);
+  color: white;
 }

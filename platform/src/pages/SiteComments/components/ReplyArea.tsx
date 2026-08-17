@@ -24,7 +24,7 @@ function ReplyArea({ value, onChange, onCancel, onSubmit, loading }: Props) {
             Cancel
           </button>
           <button
-            className="sc-btn-post-reply"
+            className="sc-btn-post"
             onClick={onSubmit}
             disabled={loading || !value.trim()}
           >

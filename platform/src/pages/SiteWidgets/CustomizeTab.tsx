@@ -98,7 +98,7 @@ function CustomizeTab({ theme: initialTheme, onSave }: Props) {
         {error && <p className="ct-error">{error}</p>}
         {success && <p className="ct-success">{success}</p>}
 
-        <button className="sc-btn" onClick={handleSave} disabled={saving} style={{ marginTop: 16 }}>
+        <button className="btn" onClick={handleSave} disabled={saving} style={{ marginTop: 16 }}>
           {saving ? 'Saving...' : 'Save theme'}
         </button>
       </div>

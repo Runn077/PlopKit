@@ -1,6 +1,6 @@
 .sc-container {
   min-height: 100vh;
-  font-family: var(--pk-heading-font);
+  font-size: var(--pk-body-font-size)
 }
 
 .sc-script-block {
@@ -24,21 +24,19 @@
 }
 
 .sc-script-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--pk-color-text);
+  font-weight: var(--pk-bold-weight);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .sc-script-loads {
-  font-size: 12px;
+  font-size: var(--pk-body-font-size-sm);
   color: var(--pk-color-font-muted);
 }
 
 .sc-script-code {
   padding: 14px 16px;
-  font-size: 12px;
+  font-size: var(--pk-body-font-size-sm);
   color: var(--pk-color-font-muted);
   white-space: pre-wrap;
   word-break: break-all;

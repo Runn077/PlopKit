@@ -29,7 +29,7 @@
 }
 
 .dark {
-  background: var(--pk-dark-bg);
+  background: #333;
   color: white;
 }
 

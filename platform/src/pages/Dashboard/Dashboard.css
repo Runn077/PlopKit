@@ -23,13 +23,13 @@
 }
 
 .dashboard-heading h1 {
-  font-size: 3rem;
-  font-weight: 800;
+  font-size: var(--pk-heading-size);
+  font-weight: var(--pk-heading-weight);
   margin-bottom: 8px;
 }
 
 .dashboard-heading p {
-  font-size: 1rem;
+  font-size: var(--pk-body-font-size);
 }
 
 .site-grid {
@@ -58,7 +58,7 @@
 
 .site-name {
   font-size: 1.25rem;
-  font-weight: 700;
+  font-weight: var(--pk-bold-weight);
   margin-bottom: 8px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -67,7 +67,7 @@
 
 .site-domain {
   color: var(--pk-color-font-muted);
-  font-size: 0.95rem;
+  font-size: var(--pk-body-font-size);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

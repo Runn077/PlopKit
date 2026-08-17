@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Modal } from '../../../components/ui/Modal/Modal';
 import { Button } from '../../../components/ui/Button/Button';
-import styles from './DeleteWidgetModal.module.css';
+import styles from './SWModal.module.css';
 
 interface Props {
   onClose: () => void;

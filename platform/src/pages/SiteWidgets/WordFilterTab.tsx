@@ -73,6 +73,7 @@ function WordFilterTab({ bannedWords: initialWords, autoDelete: initialAutoDelet
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
+          maxLength={500}
         />
         <button className="btn-light" onClick={handleAdd} disabled={!input.trim()}>
           Add
@@ -82,10 +83,15 @@ function WordFilterTab({ bannedWords: initialWords, autoDelete: initialAutoDelet
       {words.length > 0 ? (
         <div className="sw-filter-tags">
           {words.map(word => (
-            <span key={word} className="sw-filter-tag">
-              {word}
-              <button className="sw-filter-tag-remove" onClick={() => handleRemove(word)}>×</button>
-            </span>
+            <div key={word} className="sw-filter-tag">
+              <span>{word}</span>
+              <button
+                className="sw-filter-tag-remove"
+                onClick={() => handleRemove(word)}
+              >
+                ×
+              </button>
+            </div>
           ))}
         </div>
       ) : (

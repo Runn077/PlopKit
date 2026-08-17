@@ -1,25 +1,12 @@
-.sw-index {
-  font-family: var(--pk-heading-font);
-}
-
 .sw-container {
   max-width: 900px;
   margin: 0 auto;
   padding: 32px;
   min-height: 100vh;
   font-family: var(--pk-heading-font);
-}
-
-.sw-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
-
-.sw-title {
-  font-size: 2rem;
-  font-weight: 800;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .sw-site-card {
@@ -33,23 +20,22 @@
 }
 
 .sw-site-card h1 {
-  margin: 0;
-  font-size: 2rem;
+  font-size: var(--pk-heading-size);
 }
 
 .sw-site-card p {
+  font-size: var(--pk-body-font-size);
   margin-top: 8px;
 }
 
-.sw-label {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--pk-color-text-secondary);
-  margin-bottom: 4px;
+.sw-title {
+  font-size: var(--pk-heading-size);
+  font-weight: var(--pk-heading-weight);
 }
 
-.sw-field {
+.sw-header {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
 }

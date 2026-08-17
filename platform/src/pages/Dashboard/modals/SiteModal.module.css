@@ -11,20 +11,16 @@
 }
 
 .label {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--pk-color-font);
+  font-size: var(--pk-body-font-size);
+  font-weight: var(--pk-bold-weight);
 }
 
 .input {
   width: 100%;
-  border: 3px solid black; 
+  border: 3px solid black;
   padding: 12px 14px;
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: var(--pk-body-font-size);
   outline: none;
-  background: white;
-  color: var(--pk-color-font);
   box-sizing: border-box;
   transition: box-shadow 0.1s ease;
 }
@@ -34,8 +30,7 @@
 }
 
 .error {
-  font-size: 0.875rem;
-  font-weight: 700;
+  font-size: var(--pk-body-font-size);
   color: var(--red);
   margin: 0;
 }
