@@ -380,20 +380,6 @@
     width: 100%;
   }
 
-  .coupon-card {
-    margin: 0 24px 60px;
-  }
-
-  .coupon-card {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .coupon-right {
-    width: 100%;
-    align-items: center;
-  }
-
   .workflow-grid {
     grid-template-columns: 1fr;
     gap: 24px;
