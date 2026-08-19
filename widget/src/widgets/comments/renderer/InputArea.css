@@ -33,7 +33,7 @@
   border: 1px solid var(--pkw-input-border, #ccc);
   border-radius: var(--pkw-input-radius, 10px);
   margin-bottom: 8px;
-  background: var(--pkw-input-bg, #fff);
+  background: var(--pkw-input-bg, transparent);
   color: var(--pkw-input-text-color, #0f0f0f);
   box-sizing: border-box;
 }
