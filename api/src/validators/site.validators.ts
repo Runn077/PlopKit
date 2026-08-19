@@ -18,7 +18,7 @@ export const updateSiteSchema = z.object({
 })
 
 export const updateBannedWordsSchema = z.object({
-  bannedWords: z.array(z.string()).optional(),
+  bannedWords: z.array(z.string().min(1).max(200, 'Banned word must be 200 characters or less')).max(500, 'You can have at most 500 banned words').optional(),
   autoDeleteBannedWords: z.boolean().optional(),
 })
 
