@@ -5,9 +5,9 @@ export default function Footer() {
     <footer className="footer">
       <p>© {new Date().getFullYear()} PlopKit. All rights reserved.</p>
       <p className="footer-links">
-        <a href="/contact">Contact</a>
-        <a href="/privacy">Privacy Policy</a>
-        <a href="/terms">Terms of Service</a>
+        <a href="https://plopkit.com/contact">Contact</a>
+        <a href="https://plopkit.com/privacy">Privacy Policy</a>
+        <a href="https://plopkit.com/terms">Terms of Service</a>
       </p>
     </footer>
   )
