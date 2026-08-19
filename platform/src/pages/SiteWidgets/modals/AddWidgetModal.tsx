@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import type { SyntheticEvent } from 'react';
 import { Modal } from '../../../components/ui/Modal/Modal';
 import { Button } from '../../../components/ui/Button/Button';
-import styles from './SWModal.module.css';
+import styles from '../../../components/ui/Modal/ModalForm.module.css';
 
 interface Props {
   onClose: () => void;

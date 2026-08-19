@@ -73,7 +73,7 @@ function WordFilterTab({ bannedWords: initialWords, autoDelete: initialAutoDelet
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          maxLength={500}
+          maxLength={200}
         />
         <button className="btn-light" onClick={handleAdd} disabled={!input.trim()}>
           Add

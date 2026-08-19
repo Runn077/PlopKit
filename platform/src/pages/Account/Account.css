@@ -1,5 +1,8 @@
 .account-container {
   min-height: 100vh;
+  max-width: var(--pk-content-max);
+  margin: 0 auto;
+  padding: var(--pk-space-page-y) var(--pk-space-page-x);
 }
 
 .account-title {

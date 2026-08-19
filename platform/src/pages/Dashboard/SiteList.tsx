@@ -39,7 +39,7 @@ function SiteList({ sites, onManage, onAdd, onImport }: Props) {
           onClick={() => onManage(site.id)} 
           className="site-card"
         >
-          <div>
+          <div className="site-card-content">
             <h3 className="site-name">
               {site.name}
             </h3>

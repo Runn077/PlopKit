@@ -4,12 +4,10 @@
   border-bottom: 3px solid black;
   padding: 0 32px;
   gap: 4px;
-  background: white;
   font-family: var(--pk-heading-font);
 }
 .subnav-tab {
   padding: 14px 20px;
-  font-size: 0.9rem;
   background: none;
   border: none;
   border-bottom: 3px solid transparent;
@@ -20,10 +18,10 @@
   transition: color 0.1s ease;
 }
 .subnav-tab:hover {
-  color: #000;
+  color: black;
 }
 .subnav-tab-active {
-  color: #000;
+  color: black;
   border-bottom: 3px solid black;
 }
 

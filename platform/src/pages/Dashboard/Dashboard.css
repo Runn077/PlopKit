@@ -56,6 +56,10 @@
   cursor: pointer;
 }
 
+.site-card-content {
+  background: transparent;
+}
+
 .site-name {
   font-size: 1.25rem;
   font-weight: var(--pk-bold-weight);
@@ -63,6 +67,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  background: transparent;
 }
 
 .site-domain {
@@ -71,6 +76,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  background: transparent;
 }
 
 .empty-state {

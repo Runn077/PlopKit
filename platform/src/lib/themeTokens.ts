@@ -25,7 +25,7 @@ export const THEME_TOKENS: ThemeTokenDef[] = [
   { key: 'widgetRadius', group: 'General', label: 'Widget Corner Radius', type: 'text', default: '0px', ...THEME_LIMITS.radius },
   { key: 'widgetPadding', group: 'General', label: 'Widget Padding', type: 'text', default: '10px', ...THEME_LIMITS.spacing },
 
-  { key: 'inputBg', group: 'Input Area', label: 'Background', type: 'color', default: '#ffffff' },
+  { key: 'inputBg', group: 'Input Area', label: 'Background', type: 'color', default: 'transparent' },
   { key: 'inputTextColor', group: 'Input Area', label: 'Text Color', type: 'color', default: '#0f0f0f' },
   { key: 'inputBorder', group: 'Input Area', label: 'Border Color', type: 'color', default: '#cccccc' },
   { key: 'btnPostBg', group: 'Input Area', label: 'Post Button Background', type: 'color', default: '#0f0f0f' },

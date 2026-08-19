@@ -12,6 +12,7 @@
   transform: translate(2px, 2px);
   box-shadow: var(--pk-shadow-sm);
   background: var(--blue);
+  color: white;
 }
 
 .btn:disabled {

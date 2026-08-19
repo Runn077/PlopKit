@@ -106,7 +106,7 @@ function GeneralSettings({ site, onSave, onDelete }: Props) {
 
   return (
     <div>
-      <form onSubmit={handleSave} style={{ marginBottom: 40 }}>
+      <form className="sw-general-section" onSubmit={handleSave}>
         <p className="sw-settings-section-title">General</p>
         <div className="sw-settings-fields">
           <div className="sw-field">
