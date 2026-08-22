@@ -4,7 +4,7 @@
   padding: 48px 24px;
   min-height: 100vh;
   font-family: var(--pk-heading-font);
-  color: var(--pk-color-font);
+  color: var(--pk-color-text);
 }
 
 .dashboard-header {
@@ -39,7 +39,6 @@
 }
 
 .site-card {
-  background: white;
   border: 3px solid black;
   padding: 24px;
   display: flex;
@@ -48,16 +47,13 @@
   gap: 20px;
   transition: 0.15s ease;
   overflow: hidden;
+  color: var(--pk-color-text);
 }
 
 .site-card:hover {
   transform: translate(-2px, -2px);
   box-shadow: 8px 8px 0 #74c0fc;
   cursor: pointer;
-}
-
-.site-card-content {
-  background: transparent;
 }
 
 .site-name {
@@ -71,7 +67,6 @@
 }
 
 .site-domain {
-  color: var(--pk-color-font-muted);
   font-size: var(--pk-body-font-size);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -81,7 +76,7 @@
 
 .empty-state {
   font-size: 14px;
-  color: var(--pk-color-font);
+  color: var(--pk-color-text);
   text-align: center;
   padding: 80px 24px;
   border: 3px dashed black;

@@ -15,6 +15,7 @@
   width: 100%;
   max-width: 480px;
   box-shadow: 8px 8px 0 black;
+  color: black;
 }
 
 .wide {
@@ -35,7 +36,7 @@
 }
 
 .close {
-  background: var(--pk-color-bg);
+  background: white;
   border: 3px solid black;
   font-size: 1rem;
   font-weight: 800;

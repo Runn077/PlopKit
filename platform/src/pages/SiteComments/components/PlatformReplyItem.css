@@ -23,7 +23,7 @@
 
 .sc-quoted-body {
   font-size: 12px;
-  color: #353535;
+  color: var(--pk-color-text-muted);
   line-height: 1.4;
   white-space: pre-wrap;
   overflow: hidden;

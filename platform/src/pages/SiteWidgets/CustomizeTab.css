@@ -17,7 +17,7 @@
 }
 
 .ct-group {
-  border-bottom: 1px solid var(--pk-color-border-muted);
+  border-bottom: 1px solid var(--pk-color-text-muted);
 }
 
 .ct-group-header {
@@ -32,12 +32,12 @@
   font-weight: var(--pk-bold-weight);
   padding: 14px 4px;
   cursor: pointer;
-  color: var(--pk-color-font);
+  color: var(--pk-color-text);
 }
 
 .ct-group-chevron {
   font-size: var(--pk-body-font-size);
-  color: var(--pk-color-font-muted);
+  color: var(--pk-color-text-muted);
 }
 
 .ct-group-body {
@@ -56,7 +56,7 @@
 
 .ct-field-label {
   font-size: var(--pk-body-font-size-sm);
-  color: var(--pk-color-font);
+  color: var(--pk-color-text);
 }
 
 .ct-field-control {
@@ -69,7 +69,7 @@
   width: 36px;
   height: 28px;
   padding: 0;
-  border: 1px solid var(--pk-color-border-muted);
+  border: 1px solid var(--pk-color-text-muted);
   cursor: pointer;
   background: none;
 }
@@ -78,14 +78,14 @@
   width: 160px;
   padding: 6px 10px;
   font-size: var(--pk-body-font-size-sm);
-  border: 1px solid var(--pk-color-border-muted);
+  border: 1px solid var(--pk-color-text-muted);
 }
 
 .ct-reset-btn {
   background: none;
   border: none;
   font-size: var(--pk-body-font-size-sm);
-  color: var(--pk-color-font-muted);
+  color: var(--pk-color-text-muted);
   cursor: pointer;
   padding: 0;
   text-decoration: underline;
@@ -107,8 +107,8 @@
   width: 48px;
   text-align: center;
   border: none;
-  border-left: 1px solid var(--pk-color-border-muted);
-  border-right: 1px solid var(--pk-color-border-muted);
+  border-left: 1px solid var(--pk-color-text-muted);
+  border-right: 1px solid var(--pk-color-text-muted);
   padding: 5px 0;
   font-size: var(--pk-body-font-size);
   appearance: textfield;

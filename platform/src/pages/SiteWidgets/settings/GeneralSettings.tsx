@@ -182,10 +182,7 @@ function GeneralSettings({ site, onSave, onDelete }: Props) {
         <p className="sw-settings-section-title">Danger zone</p>
         <div className="sw-danger-row">
           <div>
-            <p style={{ fontSize: 14, fontWeight: 500, color: '#000' }}>Delete this site</p>
-            <p style={{ fontSize: 12, color: '#888', marginTop: 2 }}>
-              Permanently deletes this site, all widgets, and all comments.
-            </p>
+            <p>Permanently deletes this site, all widgets, and all comments.</p>
           </div>
           <button
             className="btn-red"

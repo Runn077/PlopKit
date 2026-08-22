@@ -1,7 +1,7 @@
 .subnav {
   display: flex;
   flex-wrap: wrap;
-  border-bottom: 3px solid black;
+  border-bottom: 3px solid var(--pk-color-text-muted);
   padding: 0 32px;
   gap: 4px;
   font-family: var(--pk-heading-font);
@@ -13,16 +13,16 @@
   border-bottom: 3px solid transparent;
   margin-bottom: -3px;
   cursor: pointer;
-  color: #666;
+  color: var(--pk-color-text);
   white-space: nowrap;
   transition: color 0.1s ease;
 }
 .subnav-tab:hover {
-  color: black;
+  color: var(--pk-color-text);
 }
 .subnav-tab-active {
-  color: black;
-  border-bottom: 3px solid black;
+  color: var(--pk-color-text);
+  border-bottom: 3px solid var(--pk-color-text);
 }
 
 @media (max-width: 640px) {

@@ -6,6 +6,7 @@ import { apiFetch } from '../../lib/api'
 import './Account.css'
 import UpgradeModal from './UpgradeModal'
 import DeleteAccountModal from './DeleteAccountModal'
+import { getStoredTheme, applyTheme, type Theme } from '../../lib/theme'
 
 type Usage = {
   plan: 'free' | 'hobby' | 'pro'
@@ -36,6 +37,7 @@ function Account() {
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [searchParams, setSearchParams] = useSearchParams()
+  const [theme, setThemeState] = useState<Theme>(getStoredTheme)
   const upgradeStatus = searchParams.get('upgrade')
 
   useEffect(() => {
@@ -57,7 +59,6 @@ function Account() {
         const data = await res.json()
         setUsage(data)
       } catch (err: any) {
-        // Only set error for non-self-hosted failures
         if (!selfHosted) console.error(err)
       } finally {
         setUsageLoading(false)
@@ -70,6 +71,19 @@ function Account() {
     if (upgradeStatus) {
       setSearchParams({}, { replace: true })
     }
+  }, [])
+
+  useEffect(() => {
+    async function fetchMeta() {
+      const res = await apiFetch('/account/me')
+      if (!res.ok) return
+      const data = await res.json()
+      if (data.theme && data.theme !== theme) {
+        setThemeState(data.theme)
+        applyTheme(data.theme)
+      }
+    }
+    fetchMeta()
   }, [])
 
   async function handleSaveName() {
@@ -130,6 +144,16 @@ function Account() {
     }
   }
 
+  function handleToggleTheme() {
+    const next: Theme = theme === 'dark' ? 'light' : 'dark'
+    setThemeState(next)
+    applyTheme(next)
+    apiFetch('/account/theme', {
+      method: 'PATCH',
+      body: JSON.stringify({ theme: next }),
+    }).catch(err => console.error(err))
+  }
+
   const usagePercent = usage
     ? Math.min((usage.monthlyLoads / usage.limit) * 100, 100)
     : 0
@@ -168,6 +192,23 @@ function Account() {
           >
             {nameLoading ? 'Saving...' : 'Save name'}
           </button>
+        </div>
+
+        <div className="account-section">
+          <p className="account-section-title">Appearance</p>
+          <div className="switch">
+            <div className="switch-label">
+              Dark mode
+              <span className="switch-hint">Switch between light and dark theme</span>
+            </div>
+            <button
+              className={`toggle ${theme === 'dark' ? 'toggle-on' : ''}`}
+              onClick={handleToggleTheme}
+              aria-label="Toggle dark mode"
+            >
+              <span className="toggle-knob" />
+            </button>
+          </div>
         </div>
 
         <div className="account-section">

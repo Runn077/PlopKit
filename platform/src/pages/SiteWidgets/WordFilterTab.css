@@ -15,9 +15,10 @@
   display: flex;
   align-items: flex-start;
   gap: 4px;
-  border: 1px solid var(--pk-color-border-muted);
+  border: 1px solid var(--pk-color-text-muted);
   padding: 3px 8px;
   font-size: var(--pk-body-font-size);
+  color: var(--pk-color-text)
 }
 
 .sw-filter-tag span {
@@ -33,13 +34,13 @@
   border: none;
   cursor: pointer;
   font-size: var(--pk-body-font-size);
-  color: var(--pk-color-font-muted);
+  color: var(--pk-color-text-muted);
   padding: 0;
   line-height: 1;
 }
 
 .sw-filter-tag-remove:hover {
-  color: black;
+  color: var(--pk-color-text);
 }
 
 .sw-error {
@@ -50,6 +51,6 @@
 
 .sw-success {
   font-size: var(--pk-body-font-size);
-  color: #000;
+  color: var(--pk-color-text);
   margin-top: 8px;
 }

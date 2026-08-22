@@ -14,7 +14,7 @@
 }
 
 .trigger:hover {
-  background: var(--pk-color-bg-hover);
+  background: #eeeeee;
 }
 
 .dropdown {
@@ -35,7 +35,7 @@
   padding: 8px 10px;
   font-size: 13px;
   border: none;
-  border-bottom: 1px solid var(--pk-color-border-muted);
+  border-bottom: 1px solid var(--pk-color-text-muted);
   outline: none;
 }
 
@@ -62,6 +62,6 @@
 .noResults {
   padding: 10px;
   font-size: 13px;
-  color: var(--pk-color-font-muted);
+  color: var(--pk-color-text-muted);
   text-align: center;
 }

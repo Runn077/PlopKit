@@ -11,7 +11,7 @@
   display: flex;
   flex-direction: column;
   min-width: 160px;
-  border-right: 1px solid var(--pk-color-border-muted);
+  border-right: 1px solid var(--pk-color-text-muted);
   padding-right: 24px;
   gap: 2px;
   position: absolute;
@@ -21,7 +21,7 @@
 .settings-sidenav-item {
   background: none;
   border: none;
-  color: var(--pk-color-font-muted);
+  color: var(--pk-color-text-muted);
   cursor: pointer;
   padding: 8px 12px;
   text-align: left;
@@ -30,12 +30,12 @@
 
 .settings-sidenav-item:hover {
   color: var(--pk-color-text);
-  background: var(--pk-color-bg-hover);
+  background: color-mix(in srgb, var(--pk-color-text) 10%, transparent);
 }
 
 .settings-sidenav-item-active {
   color: var(--pk-color-text);
-  background: var(--pk-color-bg-hover);
+  background: color-mix(in srgb, var(--pk-color-text) 10%, transparent);
 }
 
 .settings-content {
@@ -54,7 +54,7 @@
   font-weight: var(--pk-bold-weight);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--pk-color-font-muted);
+  color: var(--pk-color-text);
   margin-bottom: 16px;
 }
 
@@ -62,6 +62,7 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+  color: var(--pk-color-text-muted)
 }
 
 .sw-field {
@@ -89,6 +90,7 @@
   gap: 8px;
   margin-top: 8px;
   cursor: pointer;
+  color: var(--pk-color-text);
 }
 
 .sw-checkbox-row input[type='checkbox'] {
@@ -101,7 +103,7 @@
 
 .sw-export-description {
   font-size: var(--pk-body-font-size-sm);
-  color: var(--pk-color-font-muted);
+  color: var(--pk-color-text-muted);
   margin-top: 8px;
   margin-bottom: 12px;
   line-height: 1.5;
@@ -114,7 +116,7 @@
 }
 
 .sw-export-size {
-  color: var(--pk-color-font-muted);
+  color: var(--pk-color-text-muted);
 }
 
 .sw-danger-zone {
@@ -127,6 +129,8 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  font-size: var(--pk-body-font-size-sm);
+  color: var(--pk-color-text);
 }
 
 
@@ -147,7 +151,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 14px 0;
-  border-bottom: 1px solid var(--pk-color-border-muted);
+  border-bottom: 1px solid var(--pk-color-text-muted);
   gap: 16px;
 }
 
@@ -183,7 +187,7 @@
 
 .sw-manage-widget-type {
   font-size: 12px;
-  color: var(--pk-color-font-muted);
+  color: var(--pk-color-text-muted);
   margin-top: 2px;
 }
 
@@ -208,7 +212,7 @@
     border-right: none;
     padding-right: 0;
     padding-bottom: 12px;
-    border-bottom: 1px solid var(--pk-color-border-muted);
+    border-bottom: 1px solid var(--pk-color-text-muted);
     gap: 8px;
   }
 

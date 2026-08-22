@@ -7,7 +7,7 @@ title: Moderation
 
 ![Widget comment moderation panel](/docs/moderation-comments.png)
 
-The Comments tab shows the full list of comments (approved and visible). From here you can pin, delete comments, and respond to a comment with the owner padge.
+The Comments tab shows the full list of comments (approved and visible). From here you can pin, delete comments, and respond to a comment with the owner badge.
 
 <br />
 

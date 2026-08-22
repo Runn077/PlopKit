@@ -3,10 +3,15 @@ import { sendAccountDeletedEmail } from '../emails/index.js'
 import { AppError } from '../errors/appError.js'
 
 export async function getAccountMeta(userId: string) {
-  const account = await prisma.account.findFirst({
-    where: { userId },
-  })
-  return { provider: account?.providerId ?? null }
+  const [account, user] = await Promise.all([
+    prisma.account.findFirst({ where: { userId } }),
+    prisma.user.findUnique({ where: { id: userId }, select: { theme: true } }),
+  ])
+  return { provider: account?.providerId ?? null, theme: user?.theme ?? 'light' }
+}
+
+export async function updateTheme(userId: string, theme: 'light' | 'dark') {
+  await prisma.user.update({ where: { id: userId }, data: { theme } })
 }
 
 export async function updateName(userId: string, name: string) {

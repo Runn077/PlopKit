@@ -8,6 +8,7 @@ import { getWidgetLoadStats } from '../services/widget.service.js'
 const router = Router()
 
 const updateNameSchema = z.object({ name: z.string().min(1, 'Name is required') })
+const updateThemeSchema = z.object({ theme: z.enum(['light', 'dark']) })
 
 router.get('/me', requireAuth, async (req, res, next) => {
   try {
@@ -42,6 +43,14 @@ router.patch('/name', requireAuth, validate(updateNameSchema), async (req, res, 
   try {
     const { user } = res.locals.session
     await accountService.updateName(user.id, req.body.name)
+    res.json({ success: true })
+  } catch (err) { next(err) }
+})
+
+router.patch('/theme', requireAuth, validate(updateThemeSchema), async (req, res, next) => {
+  try {
+    const { user } = res.locals.session
+    await accountService.updateTheme(user.id, req.body.theme)
     res.json({ success: true })
   } catch (err) { next(err) }
 })

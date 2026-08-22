@@ -7,6 +7,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: var(--pk-color-text);
 }
 
 .sw-site-card {
@@ -17,6 +18,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: black;
 }
 
 .sw-site-card h1 {

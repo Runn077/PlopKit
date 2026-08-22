@@ -4,12 +4,14 @@
   max-width: var(--pk-content-max);
   margin: 0 auto;
   padding: var(--pk-space-page-y) var(--pk-space-page-x);
+  color: var(--pk-color-text);
 }
 
 .sc-script-block {
-  border: 3px solid var(--pk-color-border);
+  border: 3px solid var(--pk-color-text);
   overflow: hidden;
   margin-bottom: 32px;
+  color: var(--pk-color-text)
 }
 
 .sc-script-header {
@@ -17,7 +19,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 16px;
-  border-bottom: 1px solid var(--pk-color-border);
+  border-bottom: 1px solid var(--pk-color-text);
 }
 
 .sc-script-header-right {
@@ -34,16 +36,15 @@
 
 .sc-script-loads {
   font-size: var(--pk-body-font-size-sm);
-  color: var(--pk-color-font-muted);
+  color: var(--pk-color-text-muted);
 }
 
 .sc-script-code {
   padding: 14px 16px;
   font-size: var(--pk-body-font-size-sm);
-  color: var(--pk-color-font-muted);
+  color: var(--pk-color-text-muted);
   white-space: pre-wrap;
   word-break: break-all;
-  background: var(--pk-color-bg-subtle);
   margin: 0;
 }
 

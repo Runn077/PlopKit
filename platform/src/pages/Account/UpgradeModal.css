@@ -19,7 +19,7 @@
   width: 100%;
   max-width: 480px;
   box-shadow: 8px 8px 0 black;
-  color: var(--pk-color-font);
+  color: black;
 }
 
 .pk-modal-wide {
@@ -36,7 +36,6 @@
 .pk-modal-title {
   font-size: 1.5rem;
   font-weight: 900;
-  color: var(--pk-color-text);
   margin: 0 0 24px;
 }
 
@@ -46,7 +45,6 @@
   font-size: 1rem;
   font-weight: 800;
   cursor: pointer;
-  color: var(--pk-color-text);
   padding: 4px 10px;
   line-height: 1;
   box-shadow: 3px 3px 0 black;
@@ -61,7 +59,6 @@
 .pk-modal-body {
   font-size: 0.95rem;
   font-weight: 500;
-  color: var(--pk-color-text);
   margin: 0 0 16px;
   line-height: 1.5;
 }
@@ -76,7 +73,6 @@
 .pk-modal-label {
   font-size: 0.85rem;
   font-weight: 700;
-  color: var(--pk-color-text);
 }
 
 .pk-modal-input {
@@ -93,7 +89,7 @@
 }
 
 .pk-modal-input:focus {
-  box-shadow: 4px 4px 0 #74c0fc;
+  box-shadow: 4px 4px 0 var(--blue);
 }
 
 .pk-modal-actions {
@@ -124,19 +120,17 @@
 }
 
 .upgrade-card-current {
-  box-shadow: 4px 4px 0 #74c0fc;
+  box-shadow: 4px 4px 0 var(--blue);
 }
 
 .upgrade-card-name {
   font-size: 0.95rem;
   font-weight: 800;
-  color: var(--pk-color-font);
 }
 
 .upgrade-card-price {
   font-size: 1.5rem;
   font-weight: 900;
-  color: var(--pk-color-font);
 }
 
 .upgrade-card-loads {
@@ -176,14 +170,13 @@
 .upgrade-error {
   font-size: 0.875rem;
   font-weight: 700;
-  color: #ff6b6b;
+  color: var(--red);
   margin-top: 12px;
 }
 
 .upgrade-pending-notice {
   font-size: 0.9rem;
   font-weight: 500;
-  color: var(--pk-color-font);
   padding: 16px;
   border: 3px solid black;
   margin-bottom: 16px;
@@ -204,7 +197,6 @@
   font-weight: 800;
   cursor: pointer;
   background: white;
-  color: var(--pk-color-font);
   box-shadow: 3px 3px 0 black;
   transition: transform 0.1s ease, box-shadow 0.1s ease;
   margin-top: auto;

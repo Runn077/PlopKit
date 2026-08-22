@@ -1,7 +1,7 @@
 .navbar {
   height: 56px;
-  background: #ffffff;
-  border-bottom: 3px solid black;
+  background-color: var(--pk-color-bg);
+  border-bottom: 3px solid var(--pk-color-text);
   display: flex;
   align-items: center;
   padding: 0 var(--pk-space-page-x);
@@ -38,7 +38,7 @@
 .navbar-user-name {
   font-size: 13px;
   font-weight: 600;
-  color: #000;
+  color: var(--pk-color-text);
 }
 
 .navbar-plan-badge {

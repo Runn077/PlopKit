@@ -28,6 +28,10 @@ enum Plan {
   pro
 }
 
+enum Theme {
+  light
+  dark
+}
 
 // --- Auth (better-auth) ---
 
@@ -42,6 +46,7 @@ model User {
   plan             Plan      @default(free)
   pendingPlan      Plan?
   usageResetAt     DateTime   @default(now())
+  theme            Theme     @default(light)
   stripeCustomerId String?   @unique
   sessions         Session[]
   accounts         Account[]
